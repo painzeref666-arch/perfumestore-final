@@ -245,7 +245,6 @@ export default function CheckoutPage() {
               <div className="flex justify-between"><span>Discount</span><Price amount={-discount} /></div>
             </div>
             <div className="mt-6 flex justify-between border-t border-white/10 pt-6 text-2xl font-black"><span>Total</span><Price amount={total} /></div>
-            <p className="mt-4 rounded-2xl bg-white/10 p-4 text-xs text-white/70">Phase 1 checkout supports COD and manual GCash/Maya proof upload with admin verification.</p>
           </aside>
         </div>
       </div>

@@ -415,7 +415,7 @@ export default function AdminDashboard() {
                 <Field label="Hero button text" value={editing.hero_button_text || ''} onChange={(v) => setEditing({ ...editing, hero_button_text: v })} />
                 <Field label="Hero button link" value={editing.hero_button_link || ''} onChange={(v) => setEditing({ ...editing, hero_button_link: v })} />
               </div>
-              <p className="mt-3 text-xs font-bold text-stone-500 dark:text-white/50">Tip: leave blank to automatically open this product's own detail page. Use custom links only for promo pages like /products or /checkout.</p>
+   
             </div>
 
             <div className="mt-6 rounded-[2rem] border border-stone-200 p-4 dark:border-white/10">
