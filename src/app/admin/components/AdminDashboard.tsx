@@ -337,7 +337,7 @@ export default function AdminDashboard() {
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-6 py-3 font-black text-white hover:bg-amber-600">Analytics</Link>
             <Link href="/products" className="rounded-full bg-stone-950 px-6 py-3 font-black text-white hover:bg-amber-800 dark:bg-amber-700">View Shop</Link>
-            <button onClick={logout} className="rounded-full border border-stone-300 px-6 py-3 font-black dark:border-white/10">Logout</button>
+            <Link href="/admin/logout" className="rounded-full border border-stone-300 px-6 py-3 font-black dark:border-white/10">Logout</Link>
           </div>
         </div>
 
