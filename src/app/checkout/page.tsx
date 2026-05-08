@@ -8,8 +8,8 @@ import { isSupabaseConfigured, supabase, type CustomerDetails } from '@/lib/supa
 import { computeShipping, deductInventory, makeTrackingCode, validateCoupon } from '@/lib/store-utils';
 
 const regions = ['NCR', 'Luzon', 'Visayas', 'Mindanao'];
-const gcashName = 'Kristine Mae Rimpillo.';
-const gcashNumber = '09667482949';
+const gcashName = 'Exousia and Co.';
+const gcashNumber = '09XX XXX XXXX';
 
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart();
@@ -100,35 +100,41 @@ export default function CheckoutPage() {
       let proofUrl = '';
       if (needsProof && proofFile) proofUrl = await uploadPaymentProof(proofFile, code);
 
+      const customerName = `${customer.first_name} ${customer.last_name}`.trim();
+      const paymentStatus = paymentMethod === 'Cash on Delivery' ? 'COD Pending' : 'For Verification';
+      const orderStatus = 'pending';
+
       const orderPayload: any = {
+        // Legacy fields used by older Exousia builds
         customer,
         items: orderItems,
         subtotal,
         status: 'new',
+
+        // New admin order-management fields
+        customer_email: customer.email,
+        customer_name: customerName,
+        customer_phone: customer.phone,
+        customer_address: customer.address,
+        region,
         shipping_method: region === 'NCR' ? 'Metro Manila standard' : `${region} standard`,
         shipping_fee: shipping,
+        shipping,
         discount,
         coupon_code: coupon.trim().toUpperCase() || null,
         total,
         payment_method: paymentMethod,
-        payment_status: paymentMethod === 'Cash on Delivery' ? 'COD Pending' : 'For Verification',
+        payment_status: paymentStatus,
         payment_reference: String(form.get('payment_reference') || ''),
         payment_proof_url: proofUrl,
         payment_note: needsProof ? 'Customer uploaded manual payment proof. Admin verification required.' : 'Cash on Delivery order.',
+        order_status: orderStatus,
         tracking_code: code,
         tracking_number: '',
       };
 
       if (isSupabaseConfigured && supabase) {
-        let response = await supabase.from('orders').insert(orderPayload).select('id, tracking_code').single();
-
-        if (response.error && response.error.message.toLowerCase().includes('column')) {
-          response = await supabase
-            .from('orders')
-            .insert({ customer, items: orderItems, subtotal: total, status: 'new', payment_status: orderPayload.payment_status })
-            .select('id')
-            .single();
-        }
+        const response = await supabase.from('orders').insert(orderPayload).select('id, tracking_code').single();
 
         if (response.error) {
           setError(`Order save failed: ${response.error.message}`);
@@ -207,7 +213,6 @@ export default function CheckoutPage() {
                       <p className="mt-2 text-sm">Send your payment to:</p>
                       <p className="mt-2 font-black">Account name: {gcashName}</p>
                       <p className="font-black">GCash/Maya number: {gcashNumber}</p>
-                      <p className="mt-3 text-xs font-bold opacity-80">Replace this number later with your real business GCash/Maya number in the checkout file.</p>
                       <input name="payment_reference" placeholder="Reference number / transaction ID" className="mt-4 w-full rounded-2xl border border-amber-200 px-5 py-4 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
                       <label className="mt-4 block text-sm font-black">Upload payment screenshot</label>
                       <input type="file" accept="image/*" onChange={(e)=>handleProof(e.target.files?.[0] || null)} className="mt-2 w-full rounded-2xl border border-amber-200 bg-white px-4 py-3 text-sm text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
