@@ -31,8 +31,15 @@ type OrderRow = {
   created_at: string;
   shipping_method?: string;
   shipping_fee?: number;
+  payment_method?: string;
   payment_status?: string;
+  payment_reference?: string;
+  payment_proof_url?: string;
+  payment_note?: string;
+  total?: number;
+  tracking_code?: string;
   tracking_number?: string;
+  paid_at?: string | null;
   shipped_at?: string | null;
   delivered_at?: string | null;
 };
@@ -99,7 +106,7 @@ export default function AdminDashboard() {
   const totalValue = products.reduce((s, p) => s + p.stock * (p.variants?.[0]?.prices?.['10ml'] || p.price), 0);
   const activeCount = useMemo(() => products.filter((p) => p.active !== false).length, [products]);
   const lowStock = products.filter((p) => p.stock <= 10);
-  const orderRevenue = orders.reduce((sum, o) => sum + Number(o.subtotal || 0) + Number(o.shipping_fee || 0), 0);
+  const orderRevenue = orders.reduce((sum, o) => sum + Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0)), 0);
   const pendingOrders = orders.filter((o) => (o.status || '').toLowerCase() === 'new' || (o.status || '').toLowerCase() === 'pending').length;
   const paidOrders = orders.filter((o) => (o.payment_status || '').toLowerCase() === 'paid' || (o.status || '').toLowerCase() === 'paid').length;
   const shippedOrders = orders.filter((o) => (o.status || '').toLowerCase() === 'shipped').length;
@@ -129,6 +136,7 @@ export default function AdminDashboard() {
       ...changes,
       shipped_at: changes.status === 'shipped' ? new Date().toISOString() : changes.shipped_at,
       delivered_at: changes.status === 'delivered' ? new Date().toISOString() : changes.delivered_at,
+      paid_at: changes.payment_status === 'Paid' ? new Date().toISOString() : changes.paid_at,
     };
     const { error: dbError } = await supabase.from('orders').update(payload).eq('id', id);
     if (dbError) setError(dbError.message);
@@ -521,7 +529,7 @@ function OrdersPanel({
         {visible.map((o) => {
           const customerName = [o.customer?.first_name, o.customer?.last_name].filter(Boolean).join(' ') || o.customer?.name || 'Customer';
           const items = Array.isArray(o.items) ? o.items : [];
-          const total = Number(o.subtotal || 0) + Number(o.shipping_fee || 0);
+          const total = Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0));
           return (
             <article key={o.id} className="rounded-[1.5rem] border border-stone-200 p-5 text-sm dark:border-white/10">
               <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
@@ -534,7 +542,7 @@ function OrdersPanel({
                 </div>
                 <div className="grid gap-2 sm:grid-cols-2 xl:w-[360px]">
                   <Select label="Order status" value={o.status || 'new'} onChange={(value) => updateOrder(o.id, { status: value })} options={['new', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']} disabled={savingId === o.id} />
-                  <Select label="Payment" value={o.payment_status || 'Pending'} onChange={(value) => updateOrder(o.id, { payment_status: value })} options={['Pending', 'Paid', 'Failed', 'Refunded']} disabled={savingId === o.id} />
+                  <Select label="Payment" value={o.payment_status || 'Pending'} onChange={(value) => updateOrder(o.id, { payment_status: value })} options={['Pending', 'For Verification', 'COD Pending', 'Paid', 'Rejected', 'Failed', 'Refunded']} disabled={savingId === o.id} />
                 </div>
               </div>
 
@@ -557,9 +565,12 @@ function OrdersPanel({
 
                 <div className="rounded-2xl bg-stone-50 p-4 dark:bg-black/20">
                   <p className="font-black">Shipping & payment</p>
-                  <p className="mt-2 text-stone-500 dark:text-white/50">Method: <span className="font-bold text-stone-900 dark:text-white">{o.shipping_method || 'Standard'}</span></p>
+                  <p className="mt-2 text-stone-500 dark:text-white/50">Shipping: <span className="font-bold text-stone-900 dark:text-white">{o.shipping_method || 'Standard'}</span></p>
+                  <p className="text-stone-500 dark:text-white/50">Payment: <span className="font-bold text-stone-900 dark:text-white">{o.payment_method || o.customer?.payment_method || 'Not saved'}</span></p>
+                  <p className="text-stone-500 dark:text-white/50">Reference: <span className="font-bold text-stone-900 dark:text-white">{o.payment_reference || 'None'}</span></p>
                   <p className="text-stone-500 dark:text-white/50">Shipping fee: <Price amount={Number(o.shipping_fee || 0)} className="font-bold text-stone-900 dark:text-white" /></p>
                   <p className="text-stone-500 dark:text-white/50">Total: <Price amount={total} className="font-black text-stone-900 dark:text-white" /></p>
+                  {o.payment_proof_url && <a href={o.payment_proof_url} target="_blank" className="mt-3 block overflow-hidden rounded-2xl border border-stone-200 dark:border-white/10"><img src={o.payment_proof_url} alt="Payment proof" className="h-40 w-full object-cover" /><span className="block bg-white p-2 text-center text-xs font-black text-stone-900 dark:bg-black/30 dark:text-white">View payment proof</span></a>}
                   <label className="mt-3 block text-xs font-black uppercase tracking-widest text-stone-400">Tracking number</label>
                   <div className="mt-2 flex gap-2">
                     <input
@@ -583,6 +594,8 @@ function OrdersPanel({
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
+                <button onClick={() => updateOrder(o.id, { payment_status: 'Paid', status: 'paid' })} className="rounded-full bg-emerald-700 px-4 py-2 text-xs font-black text-white">Approve Payment</button>
+                <button onClick={() => updateOrder(o.id, { payment_status: 'Rejected' })} className="rounded-full bg-rose-700 px-4 py-2 text-xs font-black text-white">Reject Payment</button>
                 <button onClick={() => updateOrder(o.id, { status: 'processing' })} className="rounded-full bg-stone-100 px-4 py-2 text-xs font-black dark:bg-white/10">Mark Processing</button>
                 <button onClick={() => updateOrder(o.id, { status: 'shipped' })} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
                 <button onClick={() => updateOrder(o.id, { status: 'delivered' })} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
