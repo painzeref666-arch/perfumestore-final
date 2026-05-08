@@ -1,0 +1,251 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,600&display=swap');
+
+:root {
+  --background: #FAF7F2;
+  --foreground: #0F0D0A;
+  --primary: #C9974A;
+  --primary-dark: #8B5E2A;
+  --primary-light: #E8C98A;
+  --accent: #2A1F14;
+  --muted: #7A6A58;
+  --border: #E8DDD0;
+  --card: #FFFFFF;
+  --radius: 1rem;
+}
+
+/* Dark mode CSS variables */
+.dark {
+  --background: #0F0D0A;
+  --foreground: #F5F0E8;
+  --primary: #C9974A;
+  --primary-dark: #8B5E2A;
+  --primary-light: #E8C98A;
+  --accent: #E8DDD0;
+  --muted: #9A8A78;
+  --border: #2A2018;
+  --card: #1A1410;
+  --radius: 1rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.font-display {
+  font-family: 'Fraunces', serif;
+}
+
+/* Grain texture overlay */
+.grain {
+  position: fixed;
+  inset: 0;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(250, 247, 242, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(201, 151, 74, 0.12);
+}
+
+.glass-dark {
+  background: rgba(15, 13, 10, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(201, 151, 74, 0.15);
+}
+
+/* Dark mode glass override */
+.dark .glass {
+  background: rgba(15, 13, 10, 0.80);
+  border: 1px solid rgba(201, 151, 74, 0.15);
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+/* Arch images */
+.arch-image {
+  width: 130px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 999px;
+  box-shadow: 0 16px 40px rgba(15, 13, 10, 0.18);
+  position: absolute;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
+}
+
+.arch-image:hover {
+  transform: scale(1.12) !important;
+  z-index: 50;
+  box-shadow: 0 24px 60px rgba(201, 151, 74, 0.3);
+}
+
+/* Product card hover */
+.product-card {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 32px 64px rgba(15, 13, 10, 0.12);
+}
+.dark .product-card:hover {
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4);
+}
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+.product-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Scent family card */
+.scent-card {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.scent-card:hover {
+  transform: scale(1.03);
+}
+.scent-card:hover .scent-img {
+  transform: scale(1.08);
+}
+.scent-img {
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Add to cart button */
+.btn-amber {
+  background: var(--primary);
+  color: #fff;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+.btn-amber:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(201, 151, 74, 0.35);
+}
+.btn-amber:active {
+  transform: translateY(0);
+}
+
+/* Badge */
+.badge-new {
+  background: var(--primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.badge-bestseller {
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+/* Stars */
+.star-filled {
+  color: var(--primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+/* Footer link hover */
+.footer-link {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.footer-link:hover {
+  color: var(--foreground);
+}
+
+/* Animated gradient for gift section */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.gift-bg {
+  background: linear-gradient(135deg, #0F0D0A 0%, #2A1F14 40%, #1A120A 70%, #0F0D0A 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* Floating blob for gift section */
+@keyframes blobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -20px) scale(1.05); }
+  66% { transform: translate(-15px, 15px) scale(0.97); }
+}
+.blob {
+  animation: blobFloat 10s ease-in-out infinite;
+}
+
+/* Number counter */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sparkle */
+@keyframes sparkle-fade {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(75deg); }
+  50% { opacity: 1; transform: scale(1) rotate(120deg); }
+}
+
+/* Selection color */
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Smooth theme transition for key elements */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+
+/* Exclude transitions that would break animations */
+.arch-image, .product-card, .scent-card, .scent-img, .btn-amber, .product-overlay {
+  transition-property: transform, box-shadow, opacity, background;
+}
