@@ -95,6 +95,12 @@ export default function AdminDashboard() {
   const [imageStatus, setImageStatus] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage.getItem('exousia-admin-logged') === 'true') {
+      setLogged(true);
+    }
+  }, []);
+
   const totalInventory = products.reduce((s, p) => s + p.stock, 0);
   const totalValue = products.reduce((s, p) => s + p.stock * (p.variants?.[0]?.prices?.['10ml'] || p.price), 0);
   const activeCount = useMemo(() => products.filter((p) => p.active !== false).length, [products]);
@@ -144,27 +150,36 @@ export default function AdminDashboard() {
     e.preventDefault();
     setError('');
 
-    if (isSupabaseConfigured && supabase) {
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
-      if (!authError) {
-        setLogged(true);
-        await refreshProducts();
-        return;
-      }
-      setError(`Supabase login failed: ${authError.message}. You can still use the demo fallback below.`);
-    }
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password.trim();
 
-    if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
+    // Demo admin fallback is checked FIRST so the public admin account always works,
+    // even when Supabase Auth has not created an admin user yet.
+    if (cleanEmail === DEMO_EMAIL.toLowerCase() && cleanPassword === DEMO_PASSWORD) {
       setLogged(true);
-      setError('');
+      if (typeof window !== 'undefined') window.localStorage.setItem('exousia-admin-logged', 'true');
+      await refreshProducts();
       return;
     }
 
-    setError('Wrong admin email or password. Use the demo login shown on this page or create this user in Supabase Auth.');
+    if (isSupabaseConfigured && supabase) {
+      const { error: authError } = await supabase.auth.signInWithPassword({ email: cleanEmail, password: cleanPassword });
+      if (!authError) {
+        setLogged(true);
+        if (typeof window !== 'undefined') window.localStorage.setItem('exousia-admin-logged', 'true');
+        await refreshProducts();
+        return;
+      }
+      setError(`Supabase login failed: ${authError.message}. Demo admin still works with admin@exousia.com / exousia2026.`);
+      return;
+    }
+
+    setError('Wrong admin email or password. Use admin@exousia.com / exousia2026.');
   }
 
   async function logout() {
     if (supabase) await supabase.auth.signOut();
+    if (typeof window !== 'undefined') window.localStorage.removeItem('exousia-admin-logged');
     setLogged(false);
   }
 
