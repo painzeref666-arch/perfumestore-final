@@ -58,8 +58,7 @@ export default function HomePage() {
           <Link href="/" className="text-xl font-black tracking-tight">Exousia & Co.</Link>
           <nav className="hidden items-center gap-8 text-sm font-medium text-stone-700 dark:text-white/60 md:flex">
             <Link href="/products" className="hover:text-amber-700">Products</Link>
-            <Link href="/quiz" className="hover:text-amber-700">Scent Quiz</Link>
-            <Link href="/wishlist" className="hover:text-amber-700">Wishlist</Link>
+            <a href="#scents" className="hover:text-amber-700">Scents</a>
             <a href="#reviews" className="hover:text-amber-700">Reviews</a>
             <Link href="/admin" className="hover:text-amber-700">Admin</Link>
           </nav>
@@ -76,10 +75,10 @@ export default function HomePage() {
           <div className="relative z-10">
             <p className="mb-4 inline-flex rounded-full border border-amber-800/20 bg-white/60 px-4 py-2 text-sm font-semibold text-amber-900 dark:bg-white/10 dark:text-amber-200">Luxury perfume collection</p>
             <h1 className="max-w-2xl text-5xl font-black leading-tight tracking-tight md:text-7xl">Find the scent that becomes your signature.</h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-stone-700 dark:text-white/65">Choose bottle size, EDP or Extrait variation, and discover your signature scent through our fragrance quiz.</p>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-stone-700 dark:text-white/65">Choose bottle size, EDP or Extrait variation, and preferred currency. Built for a smooth customer shopping experience.</p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link href="/products" className="rounded-full bg-amber-800 px-7 py-4 text-center font-bold text-white shadow-xl shadow-amber-900/20 transition hover:-translate-y-1 hover:bg-stone-950">Browse Collection</Link>
-              <Link href="/quiz" className="rounded-full border border-stone-300 bg-white/70 px-7 py-4 text-center font-bold text-stone-950 transition hover:-translate-y-1 hover:border-stone-950 dark:border-white/15 dark:bg-white/10 dark:text-white">Take Scent Quiz</Link>
+              <Link href="/checkout" className="rounded-full border border-stone-300 bg-white/70 px-7 py-4 text-center font-bold text-stone-950 transition hover:-translate-y-1 hover:border-stone-950 dark:border-white/15 dark:bg-white/10 dark:text-white">View Checkout</Link>
             </div>
             <div className="mt-8 block sm:hidden"><CurrencySelector compact /></div>
           </div>

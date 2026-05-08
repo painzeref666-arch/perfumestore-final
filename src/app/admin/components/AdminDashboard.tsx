@@ -95,12 +95,6 @@ export default function AdminDashboard() {
   const [imageStatus, setImageStatus] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.localStorage.getItem('exousia-admin-logged') === 'true') {
-      setLogged(true);
-    }
-  }, []);
-
   const totalInventory = products.reduce((s, p) => s + p.stock, 0);
   const totalValue = products.reduce((s, p) => s + p.stock * (p.variants?.[0]?.prices?.['10ml'] || p.price), 0);
   const activeCount = useMemo(() => products.filter((p) => p.active !== false).length, [products]);
@@ -143,6 +137,12 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage.getItem('exousia-admin-session') === 'active') {
+      setLogged(true);
+    }
+  }, []);
+
+  useEffect(() => {
     loadOrders();
   }, [logged]);
 
@@ -150,37 +150,36 @@ export default function AdminDashboard() {
     e.preventDefault();
     setError('');
 
-    const cleanEmail = email.trim().toLowerCase();
-    const cleanPassword = password.trim();
-
-    // Demo admin fallback is checked FIRST so the public admin account always works,
-    // even when Supabase Auth has not created an admin user yet.
-    if (cleanEmail === DEMO_EMAIL.toLowerCase() && cleanPassword === DEMO_PASSWORD) {
-      setLogged(true);
-      if (typeof window !== 'undefined') window.localStorage.setItem('exousia-admin-logged', 'true');
-      await refreshProducts();
-      return;
-    }
-
     if (isSupabaseConfigured && supabase) {
-      const { error: authError } = await supabase.auth.signInWithPassword({ email: cleanEmail, password: cleanPassword });
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
       if (!authError) {
         setLogged(true);
-        if (typeof window !== 'undefined') window.localStorage.setItem('exousia-admin-logged', 'true');
+        if (typeof window !== 'undefined') window.sessionStorage.setItem('exousia-admin-session', 'active');
         await refreshProducts();
         return;
       }
-      setError(`Supabase login failed: ${authError.message}. Demo admin still works with admin@exousia.com / exousia2026.`);
+      setError(`Supabase login failed: ${authError.message}. Checking secure fallback access.`);
+    }
+
+    if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
+      setLogged(true);
+      if (typeof window !== 'undefined') window.sessionStorage.setItem('exousia-admin-session', 'active');
+      setError('');
       return;
     }
 
-    setError('Wrong admin email or password. Use admin@exousia.com / exousia2026.');
+    setError('Wrong admin email or password.');
   }
 
   async function logout() {
+    setError('');
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem('exousia-admin-session');
+      window.localStorage.removeItem('exousia-admin-session');
+    }
     if (supabase) await supabase.auth.signOut();
-    if (typeof window !== 'undefined') window.localStorage.removeItem('exousia-admin-logged');
     setLogged(false);
+    if (typeof window !== 'undefined') window.location.href = '/admin';
   }
 
   function edit(p: ManagedProduct) {
@@ -305,13 +304,8 @@ export default function AdminDashboard() {
             <p className="mt-12 font-bold uppercase tracking-[.25em] text-amber-400">Admin Login</p>
             <h1 className="mt-4 text-5xl font-black leading-tight md:text-7xl">Secure admin dashboard with database support.</h1>
             <p className="mt-6 max-w-xl text-white/60">
-              Connect Supabase to save products, uploaded images, and customer orders permanently. Without Supabase, it still works in browser demo mode.
+              Manage products, orders, inventory, promos, and store content securely.
             </p>
-            <div className="mt-8 rounded-[2rem] border border-amber-500/20 bg-amber-500/10 p-5 text-sm text-amber-100">
-              <p className="font-black">Demo fallback admin account</p>
-              <p className="mt-2">Email: {DEMO_EMAIL}</p>
-              <p>Password: {DEMO_PASSWORD}</p>
-            </div>
           </section>
 
           <form onSubmit={handleLogin} className="rounded-[2.5rem] border border-white/10 bg-white/5 p-8 shadow-2xl">
