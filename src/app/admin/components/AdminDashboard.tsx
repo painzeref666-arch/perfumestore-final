@@ -25,6 +25,10 @@ const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD || 'exousia202
 type OrderRow = {
   id: string;
   customer: any;
+  customer_name?: string;
+  customer_email?: string;
+  customer_phone?: string;
+  customer_address?: string;
   items: any[];
   subtotal: number;
   status: string;
@@ -100,6 +104,9 @@ export default function AdminDashboard() {
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [orderFilter, setOrderFilter] = useState('All');
+  const [orderSearch, setOrderSearch] = useState('');
+  const [productSearch, setProductSearch] = useState('');
+  const [lowStockLimit, setLowStockLimit] = useState(10);
   const [orderSaving, setOrderSaving] = useState('');
   const [imageStatus, setImageStatus] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -107,11 +114,17 @@ export default function AdminDashboard() {
   const totalInventory = products.reduce((s, p) => s + p.stock, 0);
   const totalValue = products.reduce((s, p) => s + p.stock * (p.variants?.[0]?.prices?.['10ml'] || p.price), 0);
   const activeCount = useMemo(() => products.filter((p) => p.active !== false).length, [products]);
-  const lowStock = products.filter((p) => p.stock <= 10);
+  const lowStock = products.filter((p) => Number(p.stock || 0) <= lowStockLimit);
   const orderRevenue = orders.reduce((sum, o) => sum + Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0)), 0);
   const pendingOrders = orders.filter((o) => ((o.order_status || o.status || '').toLowerCase() === 'new' || (o.order_status || o.status || '').toLowerCase() === 'pending')).length;
   const paidOrders = orders.filter((o) => (o.payment_status || '').toLowerCase() === 'paid' || (o.status || '').toLowerCase() === 'paid').length;
   const shippedOrders = orders.filter((o) => (o.order_status || o.status || '').toLowerCase() === 'shipped').length;
+  const pendingPayments = orders.filter((o) => ['pending', 'for verification', 'cod pending'].includes(String(o.payment_status || '').toLowerCase())).length;
+  const filteredProducts = useMemo(() => {
+    const q = productSearch.trim().toLowerCase();
+    if (!q) return products;
+    return products.filter((p) => [p.name, p.family, p.promo, p.tag, p.event].filter(Boolean).join(' ').toLowerCase().includes(q));
+  }, [products, productSearch]);
 
   async function loadOrders() {
     if (!logged) return;
@@ -354,6 +367,35 @@ export default function AdminDashboard() {
     }
   }
 
+
+  function exportOrdersCsv() {
+    const rows = orders.map((o) => {
+      const customerName = o.customer_name || [o.customer?.first_name, o.customer?.last_name].filter(Boolean).join(' ') || o.customer?.name || '';
+      const total = Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0));
+      return {
+        id: o.id,
+        created_at: o.created_at,
+        customer_name: customerName,
+        customer_email: o.customer_email || o.customer?.email || '',
+        phone: o.customer_phone || o.customer?.phone || '',
+        payment_method: o.payment_method || o.customer?.payment_method || '',
+        payment_status: o.payment_status || '',
+        order_status: o.order_status || o.status || '',
+        total,
+        tracking_number: o.tracking_number || '',
+      };
+    });
+    const headers = Object.keys(rows[0] || { id: '', created_at: '', customer_name: '', customer_email: '', phone: '', payment_method: '', payment_status: '', order_status: '', total: '', tracking_number: '' });
+    const csv = [headers.join(','), ...rows.map((row: any) => headers.map((h) => `"${String(row[h] ?? '').replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `exousia-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   if (!logged) {
     return (
       <main className="min-h-screen bg-[#080604] px-6 py-16 text-white">
@@ -412,9 +454,10 @@ export default function AdminDashboard() {
           </div>
         </section>
 
-        <section className="mt-5 grid gap-5 md:grid-cols-4">
+        <section className="mt-5 grid gap-5 md:grid-cols-5">
           <Stat label="Total Orders" value={orders.length} />
           <Stat label="Pending Orders" value={pendingOrders} />
+          <Stat label="Pending Payments" value={pendingPayments} />
           <Stat label="Paid Orders" value={paidOrders} />
           <div className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
             <p className="text-sm font-bold text-stone-500 dark:text-white/50">Order Revenue</p>
@@ -501,13 +544,14 @@ export default function AdminDashboard() {
               </div>
               <button onClick={resetProducts} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Seed Demo Data</button>
             </div>
-            {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={products} edit={edit} deleteProduct={deleteProduct} />}
+            <input value={productSearch} onChange={(e) => setProductSearch(e.target.value)} placeholder="Search products, family, promo..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
+            {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} edit={edit} deleteProduct={deleteProduct} />}
           </section>
         </section>
 
         <section className="mt-8 grid gap-8 lg:grid-cols-2">
           <section className="rounded-[2rem] bg-stone-950 p-6 text-white">
-            <h2 className="text-2xl font-black">Low stock alerts</h2>
+            <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-2xl font-black">Low stock alerts</h2><label className="text-xs font-black uppercase tracking-widest text-white/50">Alert at ≤ <input type="number" value={lowStockLimit} onChange={(e)=>setLowStockLimit(Number(e.target.value)||0)} className="ml-2 w-20 rounded-xl bg-white/10 px-3 py-2 text-white" /></label></div>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
               {lowStock.map((p) => <div key={p.id} className="rounded-2xl bg-white/10 p-4"><p className="font-black">{p.name}</p><p className="text-sm text-white/60">Only {p.stock} left</p></div>)}
               {lowStock.length === 0 && <p className="text-white/60">No low stock products.</p>}
@@ -520,6 +564,9 @@ export default function AdminDashboard() {
             usingSupabase={usingSupabase}
             filter={orderFilter}
             setFilter={setOrderFilter}
+            search={orderSearch}
+            setSearch={setOrderSearch}
+            exportOrders={exportOrdersCsv}
             refresh={loadOrders}
             updateOrder={updateOrder}
             approvePayment={approvePayment}
@@ -537,6 +584,9 @@ function OrdersPanel({
   usingSupabase,
   filter,
   setFilter,
+  search,
+  setSearch,
+  exportOrders,
   refresh,
   updateOrder,
   approvePayment,
@@ -547,13 +597,21 @@ function OrdersPanel({
   usingSupabase: boolean;
   filter: string;
   setFilter: (v: string) => void;
+  search: string;
+  setSearch: (v: string) => void;
+  exportOrders: () => void;
   refresh: () => void;
   updateOrder: (id: string, changes: Partial<OrderRow>) => void | Promise<void>;
   approvePayment: (order: OrderRow) => void | Promise<void>;
   savingId: string;
 }) {
   const filters = ['All', 'new', 'paid', 'processing', 'shipped', 'delivered', 'cancelled'];
-  const visible = filter === 'All' ? orders : orders.filter((o) => (o.order_status || o.status || '').toLowerCase() === filter.toLowerCase() || (o.payment_status || '').toLowerCase() === filter.toLowerCase());
+  const visible = (filter === 'All' ? orders : orders.filter((o) => (o.order_status || o.status || '').toLowerCase() === filter.toLowerCase() || (o.payment_status || '').toLowerCase() === filter.toLowerCase()))
+    .filter((o) => {
+      const q = search.trim().toLowerCase();
+      if (!q) return true;
+      return [o.id, o.tracking_code, o.tracking_number, o.customer_name, o.customer_email, o.customer_phone, o.customer?.email, o.customer?.phone, o.customer?.first_name, o.customer?.last_name].filter(Boolean).join(' ').toLowerCase().includes(q);
+    });
 
   return (
     <section className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5 lg:col-span-2">
@@ -562,8 +620,10 @@ function OrdersPanel({
           <h2 className="text-2xl font-black">Orders management</h2>
           <p className="text-sm text-stone-500 dark:text-white/50">Manage customer orders, payment status, shipping status, and tracking numbers.</p>
         </div>
-        <button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button>
+        <div className="flex flex-wrap gap-2"><button onClick={exportOrders} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button><button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button></div>
       </div>
+
+      <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search order ID, customer, email, phone, tracking..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
 
       {!usingSupabase && <p className="mt-4 rounded-2xl bg-amber-100 p-4 text-sm font-bold text-amber-900">Orders need Supabase to save permanently.</p>}
 
