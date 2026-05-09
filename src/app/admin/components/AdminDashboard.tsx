@@ -139,16 +139,20 @@ export default function AdminDashboard() {
       const { data, error: dbError } = await withTimeout(
         supabase
           .from('orders')
-          .select('*')
+          .select('id, created_at, customer_name, customer_email, customer_phone, customer_address, total, subtotal, shipping_fee, payment_status, payment_reference, payment_proof_url, order_status, status, tracking_code, tracking_number, admin_notes, items, inventory_deducted')
           .order('created_at', { ascending: false })
-          .limit(50),
-        10000,
+          .limit(25),
+        30000,
         'Orders load'
       );
-      if (dbError) setError(`Orders load failed: ${dbError.message}`);
-      else setOrders((data || []) as OrderRow[]);
+      if (dbError) {
+        setError(`Orders load failed: ${dbError.message}`);
+        setOrders([]);
+      } else {
+        setOrders((data || []) as OrderRow[]);
+      }
     } catch (err: any) {
-      setError(`Orders load failed: ${err?.message || 'Unknown error'}`);
+      setError(`Orders load failed: ${err?.message || 'Unknown error'}. Please run supabase/admin_dashboard_inventory_upgrade.sql in Supabase SQL Editor, then redeploy.`);
       setOrders([]);
     } finally {
       setOrdersLoading(false);
