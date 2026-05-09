@@ -2,6 +2,7 @@
 
 import { FormEvent, Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { isSupabaseConfigured, supabase, withTimeout } from '@/lib/supabase';
 
@@ -103,7 +104,12 @@ function AccountPageContent() {
       'Account session check'
     ).catch(() => ({ data: { user: null } as any }));
     const activeEmail = data.user?.email || '';
-    setUserEmail(activeEmail);
+    
+    if (activeEmail && isAdminEmail(activeEmail)) {
+      router.replace('/admin');
+      return;
+    }
+setUserEmail(activeEmail);
 
     if (data.user) {
       await ensureCustomerProfile(data.user);
@@ -234,7 +240,7 @@ function AccountPageContent() {
       <div className="mx-auto max-w-5xl">
         <Link href="/" className="font-bold text-amber-800">← Back home</Link>
         <h1 className="mt-8 text-5xl font-black">Customer account</h1>
-        <p className="mt-3 text-stone-600 dark:text-white/60">Create an account, login, and view order history.</p>
+        <p className="mt-3 text-stone-600 dark:text-white/60">Create an account, login, and view order history. Admin accounts redirect automatically.</p>
         <p className="mt-4 rounded-2xl bg-white p-4 text-sm font-bold dark:bg-white/5">
           Status: {isSupabaseConfigured ? 'Supabase ready ✅' : 'Supabase not connected ❌'}
         </p>
@@ -356,7 +362,9 @@ function AccountPageContent() {
 
 
 export default function AccountPage() {
-  return (
+  
+  const router = useRouter();
+return (
     <Suspense fallback={<main className="min-h-screen bg-stone-50 p-8 text-stone-950 dark:bg-[#070604] dark:text-white"><p className="font-bold">Loading account...</p></main>}>
       <AccountPageContent />
     </Suspense>
