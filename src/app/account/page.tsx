@@ -110,6 +110,10 @@ function AccountPageContent() {
       return;
     }
 setUserEmail(activeEmail);
+    if (activeEmail && isAdminEmail(activeEmail)) {
+      router.replace('/admin');
+      return;
+    }
 
     if (data.user) {
       await ensureCustomerProfile(data.user);
@@ -120,6 +124,13 @@ setUserEmail(activeEmail);
 
     setLoading(false);
   }
+
+  // FORCE_ADMIN_REDIRECT_PATCH
+  useEffect(() => {
+    if (userEmail && isAdminEmail(userEmail)) {
+      router.replace('/admin');
+    }
+  }, [userEmail, router]);
 
   useEffect(() => {
     const finalAccountLoadingGuard = window.setTimeout(() => {
@@ -135,6 +146,10 @@ setUserEmail(activeEmail);
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       const activeEmail = session?.user?.email || '';
       setUserEmail(activeEmail);
+    if (activeEmail && isAdminEmail(activeEmail)) {
+      router.replace('/admin');
+      return;
+    }
       if (session?.user) {
         ensureCustomerProfile(session.user);
         loadOrdersForEmail(activeEmail);
@@ -268,13 +283,23 @@ setUserEmail(activeEmail);
 
   async function logout() {
     setSubmitting(true);
-    if (supabase) await supabase.auth.signOut();
-    setUserEmail('');
-    setOrders([]);
-    setEmail('');
-    setPassword('');
-    setMessage('Logged out successfully.');
-    setSubmitting(false);
+    try {
+      if (supabase) {
+        await Promise.race([
+          supabase.auth.signOut(),
+          new Promise((resolve) => setTimeout(resolve, 5000)),
+        ]);
+      }
+    } finally {
+      setUserEmail('');
+      setOrders([]);
+      setEmail('');
+      setPassword('');
+      setMessage('Logged out successfully.');
+      setSubmitting(false);
+      setLoading(false);
+      if (typeof window !== 'undefined') window.location.href = '/';
+    }
   }
 
   return (
@@ -406,6 +431,8 @@ setUserEmail(activeEmail);
 export default function AccountPage() {
   
   const router = useRouter();
+  const ADMIN_EMAILS = ['admin@exousiaandco.com', 'exousiaandco@gmail.com', 'admin@exousia.com'];
+  const isAdminEmail = (value: string) => ADMIN_EMAILS.includes(value.trim().toLowerCase());
 return (
     <Suspense fallback={<main className="min-h-screen bg-stone-50 p-8 text-stone-950 dark:bg-[#070604] dark:text-white"><p className="font-bold">Loading account...</p></main>}>
       <AccountPageContent />
