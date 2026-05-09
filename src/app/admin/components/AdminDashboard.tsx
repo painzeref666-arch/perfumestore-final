@@ -143,20 +143,13 @@ export default function AdminDashboard() {
         setOrders([]);
         return;
       }
-      const { data, error: dbError } = await withTimeout(
-        supabase
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(25),
-        7000,
-        'Orders load'
-      );
-      if (dbError) {
-        setError(`Orders load failed: ${dbError.message}`);
+      const res = await fetch('/api/admin/orders?limit=100', { cache: 'no-store' });
+      const json = await res.json();
+      if (json.error) {
+        setError(`Orders load failed: ${json.error}`);
         setOrders([]);
       } else {
-        setOrders((data || []) as unknown as OrderRow[]);
+        setOrders((json.data || []) as unknown as OrderRow[]);
       }
     } catch (err: any) {
       setError(`Orders load failed. ${err?.message || 'Supabase request did not finish.'}`);
@@ -181,8 +174,13 @@ export default function AdminDashboard() {
       delivered_at: (changes.status === 'delivered' || changes.order_status === 'delivered') ? new Date().toISOString() : changes.delivered_at,
       paid_at: changes.payment_status === 'Paid' ? new Date().toISOString() : changes.paid_at,
     };
-    const { error: dbError } = await withTimeout(supabase.from('orders').update(payload).eq('id', id), 10000, 'Order update');
-    if (dbError) setError(dbError.message);
+    const res = await fetch('/api/admin/orders', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, changes: payload }),
+    });
+    const json = await res.json();
+    if (json.error) setError(json.error);
     else await loadOrders();
     setOrderSaving('');
   }
