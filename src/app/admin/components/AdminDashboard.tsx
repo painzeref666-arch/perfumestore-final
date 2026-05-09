@@ -625,7 +625,7 @@ function OrdersPanel({
           <h2 className="text-2xl font-black">Orders management</h2>
           <p className="text-sm text-stone-500 dark:text-white/50">Manage customer orders, payment status, shipping status, and tracking numbers.</p>
         </div>
-        <div className="flex flex-wrap gap-2"><button onClick={exportOrders} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button><button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button></div>
+        <div className="flex flex-wrap gap-2"><Link href="/admin/notifications" className="rounded-full bg-amber-700 px-4 py-2 text-sm font-black text-white">Notifications</Link><button onClick={exportOrders} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button><button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button></div>
       </div>
 
       <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search order ID, customer, email, phone, tracking..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
@@ -719,6 +719,8 @@ function OrdersPanel({
                 <button onClick={() => updateOrder(o.id, { status: 'shipped', order_status: 'shipped' } as Partial<OrderRow>)} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
                 <button onClick={() => updateOrder(o.id, { status: 'delivered', order_status: 'delivered' } as Partial<OrderRow>)} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
                 <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Cancel Order</button>
+                <Link href={`/invoice/${o.id}`} className="rounded-full border border-stone-300 px-4 py-2 text-xs font-black dark:border-white/10">Invoice / PDF</Link>
+                <Link href="/admin/notifications" className="rounded-full border border-amber-300 px-4 py-2 text-xs font-black text-amber-800 dark:border-amber-500/30 dark:text-amber-200">Notify Customer</Link>
                 {savingId === o.id && <span className="rounded-full bg-amber-100 px-4 py-2 text-xs font-black text-amber-800">Saving...</span>}
               </div>
             </article>

@@ -182,6 +182,7 @@ export default function CheckoutPage() {
                 <p className="mt-2">{paymentMethod === 'Cash on Delivery' ? 'Your COD order is now pending admin processing.' : 'Your payment proof was sent. Please wait for admin verification.'}</p>
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
                   <Link href={`/track?code=${trackingCode}`} className="rounded-full bg-stone-950 px-6 py-3 font-black text-white">Track order</Link>
+                  <Link href={`/invoice/${orderId || trackingCode}`} className="rounded-full bg-amber-700 px-6 py-3 font-black text-white">View invoice</Link>
                   <Link href="/products" className="rounded-full bg-emerald-700 px-6 py-3 font-black text-white">Shop again</Link>
                 </div>
               </div>

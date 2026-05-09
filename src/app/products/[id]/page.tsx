@@ -11,6 +11,8 @@ import { concentrations, sizes, type ConcentrationOption, type SizeOption } from
 import { getVariantPrice, useProducts } from '@/context/ProductContext';
 import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
+import WishlistButton from '@/components/shop/WishlistButton';
+import RecentlyViewed, { rememberViewedProduct } from '@/components/shop/RecentlyViewed';
 
 function StarRating({ rating }: { rating: number }) {
   const safeRating = Math.max(0, Math.min(5, Number(rating) || 5));
@@ -71,6 +73,10 @@ export default function ProductDetailPage() {
     const { data } = await supabase.from('reviews').select('*').eq('product_id', productId).eq('approved', true).order('created_at', { ascending: false }).limit(8);
     setReviews(data || []);
   }
+
+  useEffect(() => {
+    if (productId) rememberViewedProduct(productId);
+  }, [productId]);
 
   const related = useMemo(() => {
     if (!product) return activeProducts.slice(0, 4);
@@ -177,6 +183,7 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <WishlistButton productId={product.id} className="h-14 w-full text-2xl sm:w-16" />
                 <button onClick={handleAdd} disabled={product.stock <= 0} className="flex-1 rounded-2xl bg-amber-600 px-7 py-4 font-black text-white transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50">
                   {added ? 'Added to Cart ✓' : <>Add to Cart — <Price amount={price} /></>}
                 </button>
@@ -234,6 +241,8 @@ export default function ProductDetailPage() {
               </div>
             </form>
           </section>
+
+          <RecentlyViewed currentProductId={product.id} />
 
           {related.length > 0 && (
             <section className="mt-20">
