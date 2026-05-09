@@ -128,6 +128,7 @@ export default function Header() {
           <Link href="/quiz" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Quiz</Link>
           <Link href="/#scents" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Families</Link>
           <Link href="/wishlist" className="hover:text-foreground dark:hover:text-white transition-colors">Wishlist</Link>
+          <Link href="/rewards" className="hover:text-foreground dark:hover:text-white transition-colors">Rewards</Link>
           <Link href="/reviews" className="hover:text-foreground dark:hover:text-white transition-colors">Reviews</Link>
           <Link href="/track" className="hover:text-foreground dark:hover:text-white transition-colors">Track Order</Link>
           <Link href="/account" className="hover:text-foreground dark:hover:text-white transition-colors">Account</Link>
