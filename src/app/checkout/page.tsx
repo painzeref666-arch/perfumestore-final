@@ -8,8 +8,8 @@ import { isSupabaseConfigured, supabase, type CustomerDetails } from '@/lib/supa
 import { computeShipping, makeTrackingCode, validateCoupon } from '@/lib/store-utils';
 
 const regions = ['NCR', 'Luzon', 'Visayas', 'Mindanao'];
-const gcashName = 'Exousia and Co.';
-const gcashNumber = '09XX XXX XXXX';
+const gcashName = 'KR******E M** R.';
+const gcashNumber = '0966 748 ****';
 
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart();
@@ -213,13 +213,13 @@ export default function CheckoutPage() {
                       <h3 className="font-black">Manual payment instructions</h3>
                       <div className="mt-4 grid gap-4 sm:grid-cols-[160px_1fr]">
                         <div className="rounded-2xl bg-white p-3 shadow-sm">
-                          <img src="/gcash-qr.svg" alt="GCash QR code" className="h-36 w-full rounded-xl object-contain" />
+                          <a href="/gcash-qr.jpeg" target="_blank" rel="noreferrer" title="Open full GCash QR"><img src="/gcash-qr.jpeg" alt="Official GCash QR code" className="h-56 w-full rounded-xl bg-white object-contain p-2" /></a><a href="/gcash-qr.jpeg" download className="mt-3 block rounded-full bg-blue-600 px-4 py-2 text-center text-xs font-black text-white hover:bg-blue-500">Download / Save QR</a>
                         </div>
                         <div>
                           <p className="text-sm">Scan the QR or send your payment to:</p>
                           <p className="mt-2 font-black">Account name: {gcashName}</p>
                           <p className="font-black">GCash/Maya number: {gcashNumber}</p>
-                          <p className="mt-2 text-xs font-bold opacity-80">Tip: replace public/gcash-qr.svg with your real QR image.</p>
+                          <p className="mt-2 text-xs font-bold opacity-80">Tip: replace public/gcash-qr.jpeg with your real QR image.</p>
                         </div>
                       </div>
                       <input name="payment_reference" placeholder="Reference number / transaction ID" className="mt-4 w-full rounded-2xl border border-amber-200 px-5 py-4 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
