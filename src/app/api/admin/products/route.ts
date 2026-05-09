@@ -40,41 +40,16 @@ async function supabaseRest(path: string, init?: RequestInit) {
 
     return { data: json, error: '' };
   } catch (err: any) {
-    return { data: null, error: err?.name === 'AbortError' ? 'Supabase request timed out on server.' : (err?.message || 'Supabase request failed.') };
+    return { data: null, error: err?.name === 'AbortError' ? 'Supabase products request timed out on server.' : (err?.message || 'Supabase products request failed.') };
   } finally {
     clearTimeout(timer);
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const missing = envError();
   if (missing) return NextResponse.json({ data: [], error: missing }, { status: 200 });
 
-  const url = new URL(req.url);
-  const id = url.searchParams.get('id');
-  const tracking = url.searchParams.get('tracking_code') || url.searchParams.get('tracking');
-  const limit = Math.min(Number(url.searchParams.get('limit') || 100), 500);
-
-  let path = `orders?select=*&order=created_at.desc&limit=${limit}`;
-  if (id) path = `orders?select=*&id=eq.${encodeURIComponent(id)}&limit=1`;
-  if (tracking) path = `orders?select=*&tracking_code=eq.${encodeURIComponent(tracking)}&limit=1`;
-
-  const result = await supabaseRest(path);
-  return NextResponse.json(result, { status: 200 });
-}
-
-export async function PATCH(req: NextRequest) {
-  const missing = envError();
-  if (missing) return NextResponse.json({ data: null, error: missing }, { status: 200 });
-
-  const body = await req.json().catch(() => ({}));
-  const id = body?.id;
-  const changes = body?.changes || {};
-  if (!id) return NextResponse.json({ data: null, error: 'Missing order id.' }, { status: 200 });
-
-  const result = await supabaseRest(`orders?id=eq.${encodeURIComponent(id)}`, {
-    method: 'PATCH',
-    body: JSON.stringify(changes),
-  });
+  const result = await supabaseRest('products?select=*&order=created_at.desc&limit=500');
   return NextResponse.json(result, { status: 200 });
 }

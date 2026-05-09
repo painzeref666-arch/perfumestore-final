@@ -86,22 +86,16 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const { data, error: dbError } = await withTimeout(
-        supabase
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: false }),
-        5000,
-        'Products load'
-      );
+      const response = await fetch('/api/admin/products', { cache: 'no-store' });
+      const json = await response.json();
 
-      if (dbError) {
-        setError(`Supabase products load failed. Using built-in demo products. ${dbError.message}`);
+      if (json.error) {
+        setError(`Products are using backup mode. ${json.error}`);
         loadLocal();
-      } else if (!data || data.length === 0) {
+      } else if (!json.data || json.data.length === 0) {
         setProducts(seed);
       } else {
-        setProducts(data.map(rowToProduct));
+        setProducts(json.data.map(rowToProduct));
       }
     } catch (err: any) {
       setError(`Products are using backup mode. ${err?.message || 'Supabase request did not finish.'}`);

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { isSupabaseConfigured, supabase, withTimeout } from '@/lib/supabase';
 import { getCustomerAddress, getCustomerEmail, getCustomerName, getCustomerPhone, invoiceNumber, money, orderDiscount, orderShipping, orderSubtotal, orderTotal, type InvoiceOrder } from '@/lib/order-utils';
 
 export default function InvoicePage() {
@@ -15,28 +14,42 @@ export default function InvoicePage() {
 
   useEffect(() => {
     let active = true;
+    const timer = window.setTimeout(() => {
+      if (active) {
+        setError('Invoice request timed out. Please go back to Admin and open the invoice again.');
+        setLoading(false);
+      }
+    }, 8000);
+
     async function load() {
       setLoading(true);
       setError('');
       try {
-        if (!isSupabaseConfigured || !supabase) throw new Error('Supabase is not connected.');
-        let query = supabase.from('orders').select('*').eq('id', id).maybeSingle();
-        let { data, error } = await withTimeout(query, 6000, 'Invoice order lookup');
-        if (!data && !error) {
-          const second = await withTimeout(supabase.from('orders').select('*').eq('tracking_code', id).maybeSingle(), 6000, 'Invoice tracking lookup');
-          data = second.data;
-          error = second.error;
+        let response = await fetch(`/api/admin/orders?id=${encodeURIComponent(id)}`, { cache: 'no-store' });
+        let json = await response.json();
+        let foundOrder = Array.isArray(json.data) ? json.data[0] : null;
+
+        if (!foundOrder) {
+          response = await fetch(`/api/admin/orders?tracking_code=${encodeURIComponent(id)}`, { cache: 'no-store' });
+          json = await response.json();
+          foundOrder = Array.isArray(json.data) ? json.data[0] : null;
         }
-        if (error) throw error;
-        if (active) setOrder(data as InvoiceOrder);
+
+        if (json.error) throw new Error(json.error);
+        if (active) setOrder(foundOrder as InvoiceOrder);
       } catch (err: any) {
         if (active) setError(err?.message || 'Invoice not found.');
       } finally {
+        window.clearTimeout(timer);
         if (active) setLoading(false);
       }
     }
+
     load();
-    return () => { active = false; };
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+    };
   }, [id]);
 
   const items = Array.isArray(order?.items) ? order!.items : [];
