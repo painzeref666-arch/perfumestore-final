@@ -11,6 +11,7 @@ import {
 import { isSupabaseConfigured, productToRow, rowToProduct, supabase, supabaseConfigError, withTimeout } from '@/lib/supabase';
 
 export type ManagedProduct = Product & {
+  category?: 'perfumes' | 'cosmetics' | 'wellness' | string;
   event?: string;
   promo?: string;
   salePrice?: number;
@@ -35,6 +36,7 @@ const KEY = 'perfumestore-products-v5-supabase-fallback';
 const seed: ManagedProduct[] = defaultProducts.map((p, index) => ({
   ...p,
   active: true,
+  category: p.category || 'perfumes',
   promo: p.tag,
   event: '',
   hero_enabled: index < 4,

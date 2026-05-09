@@ -124,7 +124,9 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted dark:text-white/50">
-          <Link href="/products" className="hover:text-foreground dark:hover:text-white transition-colors">Collections</Link>
+          <Link href="/perfumes" className="hover:text-foreground dark:hover:text-white transition-colors">Perfumes</Link>
+          <Link href="/cosmetics" className="hover:text-foreground dark:hover:text-white transition-colors">Cosmetics</Link>
+          <Link href="/wellness" className="hover:text-foreground dark:hover:text-white transition-colors">Wellness</Link>
           <Link href="/quiz" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Quiz</Link>
           <Link href="/#scents" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Families</Link>
           <Link href="/wishlist" className="hover:text-foreground dark:hover:text-white transition-colors">Wishlist</Link>
@@ -172,7 +174,7 @@ export default function Header() {
 
           {/* CTA */}
           <Link
-            href="/products"
+            href="/perfumes"
             className="hidden sm:inline-flex btn-amber items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold"
           >
             Shop Now
@@ -201,7 +203,9 @@ export default function Header() {
         <div className="md:hidden mt-2 max-w-7xl mx-auto glass dark:glass-dark rounded-2xl px-6 py-6 shadow-2xl">
           <nav className="flex flex-col gap-4">
             {[
-              ['Collections','/products'],
+              ['Perfumes','/perfumes'],
+              ['Cosmetics','/cosmetics'],
+              ['Wellness','/wellness'],
               ['Scent Quiz','/quiz'],
               ['Scent Families','/#scents'],
               ['Wishlist','/wishlist'],
@@ -226,7 +230,7 @@ export default function Header() {
               <MobileThemeButtons />
             </div>
             <Link
-              href="/products"
+              href="/perfumes"
               onClick={() => setMenuOpen(false)}
               className="btn-amber w-full text-center py-3 rounded-full font-semibold"
             >

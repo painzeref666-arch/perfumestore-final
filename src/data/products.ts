@@ -17,6 +17,7 @@ export type Product = {
   stock: number;
   tag: string;
   description: string;
+  category?: 'perfumes' | 'cosmetics' | 'wellness' | string;
   variants: ProductVariant[];
   hero_enabled?: boolean;
   hero_badge?: string;

@@ -58,6 +58,7 @@ const blank: ManagedProduct = {
   id: '',
   name: '',
   family: 'Floral',
+  category: 'perfumes',
   notes: [],
   price: 999,
   size: '10ml',
@@ -127,7 +128,7 @@ export default function AdminDashboard() {
   const filteredProducts = useMemo(() => {
     const q = productSearch.trim().toLowerCase();
     if (!q) return products;
-    return products.filter((p) => [p.name, p.family, p.promo, p.tag, p.event].filter(Boolean).join(' ').toLowerCase().includes(q));
+    return products.filter((p) => [p.name, p.family, p.category, p.promo, p.tag, p.event].filter(Boolean).join(' ').toLowerCase().includes(q));
   }, [products, productSearch]);
 
   async function loadOrders() {
@@ -487,6 +488,7 @@ export default function AdminDashboard() {
             <h2 className="text-2xl font-black">{editing.id ? 'Edit product' : 'Add product'}</h2>
             <Field label="Product name" value={editing.name} onChange={(v) => setEditing({ ...editing, name: v })} />
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <label className="mt-3 block text-sm font-bold text-stone-500 dark:text-white/50">Category<select value={(editing.category || 'perfumes') as string} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20"><option value="perfumes">Perfumes</option><option value="cosmetics">Cosmetics</option><option value="wellness">Wellness</option></select></label>
               <Field label="Family" value={editing.family} onChange={(v) => setEditing({ ...editing, family: v })} />
               <Field label="Stock" type="number" value={String(editing.stock || '')} onChange={(v) => setEditing({ ...editing, stock: Number(v) })} />
               <Field label="Rating" type="number" value={String(editing.rating || 5)} onChange={(v) => setEditing({ ...editing, rating: Number(v) })} />
@@ -775,7 +777,7 @@ function ProductTable({ products, edit, deleteProduct }: { products: ManagedProd
         <tbody>
           {products.map((p) => (
             <tr key={p.id} className="border-b border-stone-100 dark:border-white/5">
-              <td className="py-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 rounded-2xl object-cover" /><div><p className="font-black">{p.name}</p><p className="text-xs text-stone-500">{p.family}</p></div></div></td>
+              <td className="py-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 rounded-2xl object-cover" /><div><p className="font-black">{p.name}</p><p className="text-xs text-stone-500">{p.family} • {p.category || 'perfumes'}</p></div></div></td>
               <td><span className={`rounded-full px-3 py-1 text-xs font-black ${p.hero_enabled ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-500'}`}>{p.hero_enabled ? `Hero #${p.hero_order || 0}` : 'Not hero'}</span><p className="mt-1 max-w-xs truncate text-xs text-stone-500">{p.hero_button_text || 'View Perfume'}</p></td>
               <td><p className="font-bold">{p.promo || p.tag}</p><p className="max-w-xs truncate text-xs text-stone-500">{p.event || 'No event'}</p></td>
               <td>{p.stock}</td>
