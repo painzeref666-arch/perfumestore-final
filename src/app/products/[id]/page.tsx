@@ -66,8 +66,9 @@ export default function ProductDetailPage() {
   const price = getVariantPrice(product, selectedSize, selectedConcentration);
   const notes = product.notes?.length ? product.notes : product.family ? [product.family] : ['Signature scent'];
 
-  function handleAdd() {
-    addToCart(product.id, selectedSize, selectedConcentration, 1);
+  async function handleAdd() {
+    const ok = await addToCart(product.id, selectedSize, selectedConcentration, 1);
+    if (!ok) return;
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1800);
   }

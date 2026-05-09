@@ -1,7 +1,8 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 
 type Mode = 'login' | 'signup';
@@ -33,12 +34,18 @@ function getOrderTotal(order: OrderRow) {
 }
 
 export default function AccountPage() {
+  const searchParams = useSearchParams();
+  const loginRequired = searchParams.get('loginRequired') === '1';
+  const redirectTo = useMemo(() => {
+    const value = searchParams.get('redirect') || '/products';
+    return value.startsWith('/') && !value.startsWith('//') ? value : '/products';
+  }, [searchParams]);
   const [mode, setMode] = useState<Mode>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(loginRequired ? 'Please login or create an account before adding items to your cart.' : '');
   const [userEmail, setUserEmail] = useState('');
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -147,6 +154,7 @@ export default function AccountPage() {
       await ensureCustomerProfile(data.user);
       setMessage('Logged in successfully.');
       await loadSession();
+      if (loginRequired && typeof window !== 'undefined') window.location.href = redirectTo;
     }
   }
 
@@ -173,7 +181,7 @@ export default function AccountPage() {
           full_name: fullName.trim(),
           phone: phone.trim(),
         },
-        emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/account` : undefined,
+        emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/account${loginRequired ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}` : undefined,
       },
     });
     setSubmitting(false);
@@ -195,6 +203,7 @@ export default function AccountPage() {
         : 'Account created. Please check your email to confirm your account, then login.'
     );
     await loadSession();
+    if (data.session && loginRequired && typeof window !== 'undefined') window.location.href = redirectTo;
   }
 
   async function logout() {
