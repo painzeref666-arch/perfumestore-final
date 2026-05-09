@@ -131,7 +131,10 @@ export default function AdminDashboard() {
   }, [products, productSearch]);
 
   async function loadOrders() {
-    if (!logged) return;
+    if (!logged) {
+      setOrdersLoading(false);
+      return;
+    }
     setOrdersLoading(true);
     setError('');
     try {
@@ -143,10 +146,10 @@ export default function AdminDashboard() {
       const { data, error: dbError } = await withTimeout(
         supabase
           .from('orders')
-          .select('id, created_at, customer_name, customer_email, customer_phone, customer_address, total, subtotal, shipping_fee, payment_status, payment_reference, payment_proof_url, order_status, status, tracking_code, tracking_number, courier_name, delivery_notes, estimated_delivery, admin_notes, items, inventory_deducted')
+          .select('*')
           .order('created_at', { ascending: false })
           .limit(25),
-        30000,
+        7000,
         'Orders load'
       );
       if (dbError) {
@@ -156,7 +159,7 @@ export default function AdminDashboard() {
         setOrders((data || []) as unknown as OrderRow[]);
       }
     } catch (err: any) {
-      setError(`Orders load failed: ${err?.message || 'Unknown error'}. Please run supabase/admin_dashboard_inventory_upgrade.sql in Supabase SQL Editor, then redeploy.`);
+      setError(`Orders load failed. ${err?.message || 'Supabase request did not finish.'}`);
       setOrders([]);
     } finally {
       setOrdersLoading(false);

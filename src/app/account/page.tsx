@@ -3,7 +3,7 @@
 import { FormEvent, Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { isSupabaseConfigured, supabase } from '@/lib/supabase';
+import { isSupabaseConfigured, supabase, withTimeout } from '@/lib/supabase';
 
 type Mode = 'login' | 'signup';
 
@@ -76,11 +76,15 @@ function AccountPageContent() {
 
     // Pull recent orders and filter client-side to support both old and new schemas:
     // old: customer jsonb.email, new: customer_email text.
-    const { data } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(100);
+    const { data } = await withTimeout(
+      supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100),
+      6000,
+      'Account orders load'
+    ).catch(() => ({ data: [] as any[] }));
 
     const filtered = (data || []).filter((order: OrderRow) => getOrderEmail(order) === activeEmail.toLowerCase());
     setOrders(filtered);
@@ -93,17 +97,11 @@ function AccountPageContent() {
     }
 
     setLoading(true);
-
-    const timeout = new Promise((resolve) =>
-      setTimeout(() => resolve({ data: { user: null } }), 4000)
-    );
-
-    const result: any = await Promise.race([
+    const { data } = await withTimeout(
       supabase.auth.getUser(),
-      timeout
-    ]);
-
-    const { data } = result || { data: { user: null } };
+      5000,
+      'Account session check'
+    ).catch(() => ({ data: { user: null } as any }));
     const activeEmail = data.user?.email || '';
     setUserEmail(activeEmail);
 
@@ -118,6 +116,7 @@ function AccountPageContent() {
   }
 
   useEffect(() => {
+    const accountFallbackTimer = window.setTimeout(() => setLoading(false), 7000);
     loadSession();
 
     if (!supabase) return;
@@ -133,7 +132,10 @@ function AccountPageContent() {
       setLoading(false);
     });
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      window.clearTimeout(accountFallbackTimer);
+      listener.subscription.unsubscribe();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -239,7 +241,7 @@ function AccountPageContent() {
 
         {loading ? (
           <section className="mt-8 max-w-xl rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
-            <p className="font-bold text-stone-500 dark:text-white/60">Checking your account...</p>
+            <p className="font-bold text-stone-500 dark:text-white/60">Loading your account...</p>
           </section>
         ) : userEmail ? (
           <section className="mt-8 rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">

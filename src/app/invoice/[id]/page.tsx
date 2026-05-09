@@ -21,9 +21,9 @@ export default function InvoicePage() {
       try {
         if (!isSupabaseConfigured || !supabase) throw new Error('Supabase is not connected.');
         let query = supabase.from('orders').select('*').eq('id', id).maybeSingle();
-        let { data, error } = await withTimeout(query, 10000, 'Invoice order lookup');
+        let { data, error } = await withTimeout(query, 6000, 'Invoice order lookup');
         if (!data && !error) {
-          const second = await withTimeout(supabase.from('orders').select('*').eq('tracking_code', id).maybeSingle(), 10000, 'Invoice tracking lookup');
+          const second = await withTimeout(supabase.from('orders').select('*').eq('tracking_code', id).maybeSingle(), 6000, 'Invoice tracking lookup');
           data = second.data;
           error = second.error;
         }

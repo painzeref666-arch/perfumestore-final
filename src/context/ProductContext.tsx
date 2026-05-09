@@ -91,7 +91,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
           .from('products')
           .select('*')
           .order('created_at', { ascending: false }),
-        10000,
+        5000,
         'Products load'
       );
 
@@ -104,7 +104,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         setProducts(data.map(rowToProduct));
       }
     } catch (err: any) {
-      setError(`Products load failed. Using built-in demo products. ${err?.message || 'Unknown error'}`);
+      setError(`Products are using backup mode. ${err?.message || 'Supabase request did not finish.'}`);
       loadLocal();
     } finally {
       setLoading(false);

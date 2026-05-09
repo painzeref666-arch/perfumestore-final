@@ -4,7 +4,7 @@ import { FormEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Price from '@/components/Price';
 import { useCart } from '@/context/CartContext';
-import { isSupabaseConfigured, supabase, type CustomerDetails } from '@/lib/supabase';
+import { isSupabaseConfigured, supabase, withTimeout, type CustomerDetails } from '@/lib/supabase';
 import { computeShipping, makeTrackingCode, validateCoupon } from '@/lib/store-utils';
 
 const regions = ['NCR', 'Luzon', 'Visayas', 'Mindanao'];
@@ -49,11 +49,15 @@ export default function CheckoutPage() {
     if (!isSupabaseConfigured || !supabase) return '';
     const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
     const filePath = `proofs/${tracking}-${Date.now()}.${ext}`;
-    const { error: uploadError } = await supabase.storage.from('payment-proofs').upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: true,
-      contentType: file.type || `image/${ext}`,
-    });
+    const { error: uploadError } = await withTimeout(
+      supabase.storage.from('payment-proofs').upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: true,
+        contentType: file.type || `image/${ext}`,
+      }),
+      12000,
+      'Payment proof upload'
+    );
     if (uploadError) throw new Error(`Payment proof upload failed: ${uploadError.message}`);
     const { data } = supabase.storage.from('payment-proofs').getPublicUrl(filePath);
     return data.publicUrl;
@@ -62,7 +66,6 @@ export default function CheckoutPage() {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
-    setError('');
     setError('');
 
     try {
@@ -136,7 +139,7 @@ export default function CheckoutPage() {
       };
 
       if (isSupabaseConfigured && supabase) {
-        const response = await supabase.from('orders').insert(orderPayload).select('id, tracking_code').single();
+        const response = await withTimeout(supabase.from('orders').insert(orderPayload).select('id, tracking_code').single(), 12000, 'Order save');
 
         if (response.error) {
           setError(`Order save failed: ${response.error.message}`);
@@ -159,7 +162,7 @@ export default function CheckoutPage() {
       setSubmitted(true);
       clearCart();
     } catch (err: any) {
-      setError(err.message || 'Checkout failed. Please try again.');
+      setError(err?.message || 'Checkout failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -239,7 +242,7 @@ export default function CheckoutPage() {
                   </div>
                   {couponMessage && <p className="mt-2 text-sm font-bold text-amber-900 dark:text-amber-100">{couponMessage}</p>}
                 </div>
-                <button disabled={items.length === 0 || loading} className="mt-4 rounded-full bg-stone-950 px-8 py-4 font-black text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-amber-700">{loading ? 'Processing order...' : 'Place Order'}</button>
+                <button disabled={items.length === 0 || loading} className="mt-4 rounded-full bg-stone-950 px-8 py-4 font-black text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-amber-700">{loading ? 'Placing order...' : 'Place Order'}</button>
               </form>
             )}
           </section>
