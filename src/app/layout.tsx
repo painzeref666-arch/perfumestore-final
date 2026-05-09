@@ -7,6 +7,7 @@ import { CartProvider } from '@/context/CartContext';
 import { ProductProvider } from '@/context/ProductContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import CartDrawer from '@/components/shop/CartDrawer';
+import FloatingPromoBanner from '@/components/shop/FloatingPromoBanner';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -38,6 +39,7 @@ export default function RootLayout({
               <CartProvider>
                 <WishlistProvider>
                   {children}
+                  <FloatingPromoBanner />
                   <CartDrawer />
                 </WishlistProvider>
               </CartProvider>

@@ -7,6 +7,7 @@ import CurrencySelector from '@/components/CurrencySelector';
 import Price from '@/components/Price';
 import { reviews } from '@/data/products';
 import { useProducts } from '@/context/ProductContext';
+import HomepageVideoBanner from '@/components/shop/HomepageVideoBanner';
 
 const scents = ['Floral', 'Woody', 'Fresh', 'Amber', 'Oud', 'Citrus'];
 
@@ -151,6 +152,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <div className="mx-auto max-w-7xl px-6 pb-8"><HomepageVideoBanner /></div>
 
       <section id="products" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">

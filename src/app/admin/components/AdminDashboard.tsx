@@ -18,13 +18,14 @@ import {
   type SizeOption,
 } from '@/data/products';
 import { isSupabaseConfigured, supabase, supabaseConfigError, withTimeout } from '@/lib/supabase';
+import { logActivity } from '@/lib/customer-ui-utils';
 
 const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_ADMIN_EMAIL || 'admin@exousia.com';
 const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD || 'exousia2026';
 
 type OrderRow = {
   id: string;
-  customer: any;
+  customer?: any;
   customer_name?: string;
   customer_email?: string;
   customer_phone?: string;
@@ -149,7 +150,7 @@ export default function AdminDashboard() {
         setError(`Orders load failed: ${dbError.message}`);
         setOrders([]);
       } else {
-        setOrders((data || []) as OrderRow[]);
+        setOrders((data || []) as unknown as OrderRow[]);
       }
     } catch (err: any) {
       setError(`Orders load failed: ${err?.message || 'Unknown error'}. Please run supabase/admin_dashboard_inventory_upgrade.sql in Supabase SQL Editor, then redeploy.`);
@@ -359,8 +360,13 @@ export default function AdminDashboard() {
         hero_order: Number(editing.hero_order) || 0,
       };
 
-      if (products.some((p) => p.id === id)) await updateProduct(id, product);
-      else await addProduct(product);
+      if (products.some((p) => p.id === id)) {
+        await updateProduct(id, product);
+        logActivity({ type: 'inventory', title: 'Product updated', detail: `${product.name} • Stock ${product.stock}` });
+      } else {
+        await addProduct(product);
+        logActivity({ type: 'inventory', title: 'Product added', detail: `${product.name} • Stock ${product.stock}` });
+      }
       setEditing(blank);
       setImageStatus('');
       setNotes('');
@@ -442,6 +448,8 @@ export default function AdminDashboard() {
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-6 py-3 font-black text-white hover:bg-amber-600">Analytics</Link>
             <Link href="/admin/marketing" className="rounded-full bg-white px-6 py-3 font-black text-stone-950 hover:bg-amber-100">Marketing</Link>
+            <Link href="/admin/activity-logs" className="rounded-full bg-white px-6 py-3 font-black text-stone-950 hover:bg-amber-100">Activity Logs</Link>
+            <Link href="/admin/inventory-logs" className="rounded-full bg-white px-6 py-3 font-black text-stone-950 hover:bg-amber-100">Inventory Logs</Link>
             <Link href="/products" className="rounded-full bg-stone-950 px-6 py-3 font-black text-white hover:bg-amber-800 dark:bg-amber-700">View Shop</Link>
             <Link href="/admin/logout" className="rounded-full border border-stone-300 px-6 py-3 font-black dark:border-white/10">Logout</Link>
           </div>

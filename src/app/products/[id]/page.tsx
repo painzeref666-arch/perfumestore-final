@@ -14,6 +14,10 @@ import { supabase } from '@/lib/supabase';
 import WishlistButton from '@/components/shop/WishlistButton';
 import RecentlyViewed, { rememberViewedProduct } from '@/components/shop/RecentlyViewed';
 import ProductGallery from '@/components/shop/ProductGallery';
+import StickyMobileAddToCart from '@/components/shop/StickyMobileAddToCart';
+import FrequentlyBoughtTogether from '@/components/shop/FrequentlyBoughtTogether';
+import SmartRelatedPerfumes from '@/components/shop/SmartRelatedPerfumes';
+import { logActivity } from '@/lib/customer-ui-utils';
 
 function StarRating({ rating }: { rating: number }) {
   const safeRating = Math.max(0, Math.min(5, Number(rating) || 5));
@@ -114,9 +118,11 @@ export default function ProductDetailPage() {
   const notes = product.notes?.length ? product.notes : product.family ? [product.family] : ['Signature scent'];
 
   async function handleAdd() {
-    const ok = await addToCart(product.id, selectedSize, selectedConcentration, 1);
+    const currentProduct = product!;
+    const ok = await addToCart(currentProduct.id, selectedSize, selectedConcentration, 1);
     if (!ok) return;
     setAdded(true);
+    logActivity({ type: 'cart', title: 'Added to cart', detail: `${currentProduct.name} • ${selectedSize} • ${selectedConcentration}`, amount: price });
     window.setTimeout(() => setAdded(false), 1800);
   }
 
@@ -240,6 +246,10 @@ export default function ProductDetailPage() {
             </form>
           </section>
 
+          <FrequentlyBoughtTogether current={product as any} products={activeProducts as any} />
+
+          <SmartRelatedPerfumes current={product as any} products={activeProducts as any} />
+
           <RecentlyViewed currentProductId={product.id} />
 
           {related.length > 0 && (
@@ -252,6 +262,7 @@ export default function ProductDetailPage() {
           )}
         </div>
       </main>
+      <StickyMobileAddToCart price={price} disabled={product.stock <= 0} added={added} onAdd={handleAdd} />
       <Footer />
     </>
   );

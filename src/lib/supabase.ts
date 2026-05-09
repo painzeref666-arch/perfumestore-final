@@ -31,13 +31,13 @@ try {
 
 export const supabase = client;
 
-export async function withTimeout<T>(promise: Promise<T>, ms = 10000, label = 'Supabase request'): Promise<T> {
+export async function withTimeout<T>(promise: PromiseLike<T>, ms = 10000, label = 'Supabase request'): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   const timeout = new Promise<never>((_, reject) => {
     timer = setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms / 1000)} seconds.`)), ms);
   });
   try {
-    return await Promise.race([promise, timeout]);
+    return await Promise.race([Promise.resolve(promise), timeout]);
   } finally {
     if (timer) clearTimeout(timer);
   }

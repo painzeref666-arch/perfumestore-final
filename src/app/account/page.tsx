@@ -247,6 +247,8 @@ function AccountPageContent() {
               </button>
             </div>
 
+            <div className="mt-8 rounded-3xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-400/20 dark:bg-amber-500/10"><p className="font-black">Profile editor</p><p className="mt-1 text-sm text-stone-600 dark:text-white/60">Save your delivery details for faster future orders.</p><Link href="/account/profile" className="mt-4 inline-flex rounded-full bg-amber-800 px-5 py-3 text-sm font-black text-white">Edit customer profile</Link></div>
+
             <h3 className="mt-8 text-2xl font-black">Order history</h3>
             <div className="mt-4 space-y-3">
               {orders.map((order) => (
