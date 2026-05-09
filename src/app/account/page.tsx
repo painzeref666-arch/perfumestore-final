@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
@@ -33,7 +33,7 @@ function getOrderTotal(order: OrderRow) {
   return Number(order.total || order.subtotal || 0);
 }
 
-export default function AccountPage() {
+function AccountPageContent() {
   const searchParams = useSearchParams();
   const loginRequired = searchParams.get('loginRequired') === '1';
   const redirectTo = useMemo(() => {
@@ -337,5 +337,14 @@ export default function AccountPage() {
         )}
       </div>
     </main>
+  );
+}
+
+
+export default function AccountPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-stone-50 p-8 text-stone-950 dark:bg-[#070604] dark:text-white"><p className="font-bold">Loading account...</p></main>}>
+      <AccountPageContent />
+    </Suspense>
   );
 }
