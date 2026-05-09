@@ -1,13 +1,47 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { ManagedProduct } from '@/context/ProductContext';
 
-export const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-export const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+export const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim();
+export const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
 
-export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+function validSupabaseUrl(url: string) {
+  return /^https:\/\/.+\.supabase\.co\/?$/.test(url);
+}
+
+export const supabaseConfigError = !supabaseUrl || !supabaseAnonKey
+  ? 'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY in hosting environment variables.'
+  : !validSupabaseUrl(supabaseUrl)
+    ? 'NEXT_PUBLIC_SUPABASE_URL is not a valid Supabase project URL. It should look like https://your-project.supabase.co'
+    : '';
+
+export const isSupabaseConfigured = !supabaseConfigError;
+
+let client: SupabaseClient | null = null;
+try {
+  client = isSupabaseConfigured ? createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
+  }) : null;
+} catch (err) {
+  client = null;
+}
+
+export const supabase = client;
+
+export async function withTimeout<T>(promise: Promise<T>, ms = 10000, label = 'Supabase request'): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms / 1000)} seconds.`)), ms);
+  });
+  try {
+    return await Promise.race([promise, timeout]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
 
 export type OrderLine = {
   product_id: string;

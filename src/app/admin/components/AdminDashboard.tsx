@@ -17,7 +17,7 @@ import {
   type ProductVariant,
   type SizeOption,
 } from '@/data/products';
-import { isSupabaseConfigured, supabase } from '@/lib/supabase';
+import { isSupabaseConfigured, supabase, supabaseConfigError, withTimeout } from '@/lib/supabase';
 
 const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_ADMIN_EMAIL || 'admin@exousia.com';
 const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD || 'exousia2026';
@@ -114,16 +114,32 @@ export default function AdminDashboard() {
   const shippedOrders = orders.filter((o) => (o.order_status || o.status || '').toLowerCase() === 'shipped').length;
 
   async function loadOrders() {
-    if (!isSupabaseConfigured || !supabase || !logged) return;
+    if (!logged) return;
     setOrdersLoading(true);
-    const { data, error: dbError } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(50);
-    if (dbError) setError(dbError.message);
-    else setOrders((data || []) as OrderRow[]);
-    setOrdersLoading(false);
+    setError('');
+    try {
+      if (!isSupabaseConfigured || !supabase) {
+        setError(supabaseConfigError || 'Supabase is not connected.');
+        setOrders([]);
+        return;
+      }
+      const { data, error: dbError } = await withTimeout(
+        supabase
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(50),
+        10000,
+        'Orders load'
+      );
+      if (dbError) setError(`Orders load failed: ${dbError.message}`);
+      else setOrders((data || []) as OrderRow[]);
+    } catch (err: any) {
+      setError(`Orders load failed: ${err?.message || 'Unknown error'}`);
+      setOrders([]);
+    } finally {
+      setOrdersLoading(false);
+    }
   }
 
   async function updateOrder(id: string, changes: Partial<OrderRow>) {
@@ -141,7 +157,7 @@ export default function AdminDashboard() {
       delivered_at: (changes.status === 'delivered' || changes.order_status === 'delivered') ? new Date().toISOString() : changes.delivered_at,
       paid_at: changes.payment_status === 'Paid' ? new Date().toISOString() : changes.paid_at,
     };
-    const { error: dbError } = await supabase.from('orders').update(payload).eq('id', id);
+    const { error: dbError } = await withTimeout(supabase.from('orders').update(payload).eq('id', id), 10000, 'Order update');
     if (dbError) setError(dbError.message);
     else await loadOrders();
     setOrderSaving('');
@@ -155,9 +171,9 @@ export default function AdminDashboard() {
       const productId = item.product_id || item.id;
       const qty = Number(item.quantity || item.qty || 1);
       if (!productId || qty <= 0) continue;
-      const { data } = await supabase.from('products').select('stock').eq('id', productId).maybeSingle();
+      const { data } = await withTimeout(supabase.from('products').select('stock').eq('id', productId).maybeSingle(), 10000, 'Stock check');
       const currentStock = Number(data?.stock || 0);
-      await supabase.from('products').update({ stock: Math.max(0, currentStock - qty) }).eq('id', productId);
+      await withTimeout(supabase.from('products').update({ stock: Math.max(0, currentStock - qty) }).eq('id', productId), 10000, 'Stock update');
     }
   }
 

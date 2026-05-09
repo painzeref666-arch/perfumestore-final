@@ -8,7 +8,7 @@ import {
   type SizeOption,
   type ConcentrationOption,
 } from '@/data/products';
-import { isSupabaseConfigured, productToRow, rowToProduct, supabase } from '@/lib/supabase';
+import { isSupabaseConfigured, productToRow, rowToProduct, supabase, supabaseConfigError, withTimeout } from '@/lib/supabase';
 
 export type ManagedProduct = Product & {
   event?: string;
@@ -79,27 +79,36 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     setError('');
 
-    if (!isSupabaseConfigured || !supabase) {
+    try {
+      if (!isSupabaseConfigured || !supabase) {
+        if (supabaseConfigError) setError(`${supabaseConfigError} Using built-in demo products for now.`);
+        loadLocal();
+        return;
+      }
+
+      const { data, error: dbError } = await withTimeout(
+        supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        10000,
+        'Products load'
+      );
+
+      if (dbError) {
+        setError(`Supabase products load failed. Using built-in demo products. ${dbError.message}`);
+        loadLocal();
+      } else if (!data || data.length === 0) {
+        setProducts(seed);
+      } else {
+        setProducts(data.map(rowToProduct));
+      }
+    } catch (err: any) {
+      setError(`Products load failed. Using built-in demo products. ${err?.message || 'Unknown error'}`);
       loadLocal();
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const { data, error: dbError } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (dbError) {
-      setError(`Supabase load failed. Using browser fallback. ${dbError.message}`);
-      loadLocal();
-    } else if (!data || data.length === 0) {
-      setProducts(seed);
-    } else {
-      setProducts(data.map(rowToProduct));
-    }
-
-    setLoading(false);
   };
 
   useEffect(() => {

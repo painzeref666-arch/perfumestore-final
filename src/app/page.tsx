@@ -11,7 +11,7 @@ import { useProducts } from '@/context/ProductContext';
 const scents = ['Floral', 'Woody', 'Fresh', 'Amber', 'Oud', 'Citrus'];
 
 export default function HomePage() {
-  const { activeProducts, loading } = useProducts();
+  const { activeProducts, loading, error: productsError } = useProducts();
   const featured = useMemo(() => activeProducts.slice(0, 4), [activeProducts]);
   const heroSlides = useMemo(() => {
     const selected = activeProducts
@@ -164,6 +164,8 @@ export default function HomePage() {
 
         {loading ? (
           <div className="rounded-[2rem] border border-stone-200 bg-white p-8 font-bold dark:border-white/10 dark:bg-white/5">Loading products...</div>
+        ) : productsError ? (
+          <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 font-bold text-amber-900 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100">{productsError}</div>
         ) : featured.length === 0 ? (
           <div className="rounded-[2rem] border border-stone-200 bg-white p-8 font-bold dark:border-white/10 dark:bg-white/5">No active products yet. Add products in the admin dashboard.</div>
         ) : (
