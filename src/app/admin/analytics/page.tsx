@@ -160,26 +160,26 @@ export default function AnalyticsPage() {
   const maxDailyRevenue = Math.max(...dailySales.map((day) => day.revenue), 1);
 
   return (
-    <main className="min-h-screen bg-[#fbf7ef] px-6 py-12 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
-      <div className="mx-auto max-w-7xl">
+    <main className="min-h-screen overflow-x-hidden bg-[#fbf7ef] px-4 py-8 text-stone-950 dark:bg-[#0f0d0a] dark:text-white sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
             <Link href="/admin" className="font-bold text-amber-800">← Back to admin</Link>
-            <h1 className="mt-4 text-5xl font-black">Analytics & Sales Dashboard</h1>
+            <h1 className="mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">Analytics & Sales Dashboard</h1>
             <p className="mt-2 text-stone-600 dark:text-white/60">Track sales, orders, pending payments, inventory, and best-selling perfumes.</p>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex w-full flex-wrap gap-2 md:w-auto md:justify-end">
             <CurrencySelector />
             {[7, 30, 90].map((days) => (
-              <button key={days} onClick={() => setRange(days)} className={`rounded-full px-5 py-3 font-black ${range === days ? 'bg-amber-700 text-white' : 'border border-stone-300 dark:border-white/10'}`}>Last {days}d</button>
+              <button key={days} onClick={() => setRange(days)} className={`rounded-full px-4 py-2 text-sm font-black sm:px-5 sm:py-3 ${range === days ? 'bg-amber-700 text-white' : 'border border-stone-300 dark:border-white/10'}`}>Last {days}d</button>
             ))}
-            <button onClick={loadAnalytics} className="rounded-full bg-stone-950 px-5 py-3 font-black text-white dark:bg-white dark:text-stone-950">Refresh</button>
+            <button onClick={loadAnalytics} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-white dark:text-stone-950 sm:px-5 sm:py-3">Refresh</button>
           </div>
         </div>
 
         {msg && <p className="mt-6 rounded-2xl bg-amber-100 p-4 font-bold text-amber-900 dark:bg-amber-500/10 dark:text-amber-100">{msg}</p>}
 
-        <section className="mt-8 grid gap-5 md:grid-cols-4 xl:grid-cols-8">
+        <section className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-8">
           <Stat label="Gross Sales" value={<Price amount={analytics.revenue} />} />
           <Stat label="Paid Sales" value={<Price amount={analytics.paidRevenue} />} />
           <Stat label="Orders" value={orders.length} />
@@ -190,8 +190,8 @@ export default function AnalyticsPage() {
           <Stat label="Low Stock" value={analytics.lowStock.length} />
         </section>
 
-        <section className="mt-8 grid gap-8 lg:grid-cols-[1.4fr_.8fr]">
-          <div className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
+        <section className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,.65fr)]">
+          <div className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-black">Daily sales</h2>
@@ -199,9 +199,9 @@ export default function AnalyticsPage() {
               </div>
               <p className="rounded-full bg-stone-100 px-4 py-2 text-sm font-black dark:bg-white/10">{dailySales.length} days</p>
             </div>
-            <div className="mt-8 flex h-72 items-end gap-2 overflow-x-auto border-b border-stone-200 pb-4 dark:border-white/10">
+            <div className="mt-6 flex h-64 items-end gap-1 overflow-x-auto border-b border-stone-200 pb-4 dark:border-white/10 sm:gap-2 lg:h-72">
               {dailySales.map((day) => (
-                <div key={day.key} className="flex min-w-12 flex-1 flex-col items-center justify-end gap-2">
+                <div key={day.key} className="flex min-w-9 flex-1 flex-col items-center justify-end gap-2 sm:min-w-12">
                   <div className="text-xs font-bold text-stone-400">{day.orders}</div>
                   <div title={`${day.label}: ₱${day.revenue.toLocaleString()} / ${day.orders} orders`} className="w-full rounded-t-2xl bg-amber-700" style={{ height: `${Math.max(8, (day.revenue / maxDailyRevenue) * 220)}px` }} />
                   <div className="text-[10px] font-bold text-stone-400">{day.label}</div>
@@ -210,7 +210,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] bg-stone-950 p-6 text-white">
+          <div className="min-w-0 rounded-[1.5rem] bg-stone-950 p-4 text-white sm:rounded-[2rem] sm:p-6">
             <h2 className="text-2xl font-black">Action list</h2>
             <div className="mt-5 space-y-3">
               <Action label="Verify payments" value={analytics.pendingPayments} />
@@ -221,8 +221,8 @@ export default function AnalyticsPage() {
           </div>
         </section>
 
-        <section className="mt-8 grid gap-8 lg:grid-cols-2">
-          <div className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
+        <section className="mt-8 grid gap-6 lg:grid-cols-2">
+          <div className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <h2 className="text-2xl font-black">Best sellers</h2>
             <div className="mt-5 space-y-3">
               {bestSellers.map((item, index) => (
@@ -238,7 +238,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
+          <div className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <h2 className="text-2xl font-black">Low stock products</h2>
             <div className="mt-5 space-y-3">
               {analytics.lowStock.slice(0, 8).map((product) => (
@@ -281,7 +281,7 @@ export default function AnalyticsPage() {
 }
 
 function Stat({ label, value }: { label: string; value: any }) {
-  return <div className="rounded-[2rem] bg-white p-5 shadow-sm dark:bg-white/5"><p className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white/50">{label}</p><p className="mt-2 text-2xl font-black">{value}</p></div>;
+  return <div className="min-w-0 rounded-[1.25rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-5"><p className="text-[10px] font-black uppercase tracking-widest text-stone-500 dark:text-white/50 sm:text-xs">{label}</p><p className="mt-2 break-words text-xl font-black sm:text-2xl">{value}</p></div>;
 }
 
 function Action({ label, value }: { label: string; value: number }) {
