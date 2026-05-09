@@ -93,7 +93,17 @@ function AccountPageContent() {
     }
 
     setLoading(true);
-    const { data } = await supabase.auth.getUser();
+
+    const timeout = new Promise((resolve) =>
+      setTimeout(() => resolve({ data: { user: null } }), 4000)
+    );
+
+    const result: any = await Promise.race([
+      supabase.auth.getUser(),
+      timeout
+    ]);
+
+    const { data } = result || { data: { user: null } };
     const activeEmail = data.user?.email || '';
     setUserEmail(activeEmail);
 
@@ -229,7 +239,7 @@ function AccountPageContent() {
 
         {loading ? (
           <section className="mt-8 max-w-xl rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
-            <p className="font-bold text-stone-500 dark:text-white/60">Loading your account...</p>
+            <p className="font-bold text-stone-500 dark:text-white/60">Checking your account...</p>
           </section>
         ) : userEmail ? (
           <section className="mt-8 rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">

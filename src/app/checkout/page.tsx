@@ -63,6 +63,7 @@ export default function CheckoutPage() {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setError('');
 
     try {
       if (needsProof && !proofFile) {
@@ -238,7 +239,7 @@ export default function CheckoutPage() {
                   </div>
                   {couponMessage && <p className="mt-2 text-sm font-bold text-amber-900 dark:text-amber-100">{couponMessage}</p>}
                 </div>
-                <button disabled={items.length === 0 || loading} className="mt-4 rounded-full bg-stone-950 px-8 py-4 font-black text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-amber-700">{loading ? 'Placing order...' : 'Place Order'}</button>
+                <button disabled={items.length === 0 || loading} className="mt-4 rounded-full bg-stone-950 px-8 py-4 font-black text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-amber-700">{loading ? 'Processing order...' : 'Place Order'}</button>
               </form>
             )}
           </section>
