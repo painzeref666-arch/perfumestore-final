@@ -74,11 +74,11 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
           <div className="relative z-10">
             <p className="mb-4 inline-flex rounded-full border border-amber-800/20 bg-white/60 px-4 py-2 text-sm font-semibold text-amber-900 dark:bg-white/10 dark:text-amber-200">Luxury perfume collection</p>
-            <h1 className="max-w-2xl text-5xl font-black leading-tight tracking-tight md:text-7xl">Find the scent that becomes your signature.</h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-stone-700 dark:text-white/65">Choose bottle size, EDP or Extrait variation, and preferred currency. Built for a smooth customer shopping experience.</p>
+            <h1 className="max-w-2xl text-5xl font-black leading-tight tracking-tight md:text-7xl">Luxury scents made for your signature moments.</h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-stone-700 dark:text-white/65">Explore refined perfume blends, flexible bottle sizes, and premium fragrance variations in one smooth shopping experience.</p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link href="/products" className="rounded-full bg-amber-800 px-7 py-4 text-center font-bold text-white shadow-xl shadow-amber-900/20 transition hover:-translate-y-1 hover:bg-stone-950">Browse Collection</Link>
-              <Link href="/checkout" className="rounded-full border border-stone-300 bg-white/70 px-7 py-4 text-center font-bold text-stone-950 transition hover:-translate-y-1 hover:border-stone-950 dark:border-white/15 dark:bg-white/10 dark:text-white">View Checkout</Link>
+              <Link href="/products" className="rounded-full bg-amber-800 px-7 py-4 text-center font-bold text-white shadow-xl shadow-amber-900/20 transition hover:-translate-y-1 hover:bg-stone-950">Explore Collection</Link>
+              <Link href="/checkout" className="rounded-full border border-stone-300 bg-white/70 px-7 py-4 text-center font-bold text-stone-950 transition hover:-translate-y-1 hover:border-stone-950 dark:border-white/15 dark:bg-white/10 dark:text-white">My Checkout</Link>
             </div>
             <div className="mt-8 block sm:hidden"><CurrencySelector compact /></div>
           </div>
@@ -152,14 +152,32 @@ export default function HomePage() {
         </div>
       </section>
 
+
+
+      <section className="mx-auto -mt-6 max-w-7xl px-6 pb-12">
+        <div className="grid gap-4 md:grid-cols-4">
+          {[
+            ['Signature Scents', 'Curated perfume profiles for daily wear and special occasions.'],
+            ['Flexible Sizes', 'Choose 10ml, 15ml, 50ml, or 85ml bottles before checkout.'],
+            ['EDP / Extrait', 'Select the concentration that matches your preferred projection.'],
+            ['Secure Checkout', 'Customer accounts, order tracking, and payment verification ready.'],
+          ].map(([title, text]) => (
+            <div key={title} className="rounded-[2rem] border border-stone-200 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5">
+              <p className="text-sm font-black uppercase tracking-[.18em] text-amber-800">{title}</p>
+              <p className="mt-3 text-sm leading-6 text-stone-600 dark:text-white/55">{text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section id="products" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="font-bold uppercase tracking-[.25em] text-amber-800">Featured Collection</p>
             <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">Best-selling perfumes</h2>
-            <p className="mt-3 max-w-2xl text-stone-600 dark:text-white/55">This section is now controlled by the Admin Dashboard. Edit product name, image, description, rating, stock, tag, and size/variation prices there.</p>
+            <p className="mt-3 max-w-2xl text-stone-600 dark:text-white/55">Discover best sellers from the admin-managed catalog. For deeper browsing, use the advanced filters for scent family, notes, price, style, and stock.</p>
           </div>
-          <CurrencySelector />
+          <div className="flex flex-wrap items-center gap-3"><CurrencySelector /><Link href="/products" className="rounded-full bg-stone-950 px-5 py-3 text-sm font-black text-white transition hover:bg-amber-800 dark:bg-amber-700">Advanced Filters</Link></div>
         </div>
 
         {loading ? (
