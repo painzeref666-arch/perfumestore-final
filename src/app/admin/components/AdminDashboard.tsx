@@ -44,6 +44,9 @@ type OrderRow = {
   total?: number;
   tracking_code?: string;
   tracking_number?: string;
+  courier_name?: string;
+  delivery_notes?: string;
+  estimated_delivery?: string;
   paid_at?: string | null;
   shipped_at?: string | null;
   delivered_at?: string | null;
@@ -140,7 +143,7 @@ export default function AdminDashboard() {
       const { data, error: dbError } = await withTimeout(
         supabase
           .from('orders')
-          .select('id, created_at, customer_name, customer_email, customer_phone, customer_address, total, subtotal, shipping_fee, payment_status, payment_reference, payment_proof_url, order_status, status, tracking_code, tracking_number, admin_notes, items, inventory_deducted')
+          .select('id, created_at, customer_name, customer_email, customer_phone, customer_address, total, subtotal, shipping_fee, payment_status, payment_reference, payment_proof_url, order_status, status, tracking_code, tracking_number, courier_name, delivery_notes, estimated_delivery, admin_notes, items, inventory_deducted')
           .order('created_at', { ascending: false })
           .limit(25),
         30000,
@@ -698,24 +701,27 @@ function OrdersPanel({
                   <p className="text-stone-500 dark:text-white/50">Shipping fee: <Price amount={Number(o.shipping_fee || 0)} className="font-bold text-stone-900 dark:text-white" /></p>
                   <p className="text-stone-500 dark:text-white/50">Total: <Price amount={total} className="font-black text-stone-900 dark:text-white" /></p>
                   {o.payment_proof_url && <a href={o.payment_proof_url} target="_blank" className="mt-3 block overflow-hidden rounded-2xl border border-stone-200 dark:border-white/10"><img src={o.payment_proof_url} alt="Payment proof" className="h-40 w-full object-cover" /><span className="block bg-white p-2 text-center text-xs font-black text-stone-900 dark:bg-black/30 dark:text-white">View payment proof</span></a>}
-                  <label className="mt-3 block text-xs font-black uppercase tracking-widest text-stone-400">Tracking number</label>
-                  <div className="mt-2 flex gap-2">
-                    <input
-                      defaultValue={o.tracking_number || ''}
-                      id={`tracking-${o.id}`}
-                      className="min-w-0 flex-1 rounded-xl border border-stone-200 bg-white px-3 py-2 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/30"
-                      placeholder="J&T / LBC / NinjaVan tracking"
-                    />
-                    <button
-                      onClick={() => {
-                        const input = document.getElementById(`tracking-${o.id}`) as HTMLInputElement | null;
-                        updateOrder(o.id, { tracking_number: input?.value || '' });
-                      }}
-                      className="rounded-xl bg-stone-950 px-4 py-2 font-black text-white dark:bg-amber-700"
-                      disabled={savingId === o.id}
-                    >
-                      Save
-                    </button>
+                  <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-500/20 dark:bg-amber-500/10">
+                    <p className="text-xs font-black uppercase tracking-widest text-amber-800 dark:text-amber-200">Shipping tracker</p>
+                    <div className="mt-3 grid gap-2">
+                      <input id={`courier-${o.id}`} defaultValue={o.courier_name || ''} placeholder="Courier: J&T / LBC / Flash / NinjaVan" className="rounded-xl border border-stone-200 bg-white px-3 py-2 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/30" />
+                      <input id={`tracking-${o.id}`} defaultValue={o.tracking_number || ''} placeholder="Tracking number" className="rounded-xl border border-stone-200 bg-white px-3 py-2 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/30" />
+                      <input id={`eta-${o.id}`} defaultValue={o.estimated_delivery || ''} placeholder="Estimated delivery: e.g. 2-4 business days" className="rounded-xl border border-stone-200 bg-white px-3 py-2 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/30" />
+                      <textarea id={`notes-${o.id}`} defaultValue={o.delivery_notes || ''} placeholder="Delivery notes for customer" rows={2} className="rounded-xl border border-stone-200 bg-white px-3 py-2 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/30" />
+                      <button
+                        onClick={() => {
+                          const tracking = document.getElementById(`tracking-${o.id}`) as HTMLInputElement | null;
+                          const courier = document.getElementById(`courier-${o.id}`) as HTMLInputElement | null;
+                          const eta = document.getElementById(`eta-${o.id}`) as HTMLInputElement | null;
+                          const notes = document.getElementById(`notes-${o.id}`) as HTMLTextAreaElement | null;
+                          updateOrder(o.id, { tracking_number: tracking?.value || '', courier_name: courier?.value || '', estimated_delivery: eta?.value || '', delivery_notes: notes?.value || '' } as Partial<OrderRow>);
+                        }}
+                        className="rounded-xl bg-stone-950 px-4 py-2 font-black text-white dark:bg-amber-700"
+                        disabled={savingId === o.id}
+                      >
+                        Save shipping details
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -728,6 +734,7 @@ function OrdersPanel({
                 <button onClick={() => updateOrder(o.id, { status: 'delivered', order_status: 'delivered' } as Partial<OrderRow>)} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
                 <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Cancel Order</button>
                 <Link href={`/invoice/${o.id}`} className="rounded-full border border-stone-300 px-4 py-2 text-xs font-black dark:border-white/10">Invoice / PDF</Link>
+                <Link href={`/track?code=${o.tracking_code || o.tracking_number || o.id}`} className="rounded-full border border-blue-300 px-4 py-2 text-xs font-black text-blue-800 dark:border-blue-500/30 dark:text-blue-200">Customer tracking page</Link>
                 <Link href="/admin/notifications" className="rounded-full border border-amber-300 px-4 py-2 text-xs font-black text-amber-800 dark:border-amber-500/30 dark:text-amber-200">Notify Customer</Link>
                 {savingId === o.id && <span className="rounded-full bg-amber-100 px-4 py-2 text-xs font-black text-amber-800">Saving...</span>}
               </div>
