@@ -122,6 +122,12 @@ setUserEmail(activeEmail);
   }
 
   useEffect(() => {
+    const finalAccountLoadingGuard = window.setTimeout(() => {
+      setLoading(false);
+      setBusy(false);
+      setLoading(false);
+    }, 4500);
+
     const accountFallbackTimer = window.setTimeout(() => setLoading(false), 7000);
     loadSession();
 
@@ -156,7 +162,8 @@ setUserEmail(activeEmail);
     }
 
     setSubmitting(true);
-    const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const { data, error } = await Promise.race([
+      supabase.auth.signInWithPassword({ email: email.trim(), password });
     setSubmitting(false);
 
     if (error) {
@@ -191,17 +198,20 @@ setUserEmail(activeEmail);
     }
 
     setSubmitting(true);
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await Promise.race([
+      supabase.auth.signUp({
       email: email.trim(),
       password,
-      options: {
+        options: {
         data: {
           full_name: fullName.trim(),
           phone: phone.trim(),
         },
         emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/account${loginRequired ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}` : undefined,
       },
-    });
+      }),
+      new Promise<any>((resolve) => setTimeout(() => resolve({ data: null, error: { message: 'Account creation timed out. Please try again.' } }), 8000))
+    ]);
     setSubmitting(false);
 
     if (error) {
@@ -247,7 +257,7 @@ setUserEmail(activeEmail);
 
         {loading ? (
           <section className="mt-8 max-w-xl rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
-            <p className="font-bold text-stone-500 dark:text-white/60">Loading your account...</p>
+            <p className="font-bold text-stone-500 dark:text-white/60">Checking your account... If this takes too long, refresh and try again.</p>
           </section>
         ) : userEmail ? (
           <section className="mt-8 rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
