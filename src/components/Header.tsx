@@ -125,18 +125,12 @@ export default function Header() {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted dark:text-white/50">
           <Link href="/products" className="hover:text-foreground dark:hover:text-white transition-colors">Collections</Link>
-
-	<Link href="/quiz" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Quiz</Link>
-
-	<Link href="/scents" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Families</Link>
-
-	<Link href="/wishlist" className="hover:text-foreground dark:hover:text-white transition-colors">Wishlist</Link>
-
-	<Link href="/reviews" className="hover:text-foreground dark:hover:text-white transition-colors">Reviews</Link>
-
-	<Link href="/track" className="hover:text-foreground dark:hover:text-white transition-colors">Track Order</Link>
-
-	<Link href="/account" className="hover:text-foreground dark:hover:text-white transition-colors">Account</Link>
+          <Link href="/quiz" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Quiz</Link>
+          <Link href="/#scents" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Families</Link>
+          <Link href="/wishlist" className="hover:text-foreground dark:hover:text-white transition-colors">Wishlist</Link>
+          <Link href="/reviews" className="hover:text-foreground dark:hover:text-white transition-colors">Reviews</Link>
+          <Link href="/track" className="hover:text-foreground dark:hover:text-white transition-colors">Track Order</Link>
+          <Link href="/account" className="hover:text-foreground dark:hover:text-white transition-colors">Account</Link>
         </nav>
 
         {/* Actions */}
@@ -207,7 +201,9 @@ export default function Header() {
           <nav className="flex flex-col gap-4">
             {[
               ['Collections','/products'],
+              ['Scent Quiz','/quiz'],
               ['Scent Families','/#scents'],
+              ['Wishlist','/wishlist'],
               ['Reviews','/reviews'],
               ['Track Order','/track'],
               ['Account','/account'],

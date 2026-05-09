@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Price from '@/components/Price';
 import { useCart } from '@/context/CartContext';
 import { isSupabaseConfigured, supabase, type CustomerDetails } from '@/lib/supabase';
-import { computeShipping, deductInventory, makeTrackingCode, validateCoupon } from '@/lib/store-utils';
+import { computeShipping, makeTrackingCode, validateCoupon } from '@/lib/store-utils';
 
 const regions = ['NCR', 'Luzon', 'Visayas', 'Mindanao'];
 const gcashName = 'Exousia and Co.';
@@ -131,6 +131,7 @@ export default function CheckoutPage() {
         order_status: orderStatus,
         tracking_code: code,
         tracking_number: '',
+        inventory_deducted: false,
       };
 
       if (isSupabaseConfigured && supabase) {
@@ -142,7 +143,6 @@ export default function CheckoutPage() {
           return;
         }
 
-        await deductInventory(items);
         setOrderId(response.data?.id || '');
         setTrackingCode(response.data?.tracking_code || code);
       } else {

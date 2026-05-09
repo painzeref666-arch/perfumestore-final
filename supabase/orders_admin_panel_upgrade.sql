@@ -2,6 +2,19 @@
 -- Safe to run more than once.
 
 alter table public.orders
+add column if not exists customer_email text,
+add column if not exists customer_name text,
+add column if not exists customer_phone text,
+add column if not exists customer_address text,
+add column if not exists order_status text default 'new',
+add column if not exists payment_method text default 'Cash on Delivery',
+add column if not exists payment_reference text default '',
+add column if not exists payment_proof_url text default '',
+add column if not exists tracking_code text,
+add column if not exists discount numeric default 0,
+add column if not exists shipping numeric default 0,
+add column if not exists total numeric default 0,
+add column if not exists inventory_deducted boolean default false,
 add column if not exists shipping_method text default 'Standard',
 add column if not exists shipping_fee numeric default 0,
 add column if not exists payment_status text default 'Pending',

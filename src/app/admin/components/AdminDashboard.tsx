@@ -42,6 +42,8 @@ type OrderRow = {
   paid_at?: string | null;
   shipped_at?: string | null;
   delivered_at?: string | null;
+  order_status?: string;
+  inventory_deducted?: boolean;
 };
 
 const blank: ManagedProduct = {
@@ -107,9 +109,9 @@ export default function AdminDashboard() {
   const activeCount = useMemo(() => products.filter((p) => p.active !== false).length, [products]);
   const lowStock = products.filter((p) => p.stock <= 10);
   const orderRevenue = orders.reduce((sum, o) => sum + Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0)), 0);
-  const pendingOrders = orders.filter((o) => (o.status || '').toLowerCase() === 'new' || (o.status || '').toLowerCase() === 'pending').length;
+  const pendingOrders = orders.filter((o) => ((o.order_status || o.status || '').toLowerCase() === 'new' || (o.order_status || o.status || '').toLowerCase() === 'pending')).length;
   const paidOrders = orders.filter((o) => (o.payment_status || '').toLowerCase() === 'paid' || (o.status || '').toLowerCase() === 'paid').length;
-  const shippedOrders = orders.filter((o) => (o.status || '').toLowerCase() === 'shipped').length;
+  const shippedOrders = orders.filter((o) => (o.order_status || o.status || '').toLowerCase() === 'shipped').length;
 
   async function loadOrders() {
     if (!isSupabaseConfigured || !supabase || !logged) return;
@@ -134,14 +136,47 @@ export default function AdminDashboard() {
     setError('');
     const payload = {
       ...changes,
-      shipped_at: changes.status === 'shipped' ? new Date().toISOString() : changes.shipped_at,
-      delivered_at: changes.status === 'delivered' ? new Date().toISOString() : changes.delivered_at,
+      order_status: changes.status || changes.order_status,
+      shipped_at: (changes.status === 'shipped' || changes.order_status === 'shipped') ? new Date().toISOString() : changes.shipped_at,
+      delivered_at: (changes.status === 'delivered' || changes.order_status === 'delivered') ? new Date().toISOString() : changes.delivered_at,
       paid_at: changes.payment_status === 'Paid' ? new Date().toISOString() : changes.paid_at,
     };
     const { error: dbError } = await supabase.from('orders').update(payload).eq('id', id);
     if (dbError) setError(dbError.message);
     else await loadOrders();
     setOrderSaving('');
+  }
+
+
+  async function deductOrderInventory(order: OrderRow) {
+    if (!isSupabaseConfigured || !supabase || order.inventory_deducted) return;
+    const orderItems = Array.isArray(order.items) ? order.items : [];
+    for (const item of orderItems) {
+      const productId = item.product_id || item.id;
+      const qty = Number(item.quantity || item.qty || 1);
+      if (!productId || qty <= 0) continue;
+      const { data } = await supabase.from('products').select('stock').eq('id', productId).maybeSingle();
+      const currentStock = Number(data?.stock || 0);
+      await supabase.from('products').update({ stock: Math.max(0, currentStock - qty) }).eq('id', productId);
+    }
+  }
+
+  async function approvePayment(order: OrderRow) {
+    setOrderSaving(order.id);
+    setError('');
+    try {
+      await deductOrderInventory(order);
+      await updateOrder(order.id, {
+        payment_status: 'Paid',
+        status: 'paid',
+        order_status: 'paid',
+        inventory_deducted: true,
+      } as Partial<OrderRow>);
+      await refreshProducts();
+    } catch (err: any) {
+      setError(err?.message || 'Payment approval failed.');
+      setOrderSaving('');
+    }
   }
 
   useEffect(() => {
@@ -471,6 +506,7 @@ export default function AdminDashboard() {
             setFilter={setOrderFilter}
             refresh={loadOrders}
             updateOrder={updateOrder}
+            approvePayment={approvePayment}
             savingId={orderSaving}
           />
         </section>
@@ -487,6 +523,7 @@ function OrdersPanel({
   setFilter,
   refresh,
   updateOrder,
+  approvePayment,
   savingId,
 }: {
   orders: OrderRow[];
@@ -496,10 +533,11 @@ function OrdersPanel({
   setFilter: (v: string) => void;
   refresh: () => void;
   updateOrder: (id: string, changes: Partial<OrderRow>) => void | Promise<void>;
+  approvePayment: (order: OrderRow) => void | Promise<void>;
   savingId: string;
 }) {
   const filters = ['All', 'new', 'paid', 'processing', 'shipped', 'delivered', 'cancelled'];
-  const visible = filter === 'All' ? orders : orders.filter((o) => (o.status || '').toLowerCase() === filter.toLowerCase() || (o.payment_status || '').toLowerCase() === filter.toLowerCase());
+  const visible = filter === 'All' ? orders : orders.filter((o) => (o.order_status || o.status || '').toLowerCase() === filter.toLowerCase() || (o.payment_status || '').toLowerCase() === filter.toLowerCase());
 
   return (
     <section className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5 lg:col-span-2">
@@ -527,7 +565,7 @@ function OrdersPanel({
 
       {loading ? <p className="mt-5 font-bold">Loading orders...</p> : <div className="mt-5 space-y-4">
         {visible.map((o) => {
-          const customerName = [o.customer?.first_name, o.customer?.last_name].filter(Boolean).join(' ') || o.customer?.name || 'Customer';
+          const customerName = o.customer_name || [o.customer?.first_name, o.customer?.last_name].filter(Boolean).join(' ') || o.customer?.name || 'Customer';
           const items = Array.isArray(o.items) ? o.items : [];
           const total = Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0));
           return (
@@ -536,12 +574,12 @@ function OrdersPanel({
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-stone-400">Order #{o.id?.slice(0, 8)}</p>
                   <h3 className="mt-1 text-lg font-black">{customerName}</h3>
-                  <p className="text-stone-500 dark:text-white/50">{o.customer?.email || 'No email'} • {new Date(o.created_at).toLocaleString()}</p>
-                  <p className="mt-1 text-stone-500 dark:text-white/50">{o.customer?.phone || ''}</p>
-                  <p className="mt-2 max-w-2xl text-stone-600 dark:text-white/60">{formatAddress(o.customer)}</p>
+                  <p className="text-stone-500 dark:text-white/50">{o.customer_email || o.customer?.email || 'No email'} • {new Date(o.created_at).toLocaleString()}</p>
+                  <p className="mt-1 text-stone-500 dark:text-white/50">{o.customer_phone || o.customer?.phone || ''}</p>
+                  <p className="mt-2 max-w-2xl text-stone-600 dark:text-white/60">{o.customer_address || formatAddress(o.customer)}</p>
                 </div>
                 <div className="grid gap-2 sm:grid-cols-2 xl:w-[360px]">
-                  <Select label="Order status" value={o.status || 'new'} onChange={(value) => updateOrder(o.id, { status: value })} options={['new', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']} disabled={savingId === o.id} />
+                  <Select label="Order status" value={o.order_status || o.status || 'new'} onChange={(value) => updateOrder(o.id, { status: value, order_status: value } as Partial<OrderRow>)} options={['new', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']} disabled={savingId === o.id} />
                   <Select label="Payment" value={o.payment_status || 'Pending'} onChange={(value) => updateOrder(o.id, { payment_status: value })} options={['Pending', 'For Verification', 'COD Pending', 'Paid', 'Rejected', 'Failed', 'Refunded']} disabled={savingId === o.id} />
                 </div>
               </div>
@@ -594,12 +632,12 @@ function OrdersPanel({
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <button onClick={() => updateOrder(o.id, { payment_status: 'Paid', status: 'paid' })} className="rounded-full bg-emerald-700 px-4 py-2 text-xs font-black text-white">Approve Payment</button>
-                <button onClick={() => updateOrder(o.id, { payment_status: 'Rejected' })} className="rounded-full bg-rose-700 px-4 py-2 text-xs font-black text-white">Reject Payment</button>
-                <button onClick={() => updateOrder(o.id, { status: 'processing' })} className="rounded-full bg-stone-100 px-4 py-2 text-xs font-black dark:bg-white/10">Mark Processing</button>
-                <button onClick={() => updateOrder(o.id, { status: 'shipped' })} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
-                <button onClick={() => updateOrder(o.id, { status: 'delivered' })} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
-                <button onClick={() => updateOrder(o.id, { status: 'cancelled' })} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Cancel Order</button>
+                <button onClick={() => approvePayment(o)} className="rounded-full bg-emerald-700 px-4 py-2 text-xs font-black text-white">Approve Payment + Deduct Stock</button>
+                <button onClick={() => updateOrder(o.id, { payment_status: 'Rejected', order_status: 'payment_rejected' } as Partial<OrderRow>)} className="rounded-full bg-rose-700 px-4 py-2 text-xs font-black text-white">Reject Payment</button>
+                <button onClick={() => updateOrder(o.id, { status: 'processing', order_status: 'processing' } as Partial<OrderRow>)} className="rounded-full bg-stone-100 px-4 py-2 text-xs font-black dark:bg-white/10">Mark Processing</button>
+                <button onClick={() => updateOrder(o.id, { status: 'shipped', order_status: 'shipped' } as Partial<OrderRow>)} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
+                <button onClick={() => updateOrder(o.id, { status: 'delivered', order_status: 'delivered' } as Partial<OrderRow>)} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
+                <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Cancel Order</button>
                 {savingId === o.id && <span className="rounded-full bg-amber-100 px-4 py-2 text-xs font-black text-amber-800">Saving...</span>}
               </div>
             </article>

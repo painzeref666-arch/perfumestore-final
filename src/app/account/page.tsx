@@ -41,12 +41,14 @@ export default function AccountPage() {
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [orders, setOrders] = useState<OrderRow[]>([]);
-  const [checkingSession, setCheckingSession] = useState(true);
-  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   async function ensureCustomerProfile(user: any) {
     if (!supabase || !user?.id) return;
+
+    // Safe best-effort profile creation. If the table policy/schema is not ready,
+    // the account still works because Supabase Auth is the source of truth.
     try {
       await supabase.from('customer_profiles').upsert(
         {
@@ -58,74 +60,60 @@ export default function AccountPage() {
         { onConflict: 'id' }
       );
     } catch {
-      // Do not block login/signup if profile sync fails.
+      // Ignore profile sync errors so customers can still login/signup smoothly.
     }
   }
 
   async function loadOrdersForEmail(activeEmail: string) {
-    if (!supabase || !activeEmail) {
-      setOrders([]);
-      return;
-    }
+    if (!supabase || !activeEmail) return setOrders([]);
 
-    setOrdersLoading(true);
-    try {
-      const { data } = await supabase
-        .from('orders')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100);
+    // Pull recent orders and filter client-side to support both old and new schemas:
+    // old: customer jsonb.email, new: customer_email text.
+    const { data } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(100);
 
-      const filtered = (data || []).filter((order: OrderRow) => getOrderEmail(order) === activeEmail.toLowerCase());
-      setOrders(filtered);
-    } catch {
-      setOrders([]);
-    } finally {
-      setOrdersLoading(false);
-    }
+    const filtered = (data || []).filter((order: OrderRow) => getOrderEmail(order) === activeEmail.toLowerCase());
+    setOrders(filtered);
   }
 
-  async function loadSessionFast() {
+  async function loadSession() {
     if (!supabase) {
-      setCheckingSession(false);
+      setLoading(false);
       return;
     }
 
-    // getSession is faster than getUser because it reads the cached browser session first.
-    const { data } = await supabase.auth.getSession();
-    const user = data.session?.user;
-    const activeEmail = user?.email || '';
-
+    setLoading(true);
+    const { data } = await supabase.auth.getUser();
+    const activeEmail = data.user?.email || '';
     setUserEmail(activeEmail);
-    setCheckingSession(false);
 
-    if (user) {
-      setEmail(activeEmail);
-      ensureCustomerProfile(user);
-      loadOrdersForEmail(activeEmail);
+    if (data.user) {
+      await ensureCustomerProfile(data.user);
+      await loadOrdersForEmail(activeEmail);
     } else {
       setOrders([]);
     }
+
+    setLoading(false);
   }
 
   useEffect(() => {
-    loadSessionFast();
+    loadSession();
 
     if (!supabase) return;
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      const user = session?.user;
-      const activeEmail = user?.email || '';
-
+      const activeEmail = session?.user?.email || '';
       setUserEmail(activeEmail);
-      setCheckingSession(false);
-
-      if (user) {
-        setEmail(activeEmail);
-        ensureCustomerProfile(user);
+      if (session?.user) {
+        ensureCustomerProfile(session.user);
         loadOrdersForEmail(activeEmail);
       } else {
         setOrders([]);
       }
+      setLoading(false);
     });
 
     return () => listener.subscription.unsubscribe();
@@ -143,11 +131,10 @@ export default function AccountPage() {
     }
 
     setSubmitting(true);
-    const cleanEmail = email.trim().toLowerCase();
-    const { data, error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    setSubmitting(false);
 
     if (error) {
-      setSubmitting(false);
       if (error.message.toLowerCase().includes('rate limit')) {
         setMessage('Too many attempts. Please wait 5–10 minutes before trying again.');
       } else {
@@ -157,17 +144,10 @@ export default function AccountPage() {
     }
 
     if (data.user) {
-      // Instant UI update. Orders/profile load separately in the background.
-      const activeEmail = data.user.email || cleanEmail;
-      setUserEmail(activeEmail);
+      await ensureCustomerProfile(data.user);
       setMessage('Logged in successfully.');
-      setSubmitting(false);
-      ensureCustomerProfile(data.user);
-      loadOrdersForEmail(activeEmail);
-      return;
+      await loadSession();
     }
-
-    setSubmitting(false);
   }
 
   async function signUp() {
@@ -185,9 +165,8 @@ export default function AccountPage() {
     }
 
     setSubmitting(true);
-    const cleanEmail = email.trim().toLowerCase();
     const { data, error } = await supabase.auth.signUp({
-      email: cleanEmail,
+      email: email.trim(),
       password,
       options: {
         data: {
@@ -197,9 +176,9 @@ export default function AccountPage() {
         emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/account` : undefined,
       },
     });
+    setSubmitting(false);
 
     if (error) {
-      setSubmitting(false);
       if (error.message.toLowerCase().includes('rate limit')) {
         setMessage('Too many signup attempts. Please wait 5–10 minutes before trying again.');
       } else {
@@ -208,20 +187,14 @@ export default function AccountPage() {
       return;
     }
 
-    if (data.user) {
-      ensureCustomerProfile(data.user);
-    }
+    if (data.user) await ensureCustomerProfile(data.user);
 
-    if (data.session?.user?.email) {
-      setUserEmail(data.session.user.email);
-      setMessage('Account created and logged in successfully.');
-      loadOrdersForEmail(data.session.user.email);
-    } else {
-      setMessage('Account created. Please check your email to confirm your account, then login.');
-      setMode('login');
-    }
-
-    setSubmitting(false);
+    setMessage(
+      data.session
+        ? 'Account created and logged in successfully.'
+        : 'Account created. Please check your email to confirm your account, then login.'
+    );
+    await loadSession();
   }
 
   async function logout() {
@@ -229,6 +202,7 @@ export default function AccountPage() {
     if (supabase) await supabase.auth.signOut();
     setUserEmail('');
     setOrders([]);
+    setEmail('');
     setPassword('');
     setMessage('Logged out successfully.');
     setSubmitting(false);
@@ -244,9 +218,9 @@ export default function AccountPage() {
           Status: {isSupabaseConfigured ? 'Supabase ready ✅' : 'Supabase not connected ❌'}
         </p>
 
-        {checkingSession ? (
+        {loading ? (
           <section className="mt-8 max-w-xl rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
-            <p className="font-bold text-stone-500 dark:text-white/60">Checking login...</p>
+            <p className="font-bold text-stone-500 dark:text-white/60">Loading your account...</p>
           </section>
         ) : userEmail ? (
           <section className="mt-8 rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
@@ -266,8 +240,7 @@ export default function AccountPage() {
 
             <h3 className="mt-8 text-2xl font-black">Order history</h3>
             <div className="mt-4 space-y-3">
-              {ordersLoading && <p className="text-stone-500 dark:text-white/50">Loading order history...</p>}
-              {!ordersLoading && orders.map((order) => (
+              {orders.map((order) => (
                 <Link
                   key={order.id}
                   href={`/track?code=${order.tracking_code || order.id}`}
@@ -279,7 +252,7 @@ export default function AccountPage() {
                   </p>
                 </Link>
               ))}
-              {!ordersLoading && orders.length === 0 && <p className="text-stone-500 dark:text-white/50">No orders yet.</p>}
+              {orders.length === 0 && <p className="text-stone-500 dark:text-white/50">No orders yet.</p>}
             </div>
           </section>
         ) : (
@@ -349,7 +322,7 @@ export default function AccountPage() {
               disabled={submitting}
               className="mt-6 rounded-full bg-stone-950 px-6 py-3 font-black text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-amber-700"
             >
-              {submitting ? (mode === 'login' ? 'Logging in...' : 'Creating account...') : mode === 'login' ? 'Login' : 'Create account'}
+              {submitting ? 'Please wait...' : mode === 'login' ? 'Login' : 'Create account'}
             </button>
           </form>
         )}
