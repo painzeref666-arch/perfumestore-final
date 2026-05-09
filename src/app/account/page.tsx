@@ -162,24 +162,40 @@ setUserEmail(activeEmail);
     }
 
     setSubmitting(true);
-    const { data, error } = await Promise.race([
-      supabase.auth.signInWithPassword({ email: email.trim(), password });
-    setSubmitting(false);
+    try {
+      const { data, error } = await Promise.race([
+        supabase.auth.signInWithPassword({ email: email.trim(), password }),
+        new Promise<any>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: { message: 'Login timed out. Please try again.' } }), 8000)
+        ),
+      ]);
 
-    if (error) {
-      if (error.message.toLowerCase().includes('rate limit')) {
-        setMessage('Too many attempts. Please wait 5–10 minutes before trying again.');
-      } else {
-        setMessage(error.message);
+      if (error) {
+        if (error.message?.toLowerCase().includes('rate limit')) {
+          setMessage('Too many attempts. Please wait 5–10 minutes before trying again.');
+        } else {
+          setMessage(error.message);
+        }
+        return;
       }
-      return;
-    }
 
-    if (data.user) {
-      await ensureCustomerProfile(data.user);
-      setMessage('Logged in successfully.');
-      await loadSession();
-      if (loginRequired && typeof window !== 'undefined') window.location.href = redirectTo;
+      const activeEmail = data?.user?.email || email.trim();
+      if (activeEmail && isAdminEmail(activeEmail)) {
+        router.replace('/admin');
+        return;
+      }
+
+      if (data?.user) {
+        await ensureCustomerProfile(data.user);
+        setMessage('Logged in successfully.');
+        await loadSession();
+        if (loginRequired && typeof window !== 'undefined') window.location.href = redirectTo;
+      }
+    } catch (err: any) {
+      setMessage(err?.message || 'Login failed. Please try again.');
+    } finally {
+      setSubmitting(false);
+      setLoading(false);
     }
   }
 
@@ -198,40 +214,56 @@ setUserEmail(activeEmail);
     }
 
     setSubmitting(true);
-    const { data, error } = await Promise.race([
-      supabase.auth.signUp({
-      email: email.trim(),
-      password,
-        options: {
-        data: {
-          full_name: fullName.trim(),
-          phone: phone.trim(),
-        },
-        emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/account${loginRequired ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}` : undefined,
-      },
-      }),
-      new Promise<any>((resolve) => setTimeout(() => resolve({ data: null, error: { message: 'Account creation timed out. Please try again.' } }), 8000))
-    ]);
-    setSubmitting(false);
+    try {
+      const { data, error } = await Promise.race([
+        supabase.auth.signUp({
+          email: email.trim(),
+          password,
+          options: {
+            data: {
+              full_name: fullName.trim(),
+              phone: phone.trim(),
+            },
+            emailRedirectTo: typeof window !== 'undefined'
+              ? `${window.location.origin}/account${loginRequired ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`
+              : undefined,
+          },
+        }),
+        new Promise<any>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: { message: 'Account creation timed out. Please try again.' } }), 8000)
+        ),
+      ]);
 
-    if (error) {
-      if (error.message.toLowerCase().includes('rate limit')) {
-        setMessage('Too many signup attempts. Please wait 5–10 minutes before trying again.');
-      } else {
-        setMessage(error.message);
+      if (error) {
+        if (error.message?.toLowerCase().includes('rate limit')) {
+          setMessage('Too many signup attempts. Please wait 5–10 minutes before trying again.');
+        } else {
+          setMessage(error.message);
+        }
+        return;
       }
-      return;
+
+      const activeEmail = data?.user?.email || email.trim();
+      if (activeEmail && isAdminEmail(activeEmail)) {
+        router.replace('/admin');
+        return;
+      }
+
+      if (data?.user) await ensureCustomerProfile(data.user);
+
+      setMessage(
+        data?.session
+          ? 'Account created and logged in successfully.'
+          : 'Account created. You can now login.'
+      );
+      await loadSession();
+      if (data?.session && loginRequired && typeof window !== 'undefined') window.location.href = redirectTo;
+    } catch (err: any) {
+      setMessage(err?.message || 'Account creation failed. Please try again.');
+    } finally {
+      setSubmitting(false);
+      setLoading(false);
     }
-
-    if (data.user) await ensureCustomerProfile(data.user);
-
-    setMessage(
-      data.session
-        ? 'Account created and logged in successfully.'
-        : 'Account created. Please check your email to confirm your account, then login.'
-    );
-    await loadSession();
-    if (data.session && loginRequired && typeof window !== 'undefined') window.location.href = redirectTo;
   }
 
   async function logout() {
