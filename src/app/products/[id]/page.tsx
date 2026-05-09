@@ -13,6 +13,7 @@ import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
 import WishlistButton from '@/components/shop/WishlistButton';
 import RecentlyViewed, { rememberViewedProduct } from '@/components/shop/RecentlyViewed';
+import ProductGallery from '@/components/shop/ProductGallery';
 
 function StarRating({ rating }: { rating: number }) {
   const safeRating = Math.max(0, Math.min(5, Number(rating) || 5));
@@ -131,14 +132,11 @@ export default function ProductDetailPage() {
           </nav>
 
           <section className="grid gap-12 lg:grid-cols-2 lg:items-start">
-            <div>
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/5">
-                <AppImage src={product.image} alt={product.name} fill sizes="(max-width:1024px) 100vw,50vw" className="object-cover" />
-                <div className="absolute left-6 top-6 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[.18em] text-stone-950">{product.tag || product.promo || 'Featured'}</div>
-              </div>
+            <div className="animate-[fadeIn_.7s_ease-out_both]">
+              <ProductGallery product={product as any} />
             </div>
 
-            <div className="lg:pt-5">
+            <div className="animate-[slideUp_.7s_ease-out_.08s_both] lg:pt-5">
               <p className="text-xs font-black uppercase tracking-[.28em] text-amber-400">{product.family}</p>
               <h1 className="mt-3 text-5xl font-black leading-none tracking-tight md:text-7xl">{product.name}</h1>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-white/65">{product.description || 'A premium fragrance selected for everyday confidence and special moments.'}</p>
