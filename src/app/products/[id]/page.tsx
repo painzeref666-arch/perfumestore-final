@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -10,6 +10,7 @@ import Price from '@/components/Price';
 import { concentrations, sizes, type ConcentrationOption, type SizeOption } from '@/data/products';
 import { getVariantPrice, useProducts } from '@/context/ProductContext';
 import { useCart } from '@/context/CartContext';
+import { supabase } from '@/lib/supabase';
 
 function StarRating({ rating }: { rating: number }) {
   const safeRating = Math.max(0, Math.min(5, Number(rating) || 5));
@@ -31,6 +32,45 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState<SizeOption>('10ml');
   const [selectedConcentration, setSelectedConcentration] = useState<ConcentrationOption>('EDP');
   const [added, setAdded] = useState(false);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewMsg, setReviewMsg] = useState('');
+
+  useEffect(() => {
+    let active = true;
+    async function loadReviews() {
+      if (!supabase || !productId) return;
+      const { data } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('product_id', productId)
+        .eq('approved', true)
+        .order('created_at', { ascending: false })
+        .limit(8);
+      if (active) setReviews(data || []);
+    }
+    loadReviews();
+    return () => { active = false; };
+  }, [productId]);
+
+  async function submitReview(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!supabase) { setReviewMsg('Reviews need Supabase connection.'); return; }
+    const f = new FormData(e.currentTarget);
+    const { error } = await supabase.from('reviews').insert({
+      product_id: productId,
+      customer_name: String(f.get('customer_name') || 'Customer'),
+      customer_email: String(f.get('customer_email') || ''),
+      rating: Number(f.get('rating') || 5),
+      title: String(f.get('title') || 'Review'),
+      body: String(f.get('body') || ''),
+      approved: true,
+    });
+    if (error) { setReviewMsg(error.message); return; }
+    setReviewMsg('Thank you! Your review was submitted.');
+    (e.currentTarget as HTMLFormElement).reset();
+    const { data } = await supabase.from('reviews').select('*').eq('product_id', productId).eq('approved', true).order('created_at', { ascending: false }).limit(8);
+    setReviews(data || []);
+  }
 
   const related = useMemo(() => {
     if (!product) return activeProducts.slice(0, 4);
@@ -158,6 +198,41 @@ export default function ProductDetailPage() {
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {notes.map((note) => <div key={note} className="rounded-3xl border border-white/10 bg-black/20 p-5"><p className="font-black">{note}</p><p className="mt-1 text-sm text-white/45">Signature note</p></div>)}
             </div>
+          </section>
+
+
+          <section className="mt-20 grid gap-8 lg:grid-cols-[1fr_420px]">
+            <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-8 md:p-10">
+              <p className="text-xs font-black uppercase tracking-[.25em] text-amber-400">Customer Reviews</p>
+              <h2 className="mt-3 text-3xl font-black">What customers say</h2>
+              <div className="mt-6 grid gap-4">
+                {reviews.length === 0 ? <p className="rounded-3xl bg-black/20 p-5 text-white/60">No customer reviews yet. Be the first to review this perfume.</p> : reviews.map((r) => (
+                  <article key={r.id} className="rounded-3xl border border-white/10 bg-black/20 p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <p className="font-black">{r.title || 'Customer review'}</p>
+                      <StarRating rating={Number(r.rating || 5)} />
+                    </div>
+                    <p className="mt-1 text-sm text-white/45">{r.customer_name || 'Customer'}</p>
+                    <p className="mt-3 leading-7 text-white/65">{r.body}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+            <form onSubmit={submitReview} className="rounded-[2.5rem] border border-white/10 bg-white/5 p-8">
+              <p className="text-xs font-black uppercase tracking-[.25em] text-amber-400">Leave a review</p>
+              <h3 className="mt-3 text-2xl font-black">Rate this perfume</h3>
+              <div className="mt-5 grid gap-3">
+                <input name="customer_name" required placeholder="Your name" className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4" />
+                <input name="customer_email" type="email" placeholder="Email optional" className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4" />
+                <select name="rating" className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4">
+                  <option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option>
+                </select>
+                <input name="title" required placeholder="Review title" className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4" />
+                <textarea name="body" required placeholder="Your review" className="h-28 rounded-2xl border border-white/10 bg-black/20 px-5 py-4" />
+                <button className="rounded-full bg-amber-700 px-6 py-4 font-black text-white">Submit review</button>
+                {reviewMsg && <p className="rounded-2xl bg-amber-500/10 p-3 text-sm font-bold text-amber-100">{reviewMsg}</p>}
+              </div>
+            </form>
           </section>
 
           {related.length > 0 && (

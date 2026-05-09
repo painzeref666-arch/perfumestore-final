@@ -15,8 +15,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: 'PerfumeStore — Discover Your Signature Scent',
-  description: 'Shop curated luxury fragrances at PerfumeStore. From floral to woody, find your perfect scent with same-day dispatch across the US.',
+  title: 'Exousia & Co. — Luxury Inspired Perfumes',
+  description: 'Shop Exousia & Co. luxury inspired perfumes with secure checkout, GCash payment verification, customer reviews, and order tracking.',
   icons: {
     icon: [
       { url: '/favicon.ico', type: 'image/x-icon' }

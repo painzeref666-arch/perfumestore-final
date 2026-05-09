@@ -441,6 +441,7 @@ export default function AdminDashboard() {
           <div className="flex flex-wrap gap-3">
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-6 py-3 font-black text-white hover:bg-amber-600">Analytics</Link>
+            <Link href="/admin/marketing" className="rounded-full bg-white px-6 py-3 font-black text-stone-950 hover:bg-amber-100">Marketing</Link>
             <Link href="/products" className="rounded-full bg-stone-950 px-6 py-3 font-black text-white hover:bg-amber-800 dark:bg-amber-700">View Shop</Link>
             <Link href="/admin/logout" className="rounded-full border border-stone-300 px-6 py-3 font-black dark:border-white/10">Logout</Link>
           </div>

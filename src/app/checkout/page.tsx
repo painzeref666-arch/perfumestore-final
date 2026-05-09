@@ -210,9 +210,17 @@ export default function CheckoutPage() {
                   {needsProof && (
                     <div className="mt-4 rounded-2xl bg-amber-50 p-4 text-amber-950 dark:bg-amber-500/10 dark:text-amber-100">
                       <h3 className="font-black">Manual payment instructions</h3>
-                      <p className="mt-2 text-sm">Send your payment to:</p>
-                      <p className="mt-2 font-black">Account name: {gcashName}</p>
-                      <p className="font-black">GCash/Maya number: {gcashNumber}</p>
+                      <div className="mt-4 grid gap-4 sm:grid-cols-[160px_1fr]">
+                        <div className="rounded-2xl bg-white p-3 shadow-sm">
+                          <img src="/gcash-qr.svg" alt="GCash QR code" className="h-36 w-full rounded-xl object-contain" />
+                        </div>
+                        <div>
+                          <p className="text-sm">Scan the QR or send your payment to:</p>
+                          <p className="mt-2 font-black">Account name: {gcashName}</p>
+                          <p className="font-black">GCash/Maya number: {gcashNumber}</p>
+                          <p className="mt-2 text-xs font-bold opacity-80">Tip: replace public/gcash-qr.svg with your real QR image.</p>
+                        </div>
+                      </div>
                       <input name="payment_reference" placeholder="Reference number / transaction ID" className="mt-4 w-full rounded-2xl border border-amber-200 px-5 py-4 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
                       <label className="mt-4 block text-sm font-black">Upload payment screenshot</label>
                       <input type="file" accept="image/*" onChange={(e)=>handleProof(e.target.files?.[0] || null)} className="mt-2 w-full rounded-2xl border border-amber-200 bg-white px-4 py-3 text-sm text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
