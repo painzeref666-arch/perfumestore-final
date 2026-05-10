@@ -113,17 +113,32 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
   const activeProducts = useMemo(() => products.filter((p) => p.active !== false), [products]);
 
+  const saveProductViaApi = async (product: ManagedProduct) => {
+    const row = productToRow(product);
+    const response = await fetch('/api/admin/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ row }),
+    });
+
+    const json = await response.json();
+
+    if (json.error) {
+      setError(json.error);
+      throw new Error(json.error);
+    }
+
+    await refreshProducts();
+  };
+
   const addProduct = async (p: ManagedProduct) => {
     const product = { ...p, active: p.active !== false };
-    if (isSupabaseConfigured && supabase) {
-      const { error: dbError } = await withTimeout(supabase.from('products').upsert(productToRow(product)), 10000, 'Product save');
-      if (dbError) {
-        setError(dbError.message);
-        throw dbError;
-      }
-      await refreshProducts();
+
+    if (isSupabaseConfigured) {
+      await saveProductViaApi(product);
       return;
     }
+
     saveLocal(mergeById(products, product));
   };
 
@@ -131,13 +146,8 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     const current = products.find((x) => x.id === id);
     const product = { ...current, ...p, id } as ManagedProduct;
 
-    if (isSupabaseConfigured && supabase) {
-      const { error: dbError } = await withTimeout(supabase.from('products').upsert(productToRow(product)), 10000, 'Product save');
-      if (dbError) {
-        setError(dbError.message);
-        throw dbError;
-      }
-      await refreshProducts();
+    if (isSupabaseConfigured) {
+      await saveProductViaApi(product);
       return;
     }
 
@@ -145,15 +155,22 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteProduct = async (id: string) => {
-    if (isSupabaseConfigured && supabase) {
-      const { error: dbError } = await supabase.from('products').delete().eq('id', id);
-      if (dbError) {
-        setError(dbError.message);
-        throw dbError;
+    if (isSupabaseConfigured) {
+      const response = await fetch(`/api/admin/products?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+
+      const json = await response.json();
+
+      if (json.error) {
+        setError(json.error);
+        throw new Error(json.error);
       }
+
       await refreshProducts();
       return;
     }
+
     saveLocal(products.filter((x) => x.id !== id));
   };
 

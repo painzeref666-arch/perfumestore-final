@@ -175,6 +175,7 @@ export default function AdminDashboard() {
   const [lowStockLimit, setLowStockLimit] = useState(10);
   const [orderSaving, setOrderSaving] = useState('');
   const [imageStatus, setImageStatus] = useState('');
+  const [previewImage, setPreviewImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const totalInventory = products.reduce((s, p) => s + p.stock, 0);
@@ -364,10 +365,10 @@ export default function AdminDashboard() {
     setUploadingImage(true);
 
     const previewUrl = await fileToDataUrl(file);
-    setEditing((cur) => ({ ...cur, image: previewUrl }));
+    setPreviewImage(previewUrl);
 
     if (!isSupabaseConfigured || !supabase) {
-      setImageStatus('Image preview is ready. Supabase is not connected, so this image will save as browser data only.');
+      setImageStatus('Image preview is ready, but Supabase Storage is not connected. Product can still save, but image needs a URL or storage setup.');
       setUploadingImage(false);
       return;
     }
@@ -389,7 +390,7 @@ export default function AdminDashboard() {
     const uploadError = uploadResult?.error;
 
     if (uploadError) {
-      setImageStatus('Storage upload failed, but your selected image preview is still saved in the product record. For permanent URLs, run the storage SQL setup included in this ZIP.');
+      setImageStatus('Storage upload failed. Product can still save, but image will not be permanent until product-images storage is fixed. Run the included storage SQL or paste an Image URL.');
       setError(`Image upload warning: ${uploadError.message}`);
       setUploadingImage(false);
       return;
@@ -435,11 +436,20 @@ export default function AdminDashboard() {
         hero_order: Number(editing.hero_order) || 0,
       };
 
+      const savePromise = products.some((p) => p.id === id)
+        ? updateProduct(id, product)
+        : addProduct(product);
+
+      await Promise.race([
+        savePromise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Product save timed out. Please check Supabase products table columns and run the included SQL.')), 15000)
+        ),
+      ]);
+
       if (products.some((p) => p.id === id)) {
-        await updateProduct(id, product);
         logActivity({ type: 'inventory', title: 'Product updated', detail: `${product.name} • Stock ${product.stock}` });
       } else {
-        await addProduct(product);
         logActivity({ type: 'inventory', title: 'Product added', detail: `${product.name} • Stock ${product.stock}` });
       }
       setEditing(blank);
@@ -582,7 +592,7 @@ export default function AdminDashboard() {
             <label className="mt-3 block text-sm font-bold text-stone-500 dark:text-white/50">Upload product image</label>
             <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0])} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-black/20" />
             {imageStatus && <p className={`mt-3 rounded-2xl p-3 text-xs font-bold ${imageStatus.includes('success') ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200' : 'bg-amber-100 text-amber-900 dark:bg-amber-500/10 dark:text-amber-200'}`}>{uploadingImage ? 'Uploading... ' : ''}{imageStatus}</p>}
-            {editing.image && <img key={editing.image} src={editing.image} alt="Selected product preview" className="mt-4 h-40 w-full rounded-2xl object-cover" />}
+            {(previewImage || editing.image) && <img key={previewImage || editing.image} src={previewImage || editing.image} alt="Selected product preview" className="mt-4 h-40 w-full rounded-2xl object-cover" />}
 
             <label className="mt-4 block text-sm font-bold text-stone-500 dark:text-white/50">Description</label>
             <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className="mt-2 h-24 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
@@ -671,7 +681,7 @@ export default function AdminDashboard() {
             </label>
             <div className="mt-6 grid grid-cols-2 gap-3">
               <button disabled={saving} className="rounded-full bg-amber-800 px-5 py-3 font-black text-white disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
-              <button type="button" onClick={() => { setEditing(blank); setImageStatus(''); setNotes(''); }} className="rounded-full border border-stone-300 px-5 py-3 font-black dark:border-white/10">Clear</button>
+              <button type="button" onClick={() => { setEditing(blank); setImageStatus(''); setPreviewImage(''); setNotes(''); }} className="rounded-full border border-stone-300 px-5 py-3 font-black dark:border-white/10">Clear</button>
             </div>
           </form>
 

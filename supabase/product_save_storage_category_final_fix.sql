@@ -1,0 +1,58 @@
+-- Product columns needed by Perfumes, Cosmetics, Wellness
+alter table products add column if not exists id text primary key;
+alter table products add column if not exists name text;
+alter table products add column if not exists family text;
+alter table products add column if not exists category text default 'perfumes';
+alter table products add column if not exists notes jsonb default '[]'::jsonb;
+alter table products add column if not exists price numeric default 0;
+alter table products add column if not exists size text;
+alter table products add column if not exists image text;
+alter table products add column if not exists rating numeric default 5;
+alter table products add column if not exists reviews integer default 0;
+alter table products add column if not exists stock integer default 0;
+alter table products add column if not exists tag text;
+alter table products add column if not exists description text;
+alter table products add column if not exists promo text;
+alter table products add column if not exists event text;
+alter table products add column if not exists active boolean default true;
+alter table products add column if not exists variants jsonb;
+alter table products add column if not exists hero_enabled boolean default false;
+alter table products add column if not exists hero_badge text;
+alter table products add column if not exists hero_title text;
+alter table products add column if not exists hero_description text;
+alter table products add column if not exists hero_button_text text;
+alter table products add column if not exists hero_button_link text;
+alter table products add column if not exists hero_order integer default 0;
+alter table products add column if not exists created_at timestamp with time zone default now();
+
+update products set category = 'perfumes' where category is null or category = '';
+
+alter table products disable row level security;
+
+-- Supabase Storage bucket for product images
+insert into storage.buckets (id, name, public)
+values ('product-images', 'product-images', true)
+on conflict (id) do update set public = true;
+
+-- Allow public read for product images
+drop policy if exists "Public read product images" on storage.objects;
+create policy "Public read product images"
+on storage.objects for select
+using (bucket_id = 'product-images');
+
+-- Allow uploads/updates/deletes using anon key while developing
+drop policy if exists "Public upload product images" on storage.objects;
+create policy "Public upload product images"
+on storage.objects for insert
+with check (bucket_id = 'product-images');
+
+drop policy if exists "Public update product images" on storage.objects;
+create policy "Public update product images"
+on storage.objects for update
+using (bucket_id = 'product-images')
+with check (bucket_id = 'product-images');
+
+drop policy if exists "Public delete product images" on storage.objects;
+create policy "Public delete product images"
+on storage.objects for delete
+using (bucket_id = 'product-images');
