@@ -39,6 +39,17 @@ export default function TrackPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (!loading) return;
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+      setError('Tracking request timed out.');
+    }, 6000);
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  useEffect(() => {
     const q = new URLSearchParams(window.location.search).get('code') || '';
     if (q) {
       setCode(q);
