@@ -81,6 +81,67 @@ const blank: ManagedProduct = {
   hero_order: 0,
 };
 
+
+const CATEGORY_META = {
+  perfumes: {
+    familyLabel: 'Scent family',
+    notesLabel: 'Notes, separated by comma',
+    variantTitle: 'Perfume prices by ML and concentration',
+    description: 'Use EDP/Extrait and perfume bottle sizes.',
+    kindLabel: 'Perfume type',
+    defaultFamily: 'Floral',
+    defaultNotes: 'Rose, Pear, White Floral',
+    defaultVariants: ['EDP', 'Extrait'],
+  },
+  cosmetics: {
+    familyLabel: 'Cosmetic type',
+    notesLabel: 'Shade / Flavor / Scent, separated by comma',
+    variantTitle: 'Cosmetic variant prices',
+    description: 'Use cosmetic-specific variants like shade, flavor, finish, or pack size. No EDP/Extrait.',
+    kindLabel: 'Finish / Variant',
+    defaultFamily: 'Lip Product',
+    defaultNotes: 'Cherry, Clear, Glossy',
+    defaultVariants: ['Default'],
+  },
+  wellness: {
+    familyLabel: 'Wellness type',
+    notesLabel: 'Scent / Benefit / Variant, separated by comma',
+    variantTitle: 'Wellness variant prices',
+    description: 'Use wellness-specific variants like scent, benefit, bottle size, or pack size. No EDP/Extrait.',
+    kindLabel: 'Wellness variant',
+    defaultFamily: 'Body Care',
+    defaultNotes: 'Lavender, Relaxing, Daily Care',
+    defaultVariants: ['Default'],
+  },
+} as const;
+
+function getCategoryKey(category?: string) {
+  return category === 'cosmetics' || category === 'wellness' ? category : 'perfumes';
+}
+
+function simpleVariantPrice(product: ManagedProduct) {
+  const first = product.variants?.[0];
+  const value = first?.prices?.['10ml'] || product.price || 999;
+  return Number(value) || 999;
+}
+
+function categoryVariants(product: ManagedProduct) {
+  const category = getCategoryKey(product.category as string);
+  if (category === 'perfumes') {
+    return normalizeVariants(product.variants, Number(product.price) || 999);
+  }
+
+  const base = Number(product.price) || simpleVariantPrice(product);
+  const label = product.size || (category === 'cosmetics' ? 'Variant' : 'Size');
+  return [
+    {
+      concentration: 'EDP' as ConcentrationOption,
+      prices: { '10ml': base, '15ml': 0, '50ml': 0, '85ml': 0 },
+      label,
+    } as ProductVariant,
+  ];
+}
+
 function normalizeVariants(v: ProductVariant[] | undefined, base = 999) {
   const map = new Map((v || []).map((x) => [x.concentration, x]));
   return concentrations.map((c) => map.get(c) || defaultVariants(base).find((x) => x.concentration === c)!);
@@ -316,11 +377,16 @@ export default function AdminDashboard() {
     const safeName = `products/${Date.now()}-${safeBase}.${ext}`;
 
     setImageStatus('Uploading image to Supabase Storage...');
-    const { error: uploadError } = await supabase.storage.from('product-images').upload(safeName, file, {
-      cacheControl: '3600',
-      upsert: true,
-      contentType: file.type || `image/${ext}`,
-    });
+    const uploadResult: any = await withTimeout(
+      supabase.storage.from('product-images').upload(safeName, file, {
+        cacheControl: '3600',
+        upsert: true,
+        contentType: file.type || `image/${ext}`,
+      }),
+      12000,
+      'Product image upload'
+    ).catch((err: any) => ({ error: err }));
+    const uploadError = uploadResult?.error;
 
     if (uploadError) {
       setImageStatus('Storage upload failed, but your selected image preview is still saved in the product record. For permanent URLs, run the storage SQL setup included in this ZIP.');
@@ -342,13 +408,17 @@ export default function AdminDashboard() {
 
     try {
       const id = editing.id || makeProductId(editing.name);
-      const variants = normalizeVariants(editing.variants, Number(editing.price) || 999);
+      const category = getCategoryKey(editing.category as string);
+      const variants = category === 'perfumes'
+        ? normalizeVariants(editing.variants, Number(editing.price) || 999)
+        : categoryVariants(editing);
       const product: ManagedProduct = {
         ...editing,
         id,
         notes: notes.split(',').map((n) => n.trim()).filter(Boolean),
+        category,
         price: variants[0].prices['10ml'],
-        size: '10ml',
+        size: category === 'perfumes' ? '10ml' : (editing.size || 'Default'),
         variants,
         stock: Number(editing.stock) || 0,
         rating: Number(editing.rating) || 5,
@@ -360,7 +430,7 @@ export default function AdminDashboard() {
         hero_badge: editing.hero_badge || editing.promo || editing.tag || 'Featured',
         hero_title: editing.hero_title || editing.name,
         hero_description: editing.hero_description || editing.description || '',
-        hero_button_text: editing.hero_button_text || 'View Perfume',
+        hero_button_text: editing.hero_button_text || (category === 'perfumes' ? 'View Perfume' : 'View Product'),
         hero_button_link: editing.hero_button_link && !editing.hero_button_link.startsWith('/products/') ? editing.hero_button_link : `/products/${id}`,
         hero_order: Number(editing.hero_order) || 0,
       };
@@ -488,12 +558,26 @@ export default function AdminDashboard() {
             <h2 className="text-2xl font-black">{editing.id ? 'Edit product' : 'Add product'}</h2>
             <Field label="Product name" value={editing.name} onChange={(v) => setEditing({ ...editing, name: v })} />
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <label className="mt-3 block text-sm font-bold text-stone-500 dark:text-white/50">Category<select value={(editing.category || 'perfumes') as string} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20"><option value="perfumes">Perfumes</option><option value="cosmetics">Cosmetics</option><option value="wellness">Wellness</option></select></label>
-              <Field label="Family" value={editing.family} onChange={(v) => setEditing({ ...editing, family: v })} />
+              <label className="mt-3 block text-sm font-bold text-stone-500 dark:text-white/50">Category<select value={(editing.category || 'perfumes') as string} onChange={(e) => {
+                const nextCategory = e.target.value;
+                const meta = CATEGORY_META[getCategoryKey(nextCategory)];
+                setEditing({
+                  ...editing,
+                  category: nextCategory,
+                  family: editing.family || meta.defaultFamily,
+                  notes: [],
+                  price: nextCategory === 'perfumes' ? editing.price : simpleVariantPrice(editing),
+                  size: nextCategory === 'perfumes' ? '10ml' : '',
+                  variants: nextCategory === 'perfumes' ? normalizeVariants(editing.variants, editing.price) : categoryVariants({ ...editing, category: nextCategory }),
+                });
+                if (!notes) setNotes(meta.defaultNotes);
+              }} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20"><option value="perfumes">Perfumes</option><option value="cosmetics">Cosmetics</option><option value="wellness">Wellness</option></select></label>
+              <Field label={CATEGORY_META[getCategoryKey(editing.category as string)].familyLabel} value={editing.family} onChange={(v) => setEditing({ ...editing, family: v })} />
               <Field label="Stock" type="number" value={String(editing.stock || '')} onChange={(v) => setEditing({ ...editing, stock: Number(v) })} />
               <Field label="Rating" type="number" value={String(editing.rating || 5)} onChange={(v) => setEditing({ ...editing, rating: Number(v) })} />
               <Field label="Reviews" type="number" value={String(editing.reviews || 0)} onChange={(v) => setEditing({ ...editing, reviews: Number(v) })} />
             </div>
+            <p className="mt-4 rounded-2xl bg-amber-100 p-3 text-xs font-bold text-amber-900 dark:bg-amber-500/10 dark:text-amber-100">Category setup: {CATEGORY_META[getCategoryKey(editing.category as string)].description}</p>
             <Field label="Image URL" value={editing.image} onChange={(v) => setEditing({ ...editing, image: v })} />
             <label className="mt-3 block text-sm font-bold text-stone-500 dark:text-white/50">Upload product image</label>
             <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0])} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-black/20" />
@@ -502,7 +586,7 @@ export default function AdminDashboard() {
 
             <label className="mt-4 block text-sm font-bold text-stone-500 dark:text-white/50">Description</label>
             <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className="mt-2 h-24 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
-            <Field label="Notes, separated by comma" value={notes} onChange={setNotes} />
+            <Field label={CATEGORY_META[getCategoryKey(editing.category as string)].notesLabel} value={notes} onChange={setNotes} />
             <Field label="Promo badge" value={editing.promo || ''} onChange={(v) => setEditing({ ...editing, promo: v, tag: v || editing.tag })} />
             <Field label="Sale/event message" value={editing.event || ''} onChange={(v) => setEditing({ ...editing, event: v })} />
 
@@ -532,18 +616,54 @@ export default function AdminDashboard() {
             </div>
 
             <div className="mt-6 rounded-[2rem] border border-stone-200 p-4 dark:border-white/10">
-              <h3 className="font-black">Prices by ML and Variation</h3>
+              <h3 className="font-black">{CATEGORY_META[getCategoryKey(editing.category as string)].variantTitle}</h3>
               <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/50">Base prices are Philippine Peso. Store currency selector converts display prices.</p>
-              {normalizeVariants(editing.variants, editing.price).map((v) => (
-                <div key={v.concentration} className="mt-5">
-                  <p className="mb-3 font-black text-amber-800">{v.concentration}</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {sizes.map((s) => (
-                      <Field key={`${v.concentration}-${s}`} label={s} type="number" value={String(v.prices[s] || '')} onChange={(val) => setVariantPrice(v.concentration, s, val)} />
-                    ))}
+
+              {getCategoryKey(editing.category as string) === 'perfumes' ? (
+                normalizeVariants(editing.variants, editing.price).map((v) => (
+                  <div key={v.concentration} className="mt-5">
+                    <p className="mb-3 font-black text-amber-800">{v.concentration}</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      {sizes.map((s) => (
+                        <Field key={`${v.concentration}-${s}`} label={s} type="number" value={String(v.prices[s] || '')} onChange={(val) => setVariantPrice(v.concentration, s, val)} />
+                      ))}
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <Field
+                    label={getCategoryKey(editing.category as string) === 'cosmetics' ? 'Shade / Flavor / Variant' : 'Scent / Benefit / Variant'}
+                    value={editing.size || ''}
+                    onChange={(value) => setEditing({
+                      ...editing,
+                      size: value,
+                      variants: [{
+                        concentration: 'EDP' as ConcentrationOption,
+                        prices: { '10ml': simpleVariantPrice(editing), '15ml': 0, '50ml': 0, '85ml': 0 },
+                        label: value,
+                      } as ProductVariant],
+                    })}
+                  />
+                  <Field
+                    label="Price"
+                    type="number"
+                    value={String(simpleVariantPrice(editing))}
+                    onChange={(value) => {
+                      const amount = Number(value) || 0;
+                      setEditing({
+                        ...editing,
+                        price: amount,
+                        variants: [{
+                          concentration: 'EDP' as ConcentrationOption,
+                          prices: { '10ml': amount, '15ml': 0, '50ml': 0, '85ml': 0 },
+                          label: editing.size || 'Variant',
+                        } as ProductVariant],
+                      });
+                    }}
+                  />
                 </div>
-              ))}
+              )}
             </div>
 
             <label className="mt-5 flex items-center gap-3 font-bold">

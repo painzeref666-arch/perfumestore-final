@@ -116,7 +116,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const addProduct = async (p: ManagedProduct) => {
     const product = { ...p, active: p.active !== false };
     if (isSupabaseConfigured && supabase) {
-      const { error: dbError } = await supabase.from('products').upsert(productToRow(product));
+      const { error: dbError } = await withTimeout(supabase.from('products').upsert(productToRow(product)), 10000, 'Product save');
       if (dbError) {
         setError(dbError.message);
         throw dbError;
@@ -132,7 +132,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     const product = { ...current, ...p, id } as ManagedProduct;
 
     if (isSupabaseConfigured && supabase) {
-      const { error: dbError } = await supabase.from('products').upsert(productToRow(product));
+      const { error: dbError } = await withTimeout(supabase.from('products').upsert(productToRow(product)), 10000, 'Product save');
       if (dbError) {
         setError(dbError.message);
         throw dbError;
@@ -160,7 +160,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const resetProducts = async () => {
     if (isSupabaseConfigured && supabase) {
       const rows = seed.map(productToRow);
-      const { error: dbError } = await supabase.from('products').upsert(rows);
+      const { error: dbError } = await withTimeout(supabase.from('products').upsert(rows), 10000, 'Products seed save');
       if (dbError) {
         setError(dbError.message);
         throw dbError;
