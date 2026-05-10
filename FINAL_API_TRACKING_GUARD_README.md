@@ -1,0 +1,1 @@
+# Final API Tracking Guard Fix\n\nFixes invalid UUID errors by making the server API treat any non-UUID `id` value, like `EXO-21879318`, as `tracking_code`.\n
