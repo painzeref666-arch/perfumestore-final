@@ -9,9 +9,34 @@ export default function AddToCartButton({ productId, size = '10ml', concentratio
 
   async function handleClick() {
     if (checking) return;
+
     setChecking(true);
-    const ok = await addToCart(productId, size, concentration);
-    if (ok) setChecking(false);
+
+    const timeout = new Promise<boolean>((resolve) => {
+      window.setTimeout(() => resolve(false), 5000);
+    });
+
+    try {
+      const ok = await Promise.race([
+        addToCart(productId, size, concentration),
+        timeout,
+      ]);
+
+      if (!ok && typeof window !== 'undefined') {
+        const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.href = `/account?loginRequired=1&redirect=${redirect}`;
+        return;
+      }
+    } catch (error) {
+      console.error('Add to cart failed:', error);
+      if (typeof window !== 'undefined') {
+        const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.href = `/account?loginRequired=1&redirect=${redirect}`;
+        return;
+      }
+    } finally {
+      setChecking(false);
+    }
   }
 
   return (
