@@ -53,11 +53,19 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const id = url.searchParams.get('id');
   const tracking = url.searchParams.get('tracking_code') || url.searchParams.get('tracking');
+  const email = url.searchParams.get('email');
+  const phone = url.searchParams.get('phone');
   const limit = Math.min(Number(url.searchParams.get('limit') || 100), 500);
 
+  const isUuid = (value: string) =>
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+
   let path = `orders?select=*&order=created_at.desc&limit=${limit}`;
-  if (id) path = `orders?select=*&id=eq.${encodeURIComponent(id)}&limit=1`;
+  if (id && isUuid(id)) path = `orders?select=*&id=eq.${encodeURIComponent(id)}&limit=1`;
+  else if (id) path = `orders?select=*&tracking_code=eq.${encodeURIComponent(id)}&limit=1`;
   if (tracking) path = `orders?select=*&tracking_code=eq.${encodeURIComponent(tracking)}&limit=1`;
+  if (email) path = `orders?select=*&customer_email=eq.${encodeURIComponent(email)}&order=created_at.desc&limit=${limit}`;
+  if (phone) path = `orders?select=*&customer_phone=eq.${encodeURIComponent(phone)}&order=created_at.desc&limit=${limit}`;
 
   const result = await supabaseRest(path);
   return NextResponse.json(result, { status: 200 });
