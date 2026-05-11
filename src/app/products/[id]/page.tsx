@@ -114,15 +114,27 @@ export default function ProductDetailPage() {
     );
   }
 
-  const price = getVariantPrice(product, selectedSize, selectedConcentration);
-  const notes = product.notes?.length ? product.notes : product.family ? [product.family] : ['Signature scent'];
+  const category = product.category === 'cosmetics' || product.category === 'wellness' ? product.category : 'perfumes';
+  const isPerfume = category === 'perfumes';
+  const isCosmetics = category === 'cosmetics';
+  const isWellness = category === 'wellness';
+  const price = isPerfume ? getVariantPrice(product, selectedSize, selectedConcentration) : Number(product.price || getVariantPrice(product, '10ml', 'EDP') || 0);
+  const notes = product.notes?.length ? product.notes : product.family ? [product.family] : [isCosmetics ? 'Beauty essential' : isWellness ? 'Self-care essential' : 'Signature scent'];
+  const productKindLabel = isCosmetics ? 'Cosmetic Type' : isWellness ? 'Wellness Type' : 'Scent Family';
+  const variantLabel = isCosmetics ? 'Shade / Finish' : isWellness ? 'Variant / Benefit' : 'Variation';
+  const storyLabel = isCosmetics ? 'Beauty Details' : isWellness ? 'Wellness Details' : 'Fragrance Story';
+  const fallbackDescription = isCosmetics
+    ? 'A beauty essential made for polished everyday confidence.'
+    : isWellness
+      ? 'A self-care product made for daily balance and premium wellness.'
+      : 'A premium fragrance selected for everyday confidence and special moments.';
 
   async function handleAdd() {
     const currentProduct = product!;
-    const ok = await addToCart(currentProduct.id, selectedSize, selectedConcentration, 1);
+    const ok = await addToCart(currentProduct.id, isPerfume ? selectedSize : '10ml', isPerfume ? selectedConcentration : 'EDP', 1);
     if (!ok) return;
     setAdded(true);
-    logActivity({ type: 'cart', title: 'Added to cart', detail: `${currentProduct.name} • ${selectedSize} • ${selectedConcentration}`, amount: price });
+    logActivity({ type: 'cart', title: 'Added to cart', detail: isPerfume ? `${currentProduct.name} • ${selectedSize} • ${selectedConcentration}` : `${currentProduct.name} • ${currentProduct.category || 'Product'}`, amount: price });
     window.setTimeout(() => setAdded(false), 1800);
   }
 
@@ -145,7 +157,7 @@ export default function ProductDetailPage() {
             <div className="animate-[slideUp_.7s_ease-out_.08s_both] lg:pt-5">
               <p className="text-xs font-black uppercase tracking-[.28em] text-amber-400">{product.family}</p>
               <h1 className="mt-3 text-5xl font-black leading-none tracking-tight md:text-7xl">{product.name}</h1>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-white/65">{product.description || 'A premium fragrance selected for everyday confidence and special moments.'}</p>
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-white/65">{product.description || fallbackDescription}</p>
 
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <StarRating rating={product.rating} />
@@ -157,33 +169,48 @@ export default function ProductDetailPage() {
               {product.event && <div className="mt-6 rounded-3xl border border-amber-400/30 bg-amber-500/10 p-4 font-bold text-amber-100">{product.event}</div>}
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                <InfoCard label="Variation" value={selectedConcentration === 'EDP' ? 'Eau de Parfum' : 'Extrait de Parfum'} />
-                <InfoCard label="Size" value={selectedSize} />
-                <InfoCard label="Scent Family" value={product.family} />
-                <InfoCard label="Notes" value={notes.slice(0, 3).join(' · ')} />
+                {isPerfume ? (
+                  <>
+                    <InfoCard label="Variation" value={selectedConcentration === 'EDP' ? 'Eau de Parfum' : 'Extrait de Parfum'} />
+                    <InfoCard label="Size" value={selectedSize} />
+                    <InfoCard label="Scent Family" value={product.family} />
+                    <InfoCard label="Notes" value={notes.slice(0, 3).join(' · ')} />
+                  </>
+                ) : (
+                  <>
+                    <InfoCard label={productKindLabel} value={product.family || (isCosmetics ? 'Cosmetics' : 'Wellness')} />
+                    <InfoCard label={variantLabel} value={product.size || notes.slice(0, 2).join(' · ') || 'Standard'} />
+                    <InfoCard label={isCosmetics ? 'Finish / Flavor' : 'Benefits'} value={notes.slice(0, 3).join(' · ')} />
+                    <InfoCard label="Category" value={isCosmetics ? 'Cosmetics' : 'Wellness'} />
+                  </>
+                )}
               </div>
 
-              <section className="mt-8">
-                <p className="mb-3 text-xs font-black uppercase tracking-[.2em] text-white/45">Choose perfume type</p>
-                <div className="flex flex-wrap gap-3">
-                  {concentrations.map((c) => (
-                    <button key={c} type="button" onClick={() => setSelectedConcentration(c)} className={`rounded-full border px-5 py-3 text-sm font-black transition ${selectedConcentration === c ? 'border-amber-400 bg-amber-600 text-white' : 'border-white/15 bg-white/5 text-white hover:border-amber-400/60'}`}>{c}</button>
-                  ))}
-                </div>
-              </section>
+              {isPerfume && (
+                <>
+                  <section className="mt-8">
+                    <p className="mb-3 text-xs font-black uppercase tracking-[.2em] text-white/45">Choose perfume type</p>
+                    <div className="flex flex-wrap gap-3">
+                      {concentrations.map((c) => (
+                        <button key={c} type="button" onClick={() => setSelectedConcentration(c)} className={`rounded-full border px-5 py-3 text-sm font-black transition ${selectedConcentration === c ? 'border-amber-400 bg-amber-600 text-white' : 'border-white/15 bg-white/5 text-white hover:border-amber-400/60'}`}>{c}</button>
+                      ))}
+                    </div>
+                  </section>
 
-              <section className="mt-7">
-                <p className="mb-3 text-xs font-black uppercase tracking-[.2em] text-white/45">Choose bottle size</p>
-                <div className="flex flex-wrap gap-3">
-                  {sizes.map((s) => (
-                    <button key={s} type="button" onClick={() => setSelectedSize(s)} className={`rounded-full border px-5 py-3 text-sm font-black transition ${selectedSize === s ? 'border-amber-400 bg-amber-600 text-white' : 'border-white/15 bg-white/5 text-white hover:border-amber-400/60'}`}>{s}</button>
-                  ))}
-                </div>
-              </section>
+                  <section className="mt-7">
+                    <p className="mb-3 text-xs font-black uppercase tracking-[.2em] text-white/45">Choose bottle size</p>
+                    <div className="flex flex-wrap gap-3">
+                      {sizes.map((s) => (
+                        <button key={s} type="button" onClick={() => setSelectedSize(s)} className={`rounded-full border px-5 py-3 text-sm font-black transition ${selectedSize === s ? 'border-amber-400 bg-amber-600 text-white' : 'border-white/15 bg-white/5 text-white hover:border-amber-400/60'}`}>{s}</button>
+                      ))}
+                    </div>
+                  </section>
+                </>
+              )}
 
               <div className="mt-8 flex items-end gap-4">
                 <Price amount={price} className="text-5xl font-black" />
-                <span className="pb-2 text-sm font-bold text-white/45">{selectedSize} · {selectedConcentration}</span>
+                <span className="pb-2 text-sm font-bold text-white/45">{isPerfume ? `${selectedSize} · ${selectedConcentration}` : product.size || product.family || (isCosmetics ? 'Cosmetics' : 'Wellness')}</span>
               </div>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -203,7 +230,7 @@ export default function ProductDetailPage() {
           </section>
 
           <section className="mt-20 rounded-[2.5rem] border border-white/10 bg-white/5 p-8 md:p-10">
-            <p className="text-xs font-black uppercase tracking-[.25em] text-amber-400">Fragrance Story</p>
+            <p className="text-xs font-black uppercase tracking-[.25em] text-amber-400">{storyLabel}</p>
             <h2 className="mt-3 text-3xl font-black md:text-5xl">{product.hero_title || product.name}</h2>
             <p className="mt-5 max-w-4xl text-lg leading-8 text-white/60">{product.hero_description || product.description || `${product.name} belongs to the ${product.family} family and is crafted for a lasting premium impression.`}</p>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -217,7 +244,7 @@ export default function ProductDetailPage() {
               <p className="text-xs font-black uppercase tracking-[.25em] text-amber-400">Customer Reviews</p>
               <h2 className="mt-3 text-3xl font-black">What customers say</h2>
               <div className="mt-6 grid gap-4">
-                {reviews.length === 0 ? <p className="rounded-3xl bg-black/20 p-5 text-white/60">No customer reviews yet. Be the first to review this perfume.</p> : reviews.map((r) => (
+                {reviews.length === 0 ? <p className="rounded-3xl bg-black/20 p-5 text-white/60">No customer reviews yet. Be the first to review this product.</p> : reviews.map((r) => (
                   <article key={r.id} className="rounded-3xl border border-white/10 bg-black/20 p-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <p className="font-black">{r.title || 'Customer review'}</p>

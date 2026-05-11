@@ -53,6 +53,7 @@ export default function AdminPage() {
     if (busy) return;
     setBusy(true);
     setMessage('');
+
     const cleanEmail = email.trim().toLowerCase();
 
     try {
@@ -107,11 +108,7 @@ export default function AdminPage() {
   }
 
   if (!ready) {
-    return (
-      <main className="min-h-screen bg-[#0b0907] p-8 text-white">
-        <p className="font-bold">Checking admin access...</p>
-      </main>
-    );
+    return <main className="min-h-screen bg-[#0b0907] p-8 text-white"><p className="font-bold">Checking admin access...</p></main>;
   }
 
   if (logged) return <AdminDashboard onLogout={logout} />;
@@ -127,18 +124,14 @@ export default function AdminPage() {
         </section>
         <form onSubmit={login} className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-8">
           <h2 className="text-3xl font-black">Admin access</h2>
-          <p className="mt-2 inline-flex rounded-full bg-emerald-700 px-3 py-1 text-xs font-black">
-            {isSupabaseConfigured ? 'Supabase connected' : 'Supabase not connected'}
-          </p>
+          <p className="mt-2 inline-flex rounded-full bg-emerald-700 px-3 py-1 text-xs font-black">{isSupabaseConfigured ? 'Supabase connected' : 'Supabase not connected'}</p>
           <label className="mt-6 block text-xs font-bold text-white/60">Email</label>
           <input value={email} onChange={(event) => setEmail(event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-white px-4 py-4 font-bold text-stone-950 outline-none" />
           <label className="mt-5 block text-xs font-bold text-white/60">Password</label>
           <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-4 font-bold text-white outline-none" />
           {message && <p className="mt-4 rounded-xl bg-red-950/40 p-3 text-sm font-bold text-red-100">{message}</p>}
-          <button type="submit" disabled={busy} className="mt-6 w-full rounded-full bg-amber-700 px-6 py-4 font-black hover:bg-amber-600 disabled:cursor-wait disabled:opacity-60">
-            {busy ? 'Checking...' : 'Login as Admin'}
-          </button>
-          <p className="mt-4 text-xs font-bold text-white/40">Fallback access: admin email + fallback password. Default fallback: exousia2026 unless changed in Vercel.</p>
+          <button type="submit" disabled={busy} className="mt-6 w-full rounded-full bg-amber-700 px-6 py-4 font-black hover:bg-amber-600 disabled:cursor-wait disabled:opacity-60">{busy ? 'Checking...' : 'Login as Admin'}</button>
+          <p className="mt-4 text-xs font-bold text-white/40">Emergency fallback: admin email + fallback password. Default fallback password is exousia2026 unless changed in Vercel.</p>
         </form>
       </div>
     </main>
