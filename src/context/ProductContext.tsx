@@ -177,7 +177,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const resetProducts = async () => {
     if (isSupabaseConfigured && supabase) {
       const rows = seed.map(productToRow);
-      const { error: dbError } = await withTimeout(supabase.from('products').upsert(rows), 10000, 'Products seed save');
+      const { error: dbError } = await withTimeout(supabase.from('products').upsert(rows), 25000, 'Products seed save');
       if (dbError) {
         setError(dbError.message);
         throw dbError;

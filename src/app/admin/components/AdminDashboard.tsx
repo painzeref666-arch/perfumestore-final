@@ -342,15 +342,39 @@ export default function AdminDashboard() {
 
   function fileToDataUrl(file: File) {
     return new Promise<string>((resolve, reject) => {
+      const image = new Image();
       const reader = new FileReader();
+
       const timer = window.setTimeout(() => {
-        try { reader.abort(); } catch {}
-        reject(new Error('Image preview timed out. Please try a smaller image or paste an Image URL.'));
-      }, 6000);
+        reject(new Error('Image preview timed out. Please try a smaller image.'));
+      }, 8000);
 
       reader.onload = () => {
-        window.clearTimeout(timer);
-        resolve(String(reader.result));
+        image.onload = () => {
+          window.clearTimeout(timer);
+
+          const canvas = document.createElement('canvas');
+          const maxSide = 900;
+          const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+          canvas.width = Math.max(1, Math.round(image.width * scale));
+          canvas.height = Math.max(1, Math.round(image.height * scale));
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Could not process image.'));
+            return;
+          }
+
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.78));
+        };
+
+        image.onerror = () => {
+          window.clearTimeout(timer);
+          reject(new Error('Image preview failed. Please try another image.'));
+        };
+
+        image.src = String(reader.result);
       };
 
       reader.onerror = () => {
@@ -370,57 +394,26 @@ export default function AdminDashboard() {
     try {
       if (!file.type.startsWith('image/')) {
         setImageStatus('Please choose a valid image file.');
-        setUploadingImage(false);
         return;
       }
 
-      if (file.size > 6 * 1024 * 1024) {
-        setImageStatus('Image is too large. Please use an image below 6MB or paste an Image URL.');
-        setUploadingImage(false);
+      if (file.size > 10 * 1024 * 1024) {
+        setImageStatus('Image is too large. Please use an image below 10MB.');
         return;
       }
 
       const previewUrl = await fileToDataUrl(file);
+
+      // Production stability mode:
+      // Store optimized compressed image directly in the product record.
+      // This avoids Supabase Storage timeout/bucket policy issues.
       setPreviewImage(previewUrl);
-
-      if (!isSupabaseConfigured || !supabase) {
-        setImageStatus('Preview ready. Supabase Storage is not connected, so paste a public Image URL before saving.');
-        setUploadingImage(false);
-        return;
-      }
-
-      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
-      const safeBase = makeProductId(file.name.replace(/\.[^/.]+$/, '')) || 'product-image';
-      const safeName = `products/${Date.now()}-${safeBase}.${ext}`;
-
-      setImageStatus('Uploading image to Supabase Storage...');
-
-      const uploadResult: any = await withTimeout(
-        supabase.storage.from('product-images').upload(safeName, file, {
-          cacheControl: '3600',
-          upsert: true,
-          contentType: file.type || `image/${ext}`,
-        }),
-        12000,
-        'Product image upload'
-      ).catch((err: any) => ({ error: err }));
-
-      const uploadError = uploadResult?.error;
-
-      if (uploadError) {
-        setImageStatus('Preview ready, but Storage upload failed. Product can still save if you paste an Image URL or run the Storage SQL setup.');
-        setError(`Image upload warning: ${uploadError.message || uploadError}`);
-        setUploadingImage(false);
-        return;
-      }
-
-      const { data } = supabase.storage.from('product-images').getPublicUrl(safeName);
-      setEditing((cur) => ({ ...cur, image: data.publicUrl }));
-      setImageStatus('Image uploaded successfully. Click Save to attach it to this product.');
-      setUploadingImage(false);
+      setEditing((cur) => ({ ...cur, image: previewUrl }));
+      setImageStatus('Image ready. Click Save to attach it to this product.');
     } catch (err: any) {
-      setImageStatus(err?.message || 'Image upload failed. You can still paste an Image URL.');
+      setImageStatus(err?.message || 'Image upload failed. Try a smaller image or paste an Image URL.');
       setError(err?.message || 'Image upload failed.');
+    } finally {
       setUploadingImage(false);
     }
   }
