@@ -18,7 +18,7 @@ async function supabaseRest(path: string, init?: RequestInit) {
   const base = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 7000);
+  const timer = setTimeout(() => controller.abort(), 12000);
 
   try {
     const res = await fetch(`${base}/rest/v1/${path}`, {

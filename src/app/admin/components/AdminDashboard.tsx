@@ -340,39 +340,55 @@ export default function AdminDashboard() {
     setError('Supabase is not connected. Use fallback password or check Vercel environment variables.');
   }
 
+  function fileToDataUrl(file: File) {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      const timer = window.setTimeout(() => {
+        try { reader.abort(); } catch {}
+        reject(new Error('Image preview timed out. Please try a smaller image or paste an Image URL.'));
+      }, 6000);
+
+      reader.onload = () => {
+        window.clearTimeout(timer);
+        resolve(String(reader.result));
+      };
+
+      reader.onerror = () => {
+        window.clearTimeout(timer);
+        reject(new Error('Image preview failed. Please try another image.'));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
   async function uploadImage(file: File) {
     setError('');
     setImageStatus('Preparing image preview...');
     setUploadingImage(true);
 
-    if (!file.type.startsWith('image/')) {
-      setImageStatus('Please choose a valid image file.');
-      setUploadingImage(false);
-      return;
-    }
-
-    if (file.size > 6 * 1024 * 1024) {
-      setImageStatus('Image is too large. Please use an image below 6MB or paste an Image URL.');
-      setUploadingImage(false);
-      return;
-    }
-
     try {
+      if (!file.type.startsWith('image/')) {
+        setImageStatus('Please choose a valid image file.');
+        setUploadingImage(false);
+        return;
+      }
+
+      if (file.size > 6 * 1024 * 1024) {
+        setImageStatus('Image is too large. Please use an image below 6MB or paste an Image URL.');
+        setUploadingImage(false);
+        return;
+      }
+
       const previewUrl = await fileToDataUrl(file);
       setPreviewImage(previewUrl);
-    } catch (err: any) {
-      setImageStatus(err?.message || 'Image preview failed. You can still paste an Image URL.');
-      setUploadingImage(false);
-      return;
-    }
 
-    if (!isSupabaseConfigured || !supabase) {
-      setImageStatus('Preview ready. Supabase Storage is not connected, so paste a public Image URL before saving.');
-      setUploadingImage(false);
-      return;
-    }
+      if (!isSupabaseConfigured || !supabase) {
+        setImageStatus('Preview ready. Supabase Storage is not connected, so paste a public Image URL before saving.');
+        setUploadingImage(false);
+        return;
+      }
 
-    try {
       const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
       const safeBase = makeProductId(file.name.replace(/\.[^/.]+$/, '')) || 'product-image';
       const safeName = `products/${Date.now()}-${safeBase}.${ext}`;
@@ -403,7 +419,7 @@ export default function AdminDashboard() {
       setImageStatus('Image uploaded successfully. Click Save to attach it to this product.');
       setUploadingImage(false);
     } catch (err: any) {
-      setImageStatus('Preview ready, but upload failed. Product can still save if you paste an Image URL.');
+      setImageStatus(err?.message || 'Image upload failed. You can still paste an Image URL.');
       setError(err?.message || 'Image upload failed.');
       setUploadingImage(false);
     }
