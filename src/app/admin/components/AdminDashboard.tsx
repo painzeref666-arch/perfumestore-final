@@ -20,8 +20,10 @@ import {
 import { isSupabaseConfigured, supabase, supabaseConfigError, withTimeout } from '@/lib/supabase';
 import { logActivity } from '@/lib/customer-ui-utils';
 
-const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_ADMIN_EMAIL || 'admin@exousia.com';
+const DEMO_EMAIL = 'admin@exousiaandco.com';
 const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD || 'exousia2026';
+const ADMIN_EMAILS = ['admin@exousiaandco.com', 'exousiaandco@gmail.com', 'admin@exousia.com'];
+const isAdminEmail = (value: string) => ADMIN_EMAILS.includes(value.trim().toLowerCase());
 
 type OrderRow = {
   id: string;
@@ -161,7 +163,7 @@ export default function AdminDashboard() {
   } = useProducts();
 
   const [logged, setLogged] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('admin@exousiaandco.com');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -281,7 +283,7 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.sessionStorage.getItem('exousia-admin-session') === 'active') {
+    if (typeof window !== 'undefined' && (window.sessionStorage.getItem('exousia-admin-session') === 'active' || window.localStorage.getItem('exousia_admin_logged') === '1')) {
       setLogged(true);
     }
   }, []);
@@ -294,69 +296,48 @@ export default function AdminDashboard() {
     e.preventDefault();
     setError('');
 
-    if (isSupabaseConfigured && supabase) {
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
-      if (!authError) {
-        setLogged(true);
-        if (typeof window !== 'undefined') window.sessionStorage.setItem('exousia-admin-session', 'active');
-        await refreshProducts();
-        return;
-      }
-      setError(`Supabase login failed: ${authError.message}. Checking secure fallback access.`);
-    }
+    const cleanEmail = email.trim().toLowerCase();
 
-    if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
-      setLogged(true);
-      if (typeof window !== 'undefined') window.sessionStorage.setItem('exousia-admin-session', 'active');
-      setError('');
+    if (!isAdminEmail(cleanEmail)) {
+      setError('This email is not registered as an admin.');
       return;
     }
 
-    setError('Wrong admin email or password.');
-  }
-
-  async function logout() {
-    setError('');
-    if (typeof window !== 'undefined') {
-      window.sessionStorage.removeItem('exousia-admin-session');
-      window.localStorage.removeItem('exousia-admin-session');
+    // Emergency fallback: admin email + fallback password.
+    // Default fallback password is exousia2026 unless changed in Vercel.
+    if (password === DEMO_PASSWORD) {
+      setLogged(true);
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem('exousia-admin-session', 'active');
+        window.localStorage.setItem('exousia_admin_logged', '1');
+      }
+      await refreshProducts();
+      return;
     }
-    if (supabase) await supabase.auth.signOut();
-    setLogged(false);
-    if (typeof window !== 'undefined') window.location.href = '/admin';
-  }
 
-  function edit(p: ManagedProduct) {
-    setEditing({
-      ...p,
-      variants: normalizeVariants(p.variants, p.price),
-      hero_badge: p.hero_badge || p.tag || p.promo || 'Featured',
-      hero_title: p.hero_title || p.name,
-      hero_description: p.hero_description || p.description,
-      hero_button_text: p.hero_button_text || 'View Perfume',
-      hero_button_link: p.hero_button_link || `/products/${p.id}`,
-      hero_order: p.hero_order || 0,
-    });
-    setImageStatus('');
-    setNotes(p.notes.join(', '));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+    if (isSupabaseConfigured && supabase) {
+      const result: any = await Promise.race([
+        supabase.auth.signInWithPassword({ email: cleanEmail, password }),
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ error: { message: 'Login timed out. Use fallback password or try again.' } }), 8000)
+        ),
+      ]);
 
-  function setVariantPrice(concentration: ConcentrationOption, size: SizeOption, value: string) {
-    const amount = Number(value) || 0;
-    const variants = normalizeVariants(editing.variants, editing.price).map((v) =>
-      v.concentration === concentration ? { ...v, prices: { ...v.prices, [size]: amount } } : v
-    );
-    setEditing({ ...editing, variants, price: variants[0].prices['10ml'], size: '10ml' });
-  }
+      if (!result?.error) {
+        setLogged(true);
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem('exousia-admin-session', 'active');
+          window.localStorage.setItem('exousia_admin_logged', '1');
+        }
+        await refreshProducts();
+        return;
+      }
 
-  function fileToDataUrl(file: File) {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result));
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
+      setError(`${result.error.message}. You may use fallback password if needed.`);
+      return;
+    }
+
+    setError('Supabase is not connected. Use fallback password or check Vercel environment variables.');
   }
 
   async function uploadImage(file: File) {
