@@ -675,7 +675,7 @@ export default function AdminDashboard() {
               <button onClick={resetProducts} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Seed Demo Data</button>
             </div>
             <input value={productSearch} onChange={(e) => setProductSearch(e.target.value)} placeholder="Search products, family, promo..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
-            {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} edit={edit} deleteProduct={deleteProduct} />}
+            {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} editing={editing} deleteProduct={deleteProduct} />}
           </section>
         </section>
 
@@ -878,7 +878,7 @@ function Select({ label, value, onChange, options, disabled }: { label: string; 
   );
 }
 
-function ProductTable({ products, edit, deleteProduct }: { products: ManagedProduct[]; edit: (p: ManagedProduct) => void; deleteProduct: (id: string) => void | Promise<void>; }) {
+function ProductTable({ products, editing, deleteProduct }: { products: ManagedProduct[]; editing: (p: ManagedProduct) => void; deleteProduct: (id: string) => void | Promise<void>; }) {
   return (
     <div className="mt-6 overflow-x-auto">
       <table className="w-full min-w-[980px] text-left text-sm">
@@ -895,7 +895,7 @@ function ProductTable({ products, edit, deleteProduct }: { products: ManagedProd
               <td><Price amount={p.variants?.[0]?.prices?.['10ml'] || p.price} className="font-black" /></td>
               <td><Price amount={p.variants?.[1]?.prices?.['85ml'] || p.price} className="font-black" /></td>
               <td><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></td>
-              <td><div className="flex gap-2"><button onClick={() => edit(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></td>
+              <td><div className="flex gap-2"><button onClick={() => editing(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></td>
             </tr>
           ))}
         </tbody>
