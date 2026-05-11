@@ -1,0 +1,50 @@
+
+Bakit nangyari:
+Naka-share pa rin ang perfume product detail component sa cosmetics products.
+
+Kaya lumalabas pa rin:
+- EDP
+- Extrait
+- Perfume type
+- Bottle size
+- Perfume wording
+
+DAPAT NA FLOW:
+
+PERFUMES
+- EDP / Extrait
+- bottle size
+- scent family
+- fragrance notes
+
+COSMETICS
+- shade / finish / flavor
+- glossy / matte / tint
+- NO EDP / Extrait
+- NO perfume wording
+
+WELLNESS
+- capsule count
+- supplement type
+- wellness benefits
+- dosage
+
+FILES TO EDIT:
+- src/components/product/ProductDetail.tsx
+- src/components/product/ProductCard.tsx
+
+LOGIC:
+
+const isPerfume = product.category === 'perfumes';
+const isCosmetics = product.category === 'cosmetics';
+const isWellness = product.category === 'wellness';
+
+Render perfume-only sections ONLY when isPerfume is true.
+
+Hide:
+- Choose perfume type
+- EDP
+- Extrait
+- Bottle size
+
+for cosmetics and wellness.
