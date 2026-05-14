@@ -19,9 +19,9 @@ import {
 } from '@/data/products';
 import { isSupabaseConfigured, supabase, supabaseConfigError, withTimeout } from '@/lib/supabase';
 import { logActivity } from '@/lib/customer-ui-utils';
+import { adminFetch } from '@/lib/admin-client';
 
 const DEMO_EMAIL = 'admin@exousiaandco.com';
-const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD || 'exousia2026';
 const ADMIN_EMAILS = ['admin@exousiaandco.com', 'exousiaandco@gmail.com', 'admin@exousia.com'];
 const isAdminEmail = (value: string) => ADMIN_EMAILS.includes(value.trim().toLowerCase());
 
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
         setOrders([]);
         return;
       }
-      const res = await fetch('/api/admin/orders?limit=100', { cache: 'no-store' });
+      const res = await adminFetch('/api/admin/orders?limit=100', { cache: 'no-store' });
       const json = await res.json();
       if (json.error) {
         setError(`Orders load failed: ${json.error}`);
@@ -239,7 +239,7 @@ export default function AdminDashboard() {
       delivered_at: (changes.status === 'delivered' || changes.order_status === 'delivered') ? new Date().toISOString() : changes.delivered_at,
       paid_at: changes.payment_status === 'Paid' ? new Date().toISOString() : changes.paid_at,
     };
-    const res = await fetch('/api/admin/orders', {
+    const res = await adminFetch('/api/admin/orders', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, changes: payload }),
@@ -303,23 +303,11 @@ export default function AdminDashboard() {
       return;
     }
 
-    // Emergency fallback: admin email + fallback password.
-    // Default fallback password is exousia2026 unless changed in Vercel.
-    if (password === DEMO_PASSWORD) {
-      setLogged(true);
-      if (typeof window !== 'undefined') {
-        window.sessionStorage.setItem('exousia-admin-session', 'active');
-        window.localStorage.setItem('exousia_admin_logged', '1');
-      }
-      await refreshProducts();
-      return;
-    }
-
     if (isSupabaseConfigured && supabase) {
       const result: any = await Promise.race([
         supabase.auth.signInWithPassword({ email: cleanEmail, password }),
         new Promise((resolve) =>
-          setTimeout(() => resolve({ error: { message: 'Login timed out. Use fallback password or try again.' } }), 8000)
+          setTimeout(() => resolve({ error: { message: 'Login timed out. Please try again.' } }), 8000)
         ),
       ]);
 
@@ -333,11 +321,11 @@ export default function AdminDashboard() {
         return;
       }
 
-      setError(`${result.error.message}. You may use fallback password if needed.`);
+      setError(result.error.message);
       return;
     }
 
-    setError('Supabase is not connected. Use fallback password or check Vercel environment variables.');
+    setError('Supabase is not connected. Check Vercel environment variables before using admin.');
   }
 
   function fileToDataUrl(file: File) {

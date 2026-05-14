@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { adminFetch } from '@/lib/admin-client';
 
 type OrderRow = {
   id: string;
@@ -31,7 +32,7 @@ export default function NotificationsPage() {
       const timer = window.setTimeout(() => controller.abort(), 15000);
 
       try {
-        const response = await fetch('/api/admin/orders?limit=20', {
+        const response = await adminFetch('/api/admin/orders?limit=20', {
           cache: 'no-store',
           signal: controller.signal,
         });

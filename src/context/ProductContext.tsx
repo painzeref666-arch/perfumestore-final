@@ -9,6 +9,7 @@ import {
   type ConcentrationOption,
 } from '@/data/products';
 import { isSupabaseConfigured, productToRow, rowToProduct, supabase, supabaseConfigError, withTimeout } from '@/lib/supabase';
+import { adminFetch } from '@/lib/admin-client';
 
 export type ManagedProduct = Product & {
   category?: 'perfumes' | 'cosmetics' | 'wellness' | string;
@@ -115,7 +116,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
   const saveProductViaApi = async (product: ManagedProduct) => {
     const row = productToRow(product);
-    const response = await fetch('/api/admin/products', {
+    const response = await adminFetch('/api/admin/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ row }),
@@ -156,7 +157,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
   const deleteProduct = async (id: string) => {
     if (isSupabaseConfigured) {
-      const response = await fetch(`/api/admin/products?id=${encodeURIComponent(id)}`, {
+      const response = await adminFetch(`/api/admin/products?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
 

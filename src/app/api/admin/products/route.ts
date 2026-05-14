@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminRequest } from '@/lib/admin-server';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -49,6 +50,8 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const missing = getEnvError();
   if (missing) return NextResponse.json({ data: null, error: missing }, { status: 200 });
+  const admin = await verifyAdminRequest(req);
+  if (!admin.ok) return NextResponse.json({ data: null, error: admin.error }, { status: 401 });
   const body = await req.json().catch(() => ({}));
   const row = body?.row || body;
   if (!row?.id || !row?.name) return NextResponse.json({ data: null, error: 'Product id and name are required.' }, { status: 200 });
@@ -59,6 +62,8 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const missing = getEnvError();
   if (missing) return NextResponse.json({ data: null, error: missing }, { status: 200 });
+  const admin = await verifyAdminRequest(req);
+  if (!admin.ok) return NextResponse.json({ data: null, error: admin.error }, { status: 401 });
   const url = new URL(req.url);
   const id = url.searchParams.get('id');
   if (!id) return NextResponse.json({ data: null, error: 'Product id is required.' }, { status: 200 });

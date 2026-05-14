@@ -6,7 +6,6 @@ import AdminDashboard from './components/AdminDashboard';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 
 const ADMIN_EMAILS = ['admin@exousiaandco.com', 'exousiaandco@gmail.com', 'admin@exousia.com'];
-const FALLBACK_PASSWORD = process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD || 'exousia2026';
 
 function isAdminEmail(email: string) {
   return ADMIN_EMAILS.includes(email.trim().toLowerCase());
@@ -62,26 +61,20 @@ export default function AdminPage() {
         return;
       }
 
-      if (password === FALLBACK_PASSWORD) {
-        localStorage.setItem('exousia_admin_logged', '1');
-        setLogged(true);
-        return;
-      }
-
       if (!supabase) {
-        setMessage('Supabase is not connected. Use fallback password or check Vercel environment variables.');
+        setMessage('Supabase is not connected. Check Vercel environment variables before using admin.');
         return;
       }
 
       const result: any = await Promise.race([
         supabase.auth.signInWithPassword({ email: cleanEmail, password }),
         new Promise((resolve) =>
-          window.setTimeout(() => resolve({ data: null, error: { message: 'Login timed out. Use fallback password or try again.' } }), 8000)
+          window.setTimeout(() => resolve({ data: null, error: { message: 'Login timed out. Please try again.' } }), 8000)
         ),
       ]);
 
       if (result?.error) {
-        setMessage(`${result.error.message}. You may use fallback admin password if configured.`);
+        setMessage(result.error.message);
         return;
       }
 
@@ -131,7 +124,6 @@ export default function AdminPage() {
           <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-4 font-bold text-white outline-none" />
           {message && <p className="mt-4 rounded-xl bg-red-950/40 p-3 text-sm font-bold text-red-100">{message}</p>}
           <button type="submit" disabled={busy} className="mt-6 w-full rounded-full bg-amber-700 px-6 py-4 font-black hover:bg-amber-600 disabled:cursor-wait disabled:opacity-60">{busy ? 'Checking...' : 'Login as Admin'}</button>
-          <p className="mt-4 text-xs font-bold text-white/40">Emergency fallback: admin email + fallback password. Default fallback password is exousia2026 unless changed in Vercel.</p>
         </form>
       </div>
     </main>

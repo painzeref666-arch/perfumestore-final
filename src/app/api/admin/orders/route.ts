@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminRequest } from '@/lib/admin-server';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -72,6 +73,12 @@ export async function GET(req: NextRequest) {
   const email = (url.searchParams.get('email') || '').trim();
   const phone = (url.searchParams.get('phone') || '').trim();
   const limit = Math.min(Number(url.searchParams.get('limit') || 100), 500);
+  const publicLookup = Boolean(rawTracking || rawId);
+
+  if (!publicLookup) {
+    const admin = await verifyAdminRequest(req);
+    if (!admin.ok) return NextResponse.json({ data: [], error: admin.error }, { status: 401 });
+  }
 
   let path = `orders?select=*&order=created_at.desc&limit=${limit}`;
 
@@ -97,6 +104,8 @@ export async function GET(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const envError = getEnvError();
   if (envError) return NextResponse.json({ data: null, error: envError }, { status: 200 });
+  const admin = await verifyAdminRequest(req);
+  if (!admin.ok) return NextResponse.json({ data: null, error: admin.error }, { status: 401 });
 
   const body = await req.json().catch(() => ({}));
   const id = body?.id;
