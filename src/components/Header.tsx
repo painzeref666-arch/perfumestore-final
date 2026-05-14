@@ -154,7 +154,7 @@ export default function Header() {
             aria-label="Search fragrances"
             aria-expanded={searchOpen}
             onClick={() => setSearchOpen(true)}
-            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-border dark:border-white/10 hover:bg-border/40 dark:hover:bg-white/10 transition-colors text-muted dark:text-white/50 hover:text-foreground dark:hover:text-white"
+            className="flex w-9 h-9 items-center justify-center rounded-full border border-border dark:border-white/10 hover:bg-border/40 dark:hover:bg-white/10 transition-colors text-muted dark:text-white/50 hover:text-foreground dark:hover:text-white"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -222,6 +222,7 @@ export default function Header() {
               ['Scent Quiz','/quiz'],
               ['Scent Families','/#scents'],
               ['Wishlist','/wishlist'],
+              ['Rewards','/rewards'],
               ['Reviews','/reviews'],
               ['Track Order','/track'],
               ['Account','/account'],
