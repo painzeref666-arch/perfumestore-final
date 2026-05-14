@@ -1,15 +1,32 @@
 'use client';
 
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Price from '@/components/Price';
 import { useCart } from '@/context/CartContext';
 import { isSupabaseConfigured, supabase, withTimeout, type CustomerDetails } from '@/lib/supabase';
 import { computeShipping, makeTrackingCode, validateCoupon } from '@/lib/store-utils';
+import { getCustomerProfile } from '@/lib/customer-ui-utils';
 
 const regions = ['NCR', 'Luzon', 'Visayas', 'Mindanao'];
 const gcashName = 'KR******E M** R.';
 const gcashNumber = '0966 748 ****';
+
+type CheckoutFormState = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  address: string;
+};
+
+const emptyCheckoutForm: CheckoutFormState = {
+  first_name: '',
+  last_name: '',
+  email: '',
+  phone: '',
+  address: '',
+};
 
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart();
@@ -25,10 +42,73 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState('');
+  const [customerForm, setCustomerForm] = useState<CheckoutFormState>(emptyCheckoutForm);
 
   const shipping = useMemo(() => (items.length === 0 ? 0 : computeShipping(subtotal, region)), [items.length, subtotal, region]);
   const total = Math.max(0, subtotal + shipping - discount);
   const needsProof = paymentMethod.includes('GCash') || paymentMethod.includes('Maya');
+
+  function updateCustomerField(field: keyof CheckoutFormState, value: string) {
+    setCustomerForm((current) => ({ ...current, [field]: value }));
+  }
+
+  useEffect(() => {
+    const profile = getCustomerProfile();
+    const nameParts = profile.fullName.trim().split(/\s+/).filter(Boolean);
+    const profileDefaults: CheckoutFormState = {
+      first_name: nameParts[0] || '',
+      last_name: nameParts.slice(1).join(' '),
+      email: '',
+      phone: profile.phone || '',
+      address: [profile.address, profile.city, profile.province, profile.notes].filter(Boolean).join(', '),
+    };
+
+    setCustomerForm((current) => ({
+      first_name: current.first_name || profileDefaults.first_name,
+      last_name: current.last_name || profileDefaults.last_name,
+      email: current.email || profileDefaults.email,
+      phone: current.phone || profileDefaults.phone,
+      address: current.address || profileDefaults.address,
+    }));
+
+    let active = true;
+    async function loadAccountDefaults() {
+      if (!supabase) return;
+
+      const { data } = await withTimeout(
+        supabase.auth.getUser(),
+        5000,
+        'Checkout account autofill'
+      ).catch(() => ({ data: { user: null } as any }));
+
+      if (!active || !data.user) return;
+
+      let fullName = String(data.user.user_metadata?.full_name || '');
+      let phone = String(data.user.user_metadata?.phone || '');
+
+      try {
+        const profileResult: any = await withTimeout(
+          supabase.from('customer_profiles').select('full_name, phone').eq('id', data.user.id).maybeSingle(),
+          5000,
+          'Customer profile autofill'
+        );
+        fullName = profileResult?.data?.full_name || fullName;
+        phone = profileResult?.data?.phone || phone;
+      } catch {}
+
+      const accountNameParts = fullName.trim().split(/\s+/).filter(Boolean);
+      setCustomerForm((current) => ({
+        first_name: current.first_name || accountNameParts[0] || '',
+        last_name: current.last_name || accountNameParts.slice(1).join(' '),
+        email: current.email || data.user.email || '',
+        phone: current.phone || phone || '',
+        address: current.address || profileDefaults.address,
+      }));
+    }
+
+    loadAccountDefaults();
+    return () => { active = false; };
+  }, []);
 
   async function applyCoupon() {
     const result = await validateCoupon(coupon, subtotal);
@@ -194,12 +274,12 @@ export default function CheckoutPage() {
               <form onSubmit={submit} className="mt-8 grid gap-4">
                 {error && <p className="rounded-2xl bg-red-100 p-4 font-bold text-red-800 dark:bg-red-500/10 dark:text-red-200">{error}</p>}
                 <div className="grid gap-4 md:grid-cols-2">
-                  <input name="first_name" required placeholder="First name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-                  <input name="last_name" required placeholder="Last name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                  <input name="first_name" required value={customerForm.first_name} onChange={(e) => updateCustomerField('first_name', e.target.value)} placeholder="First name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                  <input name="last_name" required value={customerForm.last_name} onChange={(e) => updateCustomerField('last_name', e.target.value)} placeholder="Last name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
                 </div>
-                <input name="email" type="email" required placeholder="Email address" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-                <input name="phone" required placeholder="Phone number" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-                <textarea name="address" required placeholder="Complete delivery address" className="h-28 rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                <input name="email" type="email" required value={customerForm.email} onChange={(e) => updateCustomerField('email', e.target.value)} placeholder="Email address" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                <input name="phone" required value={customerForm.phone} onChange={(e) => updateCustomerField('phone', e.target.value)} placeholder="Phone number" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                <textarea name="address" required value={customerForm.address} onChange={(e) => updateCustomerField('address', e.target.value)} placeholder="Complete delivery address" className="h-28 rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
                 <select value={region} onChange={(e)=>setRegion(e.target.value)} className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
                   {regions.map((r)=><option key={r}>{r}</option>)}
                 </select>

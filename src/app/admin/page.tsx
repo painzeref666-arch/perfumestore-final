@@ -11,6 +11,13 @@ function isAdminEmail(email: string) {
   return ADMIN_EMAILS.includes(email.trim().toLowerCase());
 }
 
+function clearAdminSession() {
+  if (typeof window === 'undefined') return;
+  window.localStorage.removeItem('exousia_admin_logged');
+  window.localStorage.removeItem('exousia-admin-session');
+  window.sessionStorage.removeItem('exousia-admin-session');
+}
+
 export default function AdminPage() {
   const [ready, setReady] = useState(false);
   const [logged, setLogged] = useState(false);
@@ -23,10 +30,6 @@ export default function AdminPage() {
     let active = true;
     async function checkSession() {
       try {
-        if (typeof window !== 'undefined' && localStorage.getItem('exousia_admin_logged') === '1') {
-          if (active) setLogged(true);
-          return;
-        }
         if (supabase) {
           const result: any = await Promise.race([
             supabase.auth.getUser(),
@@ -35,10 +38,16 @@ export default function AdminPage() {
           const sessionEmail = result?.data?.user?.email || '';
           if (sessionEmail && isAdminEmail(sessionEmail)) {
             localStorage.setItem('exousia_admin_logged', '1');
+            sessionStorage.setItem('exousia-admin-session', 'active');
             if (active) setLogged(true);
+          } else {
+            clearAdminSession();
           }
+        } else {
+          clearAdminSession();
         }
       } catch {
+        clearAdminSession();
       } finally {
         if (active) setReady(true);
       }
@@ -85,6 +94,7 @@ export default function AdminPage() {
       }
 
       localStorage.setItem('exousia_admin_logged', '1');
+      sessionStorage.setItem('exousia-admin-session', 'active');
       setLogged(true);
     } catch (err: any) {
       setMessage(err?.message || 'Admin login failed.');
@@ -94,7 +104,7 @@ export default function AdminPage() {
   }
 
   function logout() {
-    if (typeof window !== 'undefined') localStorage.removeItem('exousia_admin_logged');
+    clearAdminSession();
     if (supabase) supabase.auth.signOut();
     setLogged(false);
     setPassword('');

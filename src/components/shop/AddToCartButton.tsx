@@ -22,18 +22,11 @@ export default function AddToCartButton({ productId, size = '10ml', concentratio
         timeout,
       ]);
 
-      if (!ok && typeof window !== 'undefined') {
-        const redirect = encodeURIComponent(window.location.pathname + window.location.search);
-        window.location.href = `/account?loginRequired=1&redirect=${redirect}`;
+      if (!ok) {
         return;
       }
     } catch (error) {
       console.error('Add to cart failed:', error);
-      if (typeof window !== 'undefined') {
-        const redirect = encodeURIComponent(window.location.pathname + window.location.search);
-        window.location.href = `/account?loginRequired=1&redirect=${redirect}`;
-        return;
-      }
     } finally {
       setChecking(false);
     }

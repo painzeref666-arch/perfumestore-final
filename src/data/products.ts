@@ -12,6 +12,9 @@ export type Product = {
   price: number;
   size: string;
   image: string;
+  gallery?: string[];
+  image_gallery?: string[];
+  gallery_images?: string[];
   rating: number;
   reviews: number;
   stock: number;

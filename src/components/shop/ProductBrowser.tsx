@@ -6,6 +6,7 @@ import AppImage from '@/components/ui/AppImage';
 import CurrencySelector from '@/components/CurrencySelector';
 import Price from '@/components/Price';
 import AddToCartButton from '@/components/shop/AddToCartButton';
+import WishlistButton from '@/components/shop/WishlistButton';
 import { useProducts, getVariantPrice } from '@/context/ProductContext';
 import { sizes, concentrations, type SizeOption, type ConcentrationOption } from '@/data/products';
 
@@ -61,12 +62,13 @@ function ProductCard({ product }: { product: Product }) {
       : concentration;
 
   return (
-    <article className="group overflow-hidden rounded-[2rem] border border-stone-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-white/10 dark:bg-white/5">
+    <article className="group relative overflow-hidden rounded-[2rem] border border-stone-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-white/10 dark:bg-white/5">
       <Link href={`/products/${product.id}`} className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-stone-100">
         <AppImage src={product.image} alt={product.name} fill sizes="(max-width:768px) 100vw,33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-amber-900">{product.promo || product.tag}</span>
         <span className="absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1 text-xs font-black text-white">Rating {product.rating}</span>
       </Link>
+      <WishlistButton productId={product.id} className="absolute right-8 top-8 z-10 h-11 w-11 bg-stone-950/70 text-xl backdrop-blur" />
 
       <div className="p-2 pt-5">
         <div className="flex items-start justify-between gap-4">

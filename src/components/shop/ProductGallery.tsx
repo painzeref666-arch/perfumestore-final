@@ -13,6 +13,7 @@ type ProductGalleryProps = {
     notes?: string[];
     gallery?: string[];
     image_gallery?: string[];
+    gallery_images?: string[];
   };
 };
 
@@ -22,21 +23,29 @@ function uniqueImages(images: Array<string | undefined | null>) {
 
 export default function ProductGallery({ product }: ProductGalleryProps) {
   const images = useMemo(() => {
-    const extra = Array.isArray(product.gallery)
+    const extra = Array.isArray(product.gallery_images)
+      ? product.gallery_images
+      : Array.isArray(product.gallery)
       ? product.gallery
       : Array.isArray(product.image_gallery)
         ? product.image_gallery
         : [];
 
-    // The extra generated image URLs keep the gallery premium even when a product has only one uploaded photo.
-    return uniqueImages([
+    const uploaded = uniqueImages([
       product.image,
       ...extra,
+    ]).slice(0, 4);
+
+    if (uploaded.length >= 4) return uploaded;
+
+    // Fallback images keep older one-photo products presentable without hiding uploaded product images.
+    return uniqueImages([
+      ...uploaded,
       'https://images.unsplash.com/photo-1587017539504-67cfbddac569?q=80&w=1200&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1200&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1615634260167-c8cdede054de?q=80&w=1200&auto=format&fit=crop',
     ]).slice(0, 5);
-  }, [product.gallery, product.image, product.image_gallery]);
+  }, [product.gallery, product.gallery_images, product.image, product.image_gallery]);
 
   const [active, setActive] = useState(images[0] || product.image);
   const [zoom, setZoom] = useState({ x: 50, y: 50, on: false });

@@ -1,3 +1,62 @@
 'use client';
-import Link from'next/link';import Price from'@/components/Price';import{useCart}from'@/context/CartContext';
-export default function CartPage(){const{items,subtotal,updateQuantity,removeFromCart}=useCart();return <main className="min-h-screen bg-[#fbf7ef] px-6 py-16 text-stone-950 dark:bg-[#0f0d0a] dark:text-white"><div className="mx-auto max-w-5xl"><Link href="/products" className="font-bold text-amber-800">← Continue shopping</Link><h1 className="mt-6 text-5xl font-black">Your Cart</h1>{items.length===0?<div className="mt-10 rounded-[2rem] bg-white p-10 text-center dark:bg-white/5"><p className="text-xl font-bold">Your cart is empty.</p><Link href="/products" className="mt-6 inline-flex rounded-full bg-amber-800 px-6 py-3 font-bold text-white">Shop now</Link></div>:<div className="mt-10 grid gap-8 lg:grid-cols-[1fr_360px]"><div className="space-y-4">{items.map(i=><div key={i.productId} className="rounded-[2rem] bg-white p-4 shadow-sm dark:bg-white/5"><div className="flex items-start justify-between"><div><h2 className="text-xl font-black">{i.product.name}</h2><p className="text-sm text-stone-500 dark:text-white/50">{i.product.notes.join(' • ')}</p></div><Price amount={i.lineTotal} className="font-black"/></div><div className="mt-4 flex items-center justify-between"><div className="flex items-center rounded-full border border-stone-200 dark:border-white/10"><button className="px-3 py-1 font-bold" onClick={()=>updateQuantity(i.productId,i.quantity-1)}>-</button><span className="px-3 text-sm font-bold">{i.quantity}</span><button className="px-3 py-1 font-bold" onClick={()=>updateQuantity(i.productId,i.quantity+1)}>+</button></div><button className="text-sm font-bold text-red-600" onClick={()=>removeFromCart(i.productId)}>Remove</button></div></div>)}</div><aside className="h-fit rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5"><h2 className="text-2xl font-black">Order Summary</h2><div className="mt-6 flex justify-between"><span>Subtotal</span><Price amount={subtotal}/></div><div className="mt-3 flex justify-between"><span>Estimated shipping</span><span>Free</span></div><div className="mt-6 border-t border-stone-200 pt-6 text-xl font-black dark:border-white/10"><div className="flex justify-between"><span>Total</span><Price amount={subtotal}/></div></div><Link href="/checkout" className="mt-6 flex justify-center rounded-full bg-stone-950 px-6 py-4 font-black text-white hover:bg-amber-800 dark:bg-amber-700">Checkout</Link></aside></div>}</div></main>}
+
+import Link from 'next/link';
+import Price from '@/components/Price';
+import { useCart } from '@/context/CartContext';
+
+export default function CartPage() {
+  const { items, subtotal, updateQuantity, removeFromCart } = useCart();
+
+  return (
+    <main className="min-h-screen bg-[#fbf7ef] px-6 py-16 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
+      <div className="mx-auto max-w-5xl">
+        <Link href="/products" className="font-bold text-amber-800">Continue shopping</Link>
+        <h1 className="mt-6 text-5xl font-black">Your Cart</h1>
+
+        {items.length === 0 ? (
+          <div className="mt-10 rounded-[2rem] bg-white p-10 text-center dark:bg-white/5">
+            <p className="text-xl font-bold">Your cart is empty.</p>
+            <Link href="/products" className="mt-6 inline-flex rounded-full bg-amber-800 px-6 py-3 font-bold text-white">Shop now</Link>
+          </div>
+        ) : (
+          <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_360px]">
+            <div className="space-y-4">
+              {items.map((item) => (
+                <div key={item.key} className="rounded-[2rem] bg-white p-4 shadow-sm dark:bg-white/5">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h2 className="text-xl font-black">{item.product.name}</h2>
+                      <p className="text-sm text-stone-500 dark:text-white/50">
+                        {[item.size, item.concentration, ...item.product.notes.slice(0, 2)].filter(Boolean).join(' / ')}
+                      </p>
+                    </div>
+                    <Price amount={item.lineTotal} className="font-black" />
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center rounded-full border border-stone-200 dark:border-white/10">
+                      <button className="px-3 py-1 font-bold" onClick={() => updateQuantity(item.key, item.quantity - 1)}>-</button>
+                      <span className="px-3 text-sm font-bold">{item.quantity}</span>
+                      <button className="px-3 py-1 font-bold" onClick={() => updateQuantity(item.key, item.quantity + 1)}>+</button>
+                    </div>
+                    <button className="text-sm font-bold text-red-600" onClick={() => removeFromCart(item.key)}>Remove</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <aside className="h-fit rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
+              <h2 className="text-2xl font-black">Order Summary</h2>
+              <div className="mt-6 flex justify-between"><span>Subtotal</span><Price amount={subtotal} /></div>
+              <div className="mt-3 flex justify-between"><span>Estimated shipping</span><span>Calculated at checkout</span></div>
+              <div className="mt-6 border-t border-stone-200 pt-6 text-xl font-black dark:border-white/10">
+                <div className="flex justify-between"><span>Total</span><Price amount={subtotal} /></div>
+              </div>
+              <Link href="/checkout" className="mt-6 flex justify-center rounded-full bg-stone-950 px-6 py-4 font-black text-white hover:bg-amber-800 dark:bg-amber-700">Checkout</Link>
+            </aside>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}

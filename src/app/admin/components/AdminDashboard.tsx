@@ -65,6 +65,8 @@ const blank: ManagedProduct = {
   price: 999,
   size: '10ml',
   image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=1200&auto=format&fit=crop',
+  gallery: [],
+  gallery_images: [],
   rating: 5,
   reviews: 0,
   stock: 0,
@@ -144,6 +146,27 @@ function categoryVariants(product: ManagedProduct) {
   ];
 }
 
+function productImageSlots(product: ManagedProduct) {
+  const gallery = Array.isArray(product.gallery_images)
+    ? product.gallery_images
+    : Array.isArray(product.gallery)
+      ? product.gallery
+      : Array.isArray(product.image_gallery)
+        ? product.image_gallery
+        : [];
+  return [product.image || '', ...gallery].slice(0, 4);
+}
+
+function normalizeImageSlots(slots: string[]) {
+  const unique = Array.from(new Set(slots.map((slot) => slot.trim()).filter(Boolean))).slice(0, 4);
+  return {
+    image: unique[0] || '',
+    gallery: unique.slice(1),
+    gallery_images: unique.slice(1),
+    image_gallery: unique.slice(1),
+  };
+}
+
 function normalizeVariants(v: ProductVariant[] | undefined, base = 999) {
   const map = new Map((v || []).map((x) => [x.concentration, x]));
   return concentrations.map((c) => map.get(c) || defaultVariants(base).find((x) => x.concentration === c)!);
@@ -195,6 +218,13 @@ export default function AdminDashboard() {
     return products.filter((p) => [p.name, p.family, p.category, p.promo, p.tag, p.event].filter(Boolean).join(' ').toLowerCase().includes(q));
   }, [products, productSearch]);
 
+  function clearAdminSession() {
+    if (typeof window === 'undefined') return;
+    window.sessionStorage.removeItem('exousia-admin-session');
+    window.localStorage.removeItem('exousia_admin_logged');
+    window.localStorage.removeItem('exousia-admin-session');
+  }
+
   async function loadOrders() {
     if (!logged) {
       setOrdersLoading(false);
@@ -209,6 +239,13 @@ export default function AdminDashboard() {
         return;
       }
       const res = await adminFetch('/api/admin/orders?limit=100', { cache: 'no-store' });
+      if (res.status === 401) {
+        clearAdminSession();
+        setLogged(false);
+        setError('Admin session expired. Please login again to load orders.');
+        setOrders([]);
+        return;
+      }
       const json = await res.json();
       if (json.error) {
         setError(`Orders load failed: ${json.error}`);
@@ -244,6 +281,13 @@ export default function AdminDashboard() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, changes: payload }),
     });
+    if (res.status === 401) {
+      clearAdminSession();
+      setLogged(false);
+      setError('Admin session expired. Please login again before updating orders.');
+      setOrderSaving('');
+      return;
+    }
     const json = await res.json();
     if (json.error) setError(json.error);
     else await loadOrders();
@@ -283,9 +327,37 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window.sessionStorage.getItem('exousia-admin-session') === 'active' || window.localStorage.getItem('exousia_admin_logged') === '1')) {
-      setLogged(true);
+    let active = true;
+    async function verifySession() {
+      if (!supabase) {
+        clearAdminSession();
+        if (active) setLogged(false);
+        return;
+      }
+
+      try {
+        const result: any = await Promise.race([
+          supabase.auth.getUser(),
+          new Promise((resolve) => window.setTimeout(() => resolve({ data: { user: null } }), 5000)),
+        ]);
+        const sessionEmail = result?.data?.user?.email || '';
+        if (sessionEmail && isAdminEmail(sessionEmail)) {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem('exousia-admin-session', 'active');
+            window.localStorage.setItem('exousia_admin_logged', '1');
+          }
+          if (active) setLogged(true);
+        } else {
+          clearAdminSession();
+          if (active) setLogged(false);
+        }
+      } catch {
+        clearAdminSession();
+        if (active) setLogged(false);
+      }
     }
+    verifySession();
+    return () => { active = false; };
   }, []);
 
   useEffect(() => {
@@ -396,10 +468,45 @@ export default function AdminDashboard() {
       // Store optimized compressed image directly in the product record.
       // This avoids Supabase Storage timeout/bucket policy issues.
       setPreviewImage(previewUrl);
-      setEditing((cur) => ({ ...cur, image: previewUrl }));
+      setEditing((cur) => ({ ...cur, ...normalizeImageSlots([previewUrl, ...productImageSlots(cur).slice(1)]) }));
       setImageStatus('Image ready. Click Save to attach it to this product.');
     } catch (err: any) {
       setImageStatus(err?.message || 'Image upload failed. Try a smaller image or paste an Image URL.');
+      setError(err?.message || 'Image upload failed.');
+    } finally {
+      setUploadingImage(false);
+    }
+  }
+
+  function setProductImageSlot(index: number, value: string) {
+    const slots = productImageSlots(editing);
+    slots[index] = value;
+    const normalized = normalizeImageSlots(slots);
+    setEditing((cur) => ({ ...cur, ...normalized }));
+    setPreviewImage(normalized.image);
+  }
+
+  async function uploadProductImages(files: FileList | null) {
+    if (!files?.length) return;
+    setError('');
+    setImageStatus('Preparing product images...');
+    setUploadingImage(true);
+
+    try {
+      const selected = Array.from(files).slice(0, 4);
+      const processed: string[] = [];
+      for (const file of selected) {
+        if (!file.type.startsWith('image/')) throw new Error('Please choose valid image files only.');
+        if (file.size > 10 * 1024 * 1024) throw new Error('One image is too large. Please use images below 10MB.');
+        processed.push(await fileToDataUrl(file));
+      }
+      const existing = productImageSlots(editing);
+      const merged = normalizeImageSlots([...processed, ...existing].slice(0, 4));
+      setEditing((cur) => ({ ...cur, ...merged }));
+      setPreviewImage(merged.image);
+      setImageStatus(`${processed.length} image${processed.length === 1 ? '' : 's'} ready. Click Save to attach them to this product.`);
+    } catch (err: any) {
+      setImageStatus(err?.message || 'Image upload failed. Try smaller images or paste image URLs.');
       setError(err?.message || 'Image upload failed.');
     } finally {
       setUploadingImage(false);
@@ -450,8 +557,10 @@ export default function AdminDashboard() {
       const variants = category === 'perfumes'
         ? normalizeVariants(editing.variants, Number(editing.price) || 999)
         : categoryVariants(editing);
+      const images = normalizeImageSlots(productImageSlots(editing));
       const product: ManagedProduct = {
         ...editing,
+        ...images,
         id,
         notes: notes.split(',').map((n) => n.trim()).filter(Boolean),
         category,
@@ -625,11 +734,33 @@ export default function AdminDashboard() {
               <Field label="Reviews" type="number" value={String(editing.reviews || 0)} onChange={(v) => setEditing({ ...editing, reviews: Number(v) })} />
             </div>
             <p className="mt-4 rounded-2xl bg-amber-100 p-3 text-xs font-bold text-amber-900 dark:bg-amber-500/10 dark:text-amber-100">Category setup: {CATEGORY_META[getCategoryKey(editing.category as string)].description}</p>
-            <Field label="Image URL" value={editing.image} onChange={(v) => setEditing({ ...editing, image: v })} />
-            <label className="mt-3 block text-sm font-bold text-stone-500 dark:text-white/50">Upload product image</label>
-            <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0])} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-black/20" />
-            {imageStatus && <p className={`mt-3 rounded-2xl p-3 text-xs font-bold ${imageStatus.includes('success') ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200' : 'bg-amber-100 text-amber-900 dark:bg-amber-500/10 dark:text-amber-200'}`}>{uploadingImage ? 'Uploading... ' : ''}{imageStatus}</p>}
-            {(previewImage || editing.image) && <img key={previewImage || editing.image} src={previewImage || editing.image} alt="Selected product preview" className="mt-4 h-40 w-full rounded-2xl object-cover" />}
+            <div className="mt-5 rounded-[2rem] border border-stone-200 p-4 dark:border-white/10">
+              <h3 className="font-black">Product images</h3>
+              <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/50">Upload or paste up to 4 images. Image 1 is the main product photo; images 2-4 show in the product gallery.</p>
+              <div className="mt-4 grid gap-3">
+                {[0, 1, 2, 3].map((index) => (
+                  <label key={index} className="block text-sm font-bold text-stone-500 dark:text-white/50">
+                    Image {index + 1} URL
+                    <input
+                      value={productImageSlots(editing)[index] || ''}
+                      onChange={(event) => setProductImageSlot(index, event.target.value)}
+                      placeholder={index === 0 ? 'Main product image URL' : 'Optional gallery image URL'}
+                      className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20"
+                    />
+                  </label>
+                ))}
+              </div>
+              <label className="mt-4 block text-sm font-bold text-stone-500 dark:text-white/50">Upload up to 4 product images</label>
+              <input type="file" multiple accept="image/*" onChange={(e) => uploadProductImages(e.target.files)} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-black/20" />
+              {imageStatus && <p className={`mt-3 rounded-2xl p-3 text-xs font-bold ${imageStatus.includes('ready') ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200' : 'bg-amber-100 text-amber-900 dark:bg-amber-500/10 dark:text-amber-200'}`}>{uploadingImage ? 'Uploading... ' : ''}{imageStatus}</p>}
+              {productImageSlots(editing).length > 0 && (
+                <div className="mt-4 grid grid-cols-4 gap-2">
+                  {productImageSlots(editing).map((src, index) => src ? (
+                    <img key={`${src}-${index}`} src={src} alt={`Product image ${index + 1}`} className="h-24 w-full rounded-2xl object-cover" />
+                  ) : null)}
+                </div>
+              )}
+            </div>
 
             <label className="mt-4 block text-sm font-bold text-stone-500 dark:text-white/50">Description</label>
             <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className="mt-2 h-24 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
