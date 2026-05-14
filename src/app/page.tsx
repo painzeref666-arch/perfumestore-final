@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import HomepageVideoBanner from '@/components/shop/HomepageVideoBanner';
@@ -32,6 +33,114 @@ const categories = [
   },
 ];
 
+type HomeProduct = ReturnType<typeof useProducts>['activeProducts'][number];
+
+function heroHref(product: HomeProduct) {
+  const savedLink = String(product.hero_button_link || '').trim();
+  return savedLink || `/products/${product.id}`;
+}
+
+function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
+  const slides = useMemo(() => {
+    const enabled = products
+      .filter((product) => product.hero_enabled === true)
+      .sort((a, b) => Number(a.hero_order || 999) - Number(b.hero_order || 999));
+
+    return (enabled.length ? enabled : products.slice(0, 4)).slice(0, 6);
+  }, [products]);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    setIndex(0);
+  }, [slides.length]);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current + 1) % slides.length);
+    }, 6000);
+    return () => window.clearInterval(timer);
+  }, [slides.length]);
+
+  if (slides.length === 0) {
+    return (
+      <section className="relative overflow-hidden bg-stone-950 px-6 py-24 text-white">
+        <div className="mx-auto max-w-7xl">
+          <p className="font-black uppercase tracking-[.35em] text-amber-300">Exousia & Co.</p>
+          <h1 className="mt-5 max-w-4xl text-5xl font-black leading-tight md:text-7xl">Choose your world of luxury.</h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70">Shop perfumes, cosmetics, and wellness products from one premium ecommerce experience.</p>
+          <Link href="/products" className="mt-8 inline-flex rounded-full bg-amber-700 px-7 py-4 font-black text-white transition hover:bg-amber-600">Shop collection</Link>
+        </div>
+      </section>
+    );
+  }
+
+  const active = slides[index % slides.length];
+  const activeHref = heroHref(active);
+
+  return (
+    <section className="relative min-h-[560px] overflow-hidden bg-stone-950 text-white md:min-h-[620px]">
+      <div className="absolute inset-0">
+        {slides.map((product, slideIndex) => (
+          <div
+            key={product.id}
+            className={`absolute inset-0 transition-opacity duration-700 ${slideIndex === index ? 'opacity-100' : 'opacity-0'}`}
+            aria-hidden={slideIndex !== index}
+          >
+            <AppImage
+              src={product.image}
+              alt={product.name}
+              fill
+              priority={slideIndex === 0}
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/15" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#fbf7ef] to-transparent dark:from-[#0f0d0a]" />
+      </div>
+
+      <div className="relative mx-auto flex min-h-[560px] max-w-7xl items-center px-6 py-16 md:min-h-[620px]">
+        <div className="max-w-3xl">
+          <p className="inline-flex rounded-full border border-amber-300/30 bg-black/35 px-4 py-2 text-xs font-black uppercase tracking-[.3em] text-amber-200 backdrop-blur">
+            {active.hero_badge || active.tag || active.promo || 'Featured'}
+          </p>
+          <h1 className="mt-6 text-5xl font-black leading-none tracking-tight md:text-7xl">
+            {active.hero_title || active.name}
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/75">
+            {active.hero_description || active.description}
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link href={activeHref} className="rounded-full bg-amber-700 px-7 py-4 font-black text-white transition hover:bg-amber-600">
+              {active.hero_button_text || 'View Product'}
+            </Link>
+            <Link href="/products" className="rounded-full border border-white/25 bg-black/25 px-7 py-4 font-black text-white backdrop-blur transition hover:bg-white hover:text-stone-950">
+              Browse All
+            </Link>
+            <Price amount={Number(active.salePrice || active.price || 0)} className="text-xl font-black text-amber-100" />
+          </div>
+        </div>
+      </div>
+
+      {slides.length > 1 && (
+        <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 gap-2 rounded-full bg-black/35 p-2 backdrop-blur">
+          {slides.map((product, slideIndex) => (
+            <button
+              key={product.id}
+              type="button"
+              aria-label={`Show ${product.name}`}
+              onClick={() => setIndex(slideIndex)}
+              className={`h-2.5 rounded-full transition-all ${slideIndex === index ? 'w-9 bg-amber-300' : 'w-2.5 bg-white/45 hover:bg-white'}`}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 export default function HomePage() {
   const { activeProducts } = useProducts();
   const featured = activeProducts.slice(0, 4);
@@ -41,16 +150,9 @@ export default function HomePage() {
       <div className="grain" aria-hidden="true" />
       <Header />
       <main className="min-h-screen bg-[#fbf7ef] pt-28 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
-        <section className="relative overflow-hidden px-6 py-16 md:py-24">
-          <div className="absolute left-1/2 top-10 h-96 w-96 -translate-x-1/2 rounded-full bg-amber-500/20 blur-3xl" />
-          <div className="relative mx-auto max-w-7xl text-center">
-            <p className="inline-flex rounded-full border border-amber-700/30 bg-amber-100/80 px-5 py-2 text-xs font-black uppercase tracking-[.35em] text-amber-900 dark:bg-amber-500/10 dark:text-amber-200">Exousia & Co.</p>
-            <h1 className="mx-auto mt-6 max-w-5xl text-5xl font-black leading-tight tracking-tight md:text-7xl">Choose your world of luxury.</h1>
-            <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-stone-600 dark:text-white/60">Shop perfumes, cosmetics, and wellness products from one premium ecommerce experience. Each category has its own page, filters, cart, wishlist, reviews, and checkout flow.</p>
-          </div>
-        </section>
+        <HomepageHeroCarousel products={activeProducts} />
 
-        <section className="mx-auto grid max-w-7xl gap-6 px-6 pb-16 md:grid-cols-3">
+        <section className="mx-auto grid max-w-7xl gap-6 px-6 py-16 md:grid-cols-3">
           {categories.map((cat) => (
             <Link key={cat.href} href={cat.href} className="group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-stone-950 shadow-2xl shadow-amber-900/10 transition duration-500 hover:-translate-y-2">
               <div className="relative aspect-[4/5]">
