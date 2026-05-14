@@ -294,6 +294,39 @@ export default function AdminDashboard() {
     setOrderSaving('');
   }
 
+  async function deleteOrder(id: string) {
+    if (!isSupabaseConfigured || !supabase) {
+      setError('Order delete needs Supabase connection.');
+      return;
+    }
+
+    if (!window.confirm('Delete this order permanently? Use this for test orders only.')) return;
+
+    setOrderSaving(id);
+    setError('');
+    try {
+      const res = await adminFetch(`/api/admin/orders?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (res.status === 401) {
+        clearAdminSession();
+        setLogged(false);
+        setError('Admin session expired. Please login again before deleting orders.');
+        return;
+      }
+      const json = await res.json();
+      if (json.error) {
+        setError(`Order delete failed: ${json.error}`);
+      } else {
+        setOrders((current) => current.filter((order) => order.id !== id));
+      }
+    } catch (err: any) {
+      setError(`Order delete failed. ${err?.message || 'Supabase request did not finish.'}`);
+    } finally {
+      setOrderSaving('');
+    }
+  }
+
 
   async function deductOrderInventory(order: OrderRow) {
     if (!isSupabaseConfigured || !supabase || order.inventory_deducted) return;
@@ -484,6 +517,15 @@ export default function AdminDashboard() {
     const normalized = normalizeImageSlots(slots);
     setEditing((cur) => ({ ...cur, ...normalized }));
     setPreviewImage(normalized.image);
+  }
+
+  function removeProductImageSlot(index: number) {
+    const slots = productImageSlots(editing);
+    slots[index] = '';
+    const normalized = normalizeImageSlots(slots);
+    setEditing((cur) => ({ ...cur, ...normalized }));
+    setPreviewImage(normalized.image);
+    setImageStatus(`Image ${index + 1} removed. Click Save to update this product.`);
   }
 
   async function uploadProductImages(files: FileList | null) {
@@ -738,17 +780,31 @@ export default function AdminDashboard() {
               <h3 className="font-black">Product images</h3>
               <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/50">Upload or paste up to 4 images. Image 1 is the main product photo; images 2-4 show in the product gallery.</p>
               <div className="mt-4 grid gap-3">
-                {[0, 1, 2, 3].map((index) => (
-                  <label key={index} className="block text-sm font-bold text-stone-500 dark:text-white/50">
-                    Image {index + 1} URL
+                {[0, 1, 2, 3].map((index) => {
+                  const slot = productImageSlots(editing)[index] || '';
+                  return (
+                  <div key={index} className="rounded-2xl border border-stone-200 p-3 dark:border-white/10">
+                    <div className="flex items-center justify-between gap-3">
+                      <label htmlFor={`product-image-${index}`} className="text-sm font-bold text-stone-500 dark:text-white/50">Image {index + 1} URL</label>
+                      <button
+                        type="button"
+                        onClick={() => removeProductImageSlot(index)}
+                        disabled={!slot}
+                        className="rounded-full border border-red-200 px-3 py-1 text-xs font-black text-red-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-500/30 dark:text-red-200"
+                      >
+                        Remove
+                      </button>
+                    </div>
                     <input
-                      value={productImageSlots(editing)[index] || ''}
+                      id={`product-image-${index}`}
+                      value={slot}
                       onChange={(event) => setProductImageSlot(index, event.target.value)}
                       placeholder={index === 0 ? 'Main product image URL' : 'Optional gallery image URL'}
                       className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20"
                     />
-                  </label>
-                ))}
+                  </div>
+                  );
+                })}
               </div>
               <label className="mt-4 block text-sm font-bold text-stone-500 dark:text-white/50">Upload up to 4 product images</label>
               <input type="file" multiple accept="image/*" onChange={(e) => uploadProductImages(e.target.files)} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-black/20" />
@@ -756,7 +812,16 @@ export default function AdminDashboard() {
               {productImageSlots(editing).length > 0 && (
                 <div className="mt-4 grid grid-cols-4 gap-2">
                   {productImageSlots(editing).map((src, index) => src ? (
-                    <img key={`${src}-${index}`} src={src} alt={`Product image ${index + 1}`} className="h-24 w-full rounded-2xl object-cover" />
+                    <div key={`${src}-${index}`} className="relative">
+                      <img src={src} alt={`Product image ${index + 1}`} className="h-24 w-full rounded-2xl object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => removeProductImageSlot(index)}
+                        className="absolute right-2 top-2 rounded-full bg-red-700 px-2 py-1 text-[10px] font-black text-white shadow"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   ) : null)}
                 </div>
               )}
@@ -886,6 +951,7 @@ export default function AdminDashboard() {
             exportOrders={exportOrdersCsv}
             refresh={loadOrders}
             updateOrder={updateOrder}
+            deleteOrder={deleteOrder}
             approvePayment={approvePayment}
             savingId={orderSaving}
           />
@@ -906,6 +972,7 @@ function OrdersPanel({
   exportOrders,
   refresh,
   updateOrder,
+  deleteOrder,
   approvePayment,
   savingId,
 }: {
@@ -919,6 +986,7 @@ function OrdersPanel({
   exportOrders: () => void;
   refresh: () => void;
   updateOrder: (id: string, changes: Partial<OrderRow>) => void | Promise<void>;
+  deleteOrder: (id: string) => void | Promise<void>;
   approvePayment: (order: OrderRow) => void | Promise<void>;
   savingId: string;
 }) {
@@ -1034,6 +1102,7 @@ function OrdersPanel({
                 <button onClick={() => updateOrder(o.id, { status: 'shipped', order_status: 'shipped' } as Partial<OrderRow>)} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
                 <button onClick={() => updateOrder(o.id, { status: 'delivered', order_status: 'delivered' } as Partial<OrderRow>)} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
                 <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Cancel Order</button>
+                <button onClick={() => deleteOrder(o.id)} disabled={savingId === o.id} className="rounded-full border border-red-300 px-4 py-2 text-xs font-black text-red-700 disabled:cursor-wait disabled:opacity-60 dark:border-red-500/40 dark:text-red-200">Delete Test Order</button>
                 <Link href={`/invoice/${o.id}`} className="rounded-full border border-stone-300 px-4 py-2 text-xs font-black dark:border-white/10">Invoice / PDF</Link>
                 <Link href={`/track?code=${o.tracking_code || o.tracking_number || o.id}`} className="rounded-full border border-blue-300 px-4 py-2 text-xs font-black text-blue-800 dark:border-blue-500/30 dark:text-blue-200">Customer tracking page</Link>
                 <Link href="/admin/notifications" className="rounded-full border border-amber-300 px-4 py-2 text-xs font-black text-amber-800 dark:border-amber-500/30 dark:text-amber-200">Notify Customer</Link>

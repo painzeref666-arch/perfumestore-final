@@ -122,3 +122,23 @@ export async function PATCH(req: NextRequest) {
 
   return NextResponse.json(result, { status: 200 });
 }
+
+export async function DELETE(req: NextRequest) {
+  const envError = getEnvError();
+  if (envError) return NextResponse.json({ data: null, error: envError }, { status: 200 });
+  const admin = await verifyAdminRequest(req);
+  if (!admin.ok) return NextResponse.json({ data: null, error: admin.error }, { status: 401 });
+
+  const url = new URL(req.url);
+  const id = (url.searchParams.get('id') || '').trim();
+
+  if (!id || !isUuid(id)) {
+    return NextResponse.json({ data: null, error: 'Valid UUID order id is required for delete.' }, { status: 200 });
+  }
+
+  const result = await supabaseRest(`orders?id=eq.${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  });
+
+  return NextResponse.json(result, { status: 200 });
+}
