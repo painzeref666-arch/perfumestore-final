@@ -11,6 +11,20 @@ export default function ReviewsPage() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [msg, setMsg] = useState('');
 
+  function isReviewFormComplete(form: HTMLFormElement) {
+    const formData = new FormData(form);
+    return Boolean(
+      String(formData.get('product_id') || '').trim() &&
+      String(formData.get('customer_name') || '').trim() &&
+      String(formData.get('title') || '').trim() &&
+      String(formData.get('body') || '').trim()
+    );
+  }
+
+  function showRequiredMessage() {
+    setMsg('Please complete your name, review title, and review message before submitting.');
+  }
+
   async function load() {
     if (!supabase) {
       try {
@@ -54,8 +68,8 @@ export default function ReviewsPage() {
       created_at: new Date().toISOString(),
     };
 
-    if (!payload.product_id || !payload.customer_name.trim() || !payload.title.trim() || !payload.body.trim()) {
-      setMsg('Please complete your name, review title, and review message before submitting.');
+    if (!isReviewFormComplete(e.currentTarget)) {
+      showRequiredMessage();
       return;
     }
 
@@ -89,20 +103,32 @@ export default function ReviewsPage() {
             <p className="mt-4 text-stone-600 dark:text-white/60">Customers can add a photo URL, star rating, and review. This uses Supabase if connected, with a free local fallback.</p>
 
             <form onSubmit={submit} noValidate className="mt-8 grid gap-4 rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
-              <select name="product_id" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
+              <select name="product_id" required className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
                 {activeProducts.map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
               </select>
-              <input name="customer_name" placeholder="Your name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+              <input name="customer_name" required placeholder="Your name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
               <select name="rating" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
                 <option value="5">5 stars</option>
                 <option value="4">4 stars</option>
                 <option value="3">3 stars</option>
               </select>
-              <input name="title" placeholder="Review title" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+              <input name="title" required placeholder="Review title" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
               <input name="photo_url" placeholder="Optional photo URL" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-              <textarea name="body" placeholder="Your review" className="h-28 rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-              <button type="submit" className="rounded-full bg-amber-800 px-6 py-3 font-black text-white">Submit review</button>
-              {msg && <p className="font-bold text-amber-800">{msg}</p>}
+              <textarea name="body" required placeholder="Your review" className="h-28 rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+              <button
+                type="submit"
+                onClick={(event) => {
+                  const form = event.currentTarget.form;
+                  if (form && !isReviewFormComplete(form)) {
+                    event.preventDefault();
+                    showRequiredMessage();
+                  }
+                }}
+                className="rounded-full bg-amber-800 px-6 py-3 font-black text-white"
+              >
+                Submit review
+              </button>
+              {msg && <p role="alert" aria-live="polite" className="font-bold text-amber-800">{msg}</p>}
             </form>
           </section>
 
