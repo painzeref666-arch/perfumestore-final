@@ -26,7 +26,7 @@ export default function CheckoutPage() {
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState('');
 
-  const shipping = useMemo(() => computeShipping(subtotal, region), [subtotal, region]);
+  const shipping = useMemo(() => (items.length === 0 ? 0 : computeShipping(subtotal, region)), [items.length, subtotal, region]);
   const total = Math.max(0, subtotal + shipping - discount);
   const needsProof = paymentMethod.includes('GCash') || paymentMethod.includes('Maya');
 

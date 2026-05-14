@@ -111,7 +111,7 @@ export default function AdminPage() {
     return <main className="min-h-screen bg-[#0b0907] p-8 text-white"><p className="font-bold">Checking admin access...</p></main>;
   }
 
-  if (logged) return <AdminDashboard onLogout={logout} />;
+  if (logged) return <AdminDashboard />;
 
   return (
     <main className="min-h-screen bg-[#0b0907] px-6 py-12 text-white">

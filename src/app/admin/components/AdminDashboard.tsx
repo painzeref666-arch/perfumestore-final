@@ -418,6 +418,39 @@ export default function AdminDashboard() {
     }
   }
 
+  function setVariantPrice(concentration: ConcentrationOption, size: SizeOption, value: string) {
+    const amount = Number(value) || 0;
+    const variants = normalizeVariants(editing.variants, Number(editing.price) || 999).map((variant) => (
+      variant.concentration === concentration
+        ? { ...variant, prices: { ...variant.prices, [size]: amount } }
+        : variant
+    ));
+
+    setEditing({
+      ...editing,
+      price: variants[0]?.prices?.['10ml'] || amount || editing.price,
+      variants,
+    });
+  }
+
+  function startEditProduct(product: ManagedProduct) {
+    const category = getCategoryKey(product.category as string);
+    const variants = category === 'perfumes'
+      ? normalizeVariants(product.variants, Number(product.price) || 999)
+      : categoryVariants(product);
+
+    setEditing({
+      ...product,
+      category,
+      variants,
+      price: Number(product.price) || simpleVariantPrice(product),
+      size: category === 'perfumes' ? (product.size || '10ml') : (product.size || (variants[0] as any)?.label || 'Default'),
+    });
+    setNotes((product.notes || []).join(', '));
+    setPreviewImage(product.image || '');
+    setImageStatus('');
+  }
+
   async function save(e: FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -710,7 +743,7 @@ export default function AdminDashboard() {
               <button onClick={resetProducts} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Seed Demo Data</button>
             </div>
             <input value={productSearch} onChange={(e) => setProductSearch(e.target.value)} placeholder="Search products, family, promo..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
-            {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} editing={editing} deleteProduct={deleteProduct} />}
+            {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} editing={startEditProduct} deleteProduct={deleteProduct} />}
           </section>
         </section>
 

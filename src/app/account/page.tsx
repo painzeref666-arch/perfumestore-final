@@ -137,14 +137,17 @@ setUserEmail(activeEmail);
   useEffect(() => {
     const finalAccountLoadingGuard = window.setTimeout(() => {
       setLoading(false);
-      setBusy(false);
-      setLoading(false);
     }, 4500);
 
     const accountFallbackTimer = window.setTimeout(() => setLoading(false), 7000);
     loadSession();
 
-    if (!supabase) return;
+    if (!supabase) {
+      return () => {
+        window.clearTimeout(finalAccountLoadingGuard);
+        window.clearTimeout(accountFallbackTimer);
+      };
+    }
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       const activeEmail = session?.user?.email || '';
       setUserEmail(activeEmail);
@@ -162,6 +165,7 @@ setUserEmail(activeEmail);
     });
 
     return () => {
+      window.clearTimeout(finalAccountLoadingGuard);
       window.clearTimeout(accountFallbackTimer);
       listener.subscription.unsubscribe();
     };

@@ -5,6 +5,7 @@ import AppLogo from '@/components/ui/AppLogo';
 import { useTheme } from '@/context/ThemeContext';
 import CurrencySelector from '@/components/CurrencySelector';
 import { useCart } from '@/context/CartContext';
+import { useProducts } from '@/context/ProductContext';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -95,7 +96,17 @@ function ThemeToggle() {
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { itemCount: cartCount, setCartOpen } = useCart();
+  const { activeProducts } = useProducts();
+  const searchResults = activeProducts
+    .filter((product) => {
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return false;
+      return [product.name, product.family, product.description, product.category, ...product.notes].join(' ').toLowerCase().includes(query);
+    })
+    .slice(0, 6);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -141,6 +152,8 @@ export default function Header() {
           {/* Search */}
           <button
             aria-label="Search fragrances"
+            aria-expanded={searchOpen}
+            onClick={() => setSearchOpen(true)}
             className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-border dark:border-white/10 hover:bg-border/40 dark:hover:bg-white/10 transition-colors text-muted dark:text-white/50 hover:text-foreground dark:hover:text-white"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -237,6 +250,48 @@ export default function Header() {
               Shop Now
             </Link>
           </nav>
+        </div>
+      )}
+
+      {searchOpen && (
+        <div className="fixed inset-0 z-[120] bg-black/45 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
+          <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-card p-5 shadow-2xl dark:border-white/10 dark:bg-[#1A1410]" onClick={(event) => event.stopPropagation()}>
+            <div className="flex items-center gap-3">
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search products, notes, or categories"
+                className="min-w-0 flex-1 rounded-full border border-border bg-background px-5 py-3 text-foreground outline-none focus:border-primary dark:border-white/10 dark:bg-black/20 dark:text-white"
+              />
+              <button
+                type="button"
+                aria-label="Close search"
+                onClick={() => setSearchOpen(false)}
+                className="h-11 w-11 rounded-full border border-border text-xl font-black transition hover:bg-border/40 dark:border-white/10 dark:hover:bg-white/10"
+              >
+                x
+              </button>
+            </div>
+            <div className="mt-5 grid gap-2">
+              {!searchQuery.trim() && <p className="rounded-2xl bg-border/30 p-4 text-sm font-bold text-muted dark:bg-white/5 dark:text-white/60">Type a product name, note, or category.</p>}
+              {searchQuery.trim() && searchResults.length === 0 && <p className="rounded-2xl bg-border/30 p-4 text-sm font-bold text-muted dark:bg-white/5 dark:text-white/60">No matching products found.</p>}
+              {searchResults.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/products/${product.id}`}
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchQuery('');
+                  }}
+                  className="rounded-2xl border border-border p-4 transition hover:border-primary dark:border-white/10"
+                >
+                  <p className="font-black">{product.name}</p>
+                  <p className="mt-1 text-sm text-muted dark:text-white/60">{product.category || 'perfumes'} - {product.family}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </header>
