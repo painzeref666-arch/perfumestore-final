@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type OrderRow = {
   id: string;
@@ -45,10 +45,10 @@ export default function TrackPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  async function handleSearch() {
-    const value = search.trim();
+  async function searchOrders(value: string) {
+    const cleanValue = value.trim();
 
-    if (!value) {
+    if (!cleanValue) {
       setMessage('Please enter your tracking code.');
       return;
     }
@@ -61,7 +61,7 @@ export default function TrackPage() {
     const timeout = window.setTimeout(() => controller.abort(), 7000);
 
     try {
-      const response = await fetch(`/api/admin/orders?id=${encodeURIComponent(value)}`, {
+      const response = await fetch(`/api/admin/orders?id=${encodeURIComponent(cleanValue)}`, {
         cache: 'no-store',
         signal: controller.signal,
       });
@@ -92,6 +92,18 @@ export default function TrackPage() {
       setLoading(false);
     }
   }
+
+  function handleSearch() {
+    searchOrders(search);
+  }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const initial = params.get('code') || params.get('tracking') || params.get('id') || '';
+    if (!initial) return;
+    setSearch(initial);
+    searchOrders(initial);
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#0b0907] px-6 py-10 text-white">
@@ -133,14 +145,16 @@ export default function TrackPage() {
         <div className="mt-8 space-y-6">
           {orders.map((order) => {
             const current = getStatus(order);
-            const total = Number(order.total || order.subtotal || 0) + Number(order.shipping_fee || 0);
+            const total = order.total != null
+              ? Number(order.total || 0)
+              : Number(order.subtotal || 0) + Number(order.shipping_fee || 0);
             const activeIndex = current === 'delivered'
               ? 4
               : current === 'shipped'
                 ? 3
                 : current === 'processing'
                   ? 2
-                  : current === 'paid' || order.payment_status === 'paid'
+                  : current === 'paid' || String(order.payment_status || '').toLowerCase() === 'paid'
                     ? 1
                     : 0;
 
