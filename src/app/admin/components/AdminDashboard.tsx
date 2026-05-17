@@ -696,9 +696,9 @@ export default function AdminDashboard() {
             <h2 className="text-3xl font-black">Admin access</h2>
             <Status usingSupabase={usingSupabase} />
             <label className="mt-6 block text-sm font-bold text-white/60">Email</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="admin@exousia.com" />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="admin@exousia.com" />
             <label className="mt-5 block text-sm font-bold text-white/60">Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="••••••••" />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="••••••••" />
             {error && <p className="mt-4 rounded-2xl bg-red-500/10 p-4 text-sm font-bold text-red-200">{error}</p>}
             <button className="mt-6 w-full rounded-full bg-amber-700 px-6 py-4 font-black text-white transition hover:bg-amber-600">Login as Admin</button>
           </form>
