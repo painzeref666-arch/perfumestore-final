@@ -708,8 +708,8 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fbf7ef] px-6 py-12 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
-      <div className="mx-auto max-w-7xl">
+    <main className="min-h-screen overflow-x-hidden bg-[#fbf7ef] px-4 py-10 text-stone-950 dark:bg-[#0f0d0a] dark:text-white sm:px-6 sm:py-12">
+      <div className="mx-auto min-w-0 max-w-7xl">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
             <Link href="/" className="font-bold text-amber-800">← Back to store</Link>
@@ -717,42 +717,42 @@ export default function AdminDashboard() {
             <p className="mt-2 text-stone-600 dark:text-white/60">Products, images, prices, promos, inventory, and orders.</p>
             <div className="mt-3"><Status usingSupabase={usingSupabase} /></div>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
             <CurrencySelector />
-            <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-6 py-3 font-black text-white hover:bg-amber-600">Analytics</Link>
-            <Link href="/admin/marketing" className="rounded-full bg-white px-6 py-3 font-black text-stone-950 hover:bg-amber-100">Marketing</Link>
-            <Link href="/admin/activity-logs" className="rounded-full bg-white px-6 py-3 font-black text-stone-950 hover:bg-amber-100">Activity Logs</Link>
-            <Link href="/admin/inventory-logs" className="rounded-full bg-white px-6 py-3 font-black text-stone-950 hover:bg-amber-100">Inventory Logs</Link>
-            <Link href="/products" className="rounded-full bg-stone-950 px-6 py-3 font-black text-white hover:bg-amber-800 dark:bg-amber-700">View Shop</Link>
-            <Link href="/admin/logout" className="rounded-full border border-stone-300 px-6 py-3 font-black dark:border-white/10">Logout</Link>
+            <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 sm:px-5">Analytics</Link>
+            <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Marketing</Link>
+            <Link href="/admin/activity-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Activity Logs</Link>
+            <Link href="/admin/inventory-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Inventory Logs</Link>
+            <Link href="/products" className="rounded-full bg-stone-950 px-4 py-3 text-sm font-black text-white hover:bg-amber-800 dark:bg-amber-700 sm:px-5">View Shop</Link>
+            <Link href="/admin/logout" className="rounded-full border border-stone-300 px-4 py-3 text-sm font-black dark:border-white/10 sm:px-5">Logout</Link>
           </div>
         </div>
 
         {(error || productError) && <p className="mt-6 rounded-2xl bg-red-100 p-4 font-bold text-red-800 dark:bg-red-500/10 dark:text-red-200">{error || productError}</p>}
 
-        <section className="mt-10 grid gap-5 md:grid-cols-4">
+        <section className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Stat label="Active Products" value={activeCount} />
           <Stat label="Total Products" value={products.length} />
           <Stat label="Total Stock" value={totalInventory} />
-          <div className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
+          <div className="min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <p className="text-sm font-bold text-stone-500 dark:text-white/50">Inventory Value</p>
             <Price amount={totalValue} className="mt-2 block text-3xl font-black" />
           </div>
         </section>
 
-        <section className="mt-5 grid gap-5 md:grid-cols-5">
+        <section className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <Stat label="Total Orders" value={orders.length} />
           <Stat label="Pending Orders" value={pendingOrders} />
           <Stat label="Pending Payments" value={pendingPayments} />
           <Stat label="Paid Orders" value={paidOrders} />
-          <div className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
+          <div className="min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <p className="text-sm font-bold text-stone-500 dark:text-white/50">Order Revenue</p>
             <Price amount={orderRevenue} className="mt-2 block text-3xl font-black" />
           </div>
         </section>
 
-        <section className="mt-8 grid gap-8 lg:grid-cols-[480px_1fr]">
-          <form onSubmit={save} className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
+        <section className="mt-8 grid min-w-0 gap-6 xl:grid-cols-[minmax(320px,440px)_minmax(0,1fr)] xl:items-start">
+          <form onSubmit={save} className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <h2 className="text-2xl font-black">{editing.id ? 'Edit product' : 'Add product'}</h2>
             <Field label="Product name" value={editing.name} onChange={(v) => setEditing({ ...editing, name: v })} />
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -776,7 +776,7 @@ export default function AdminDashboard() {
               <Field label="Reviews" type="number" value={String(editing.reviews || 0)} onChange={(v) => setEditing({ ...editing, reviews: Number(v) })} />
             </div>
             <p className="mt-4 rounded-2xl bg-amber-100 p-3 text-xs font-bold text-amber-900 dark:bg-amber-500/10 dark:text-amber-100">Category setup: {CATEGORY_META[getCategoryKey(editing.category as string)].description}</p>
-            <div className="mt-5 rounded-[2rem] border border-stone-200 p-4 dark:border-white/10">
+            <div className="mt-5 min-w-0 rounded-[1.5rem] border border-stone-200 p-3 dark:border-white/10 sm:rounded-[2rem] sm:p-4">
               <h3 className="font-black">Product images</h3>
               <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/50">Upload or paste up to 4 images. Image 1 is the main product photo; images 2-4 show in the product gallery.</p>
               <div className="mt-4 grid gap-3">
@@ -784,7 +784,7 @@ export default function AdminDashboard() {
                   const slot = productImageSlots(editing)[index] || '';
                   return (
                   <div key={index} className="rounded-2xl border border-stone-200 p-3 dark:border-white/10">
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <label htmlFor={`product-image-${index}`} className="text-sm font-bold text-stone-500 dark:text-white/50">Image {index + 1} URL</label>
                       <button
                         type="button"
@@ -810,7 +810,7 @@ export default function AdminDashboard() {
               <input type="file" multiple accept="image/*" onChange={(e) => uploadProductImages(e.target.files)} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-black/20" />
               {imageStatus && <p className={`mt-3 rounded-2xl p-3 text-xs font-bold ${imageStatus.includes('ready') ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200' : 'bg-amber-100 text-amber-900 dark:bg-amber-500/10 dark:text-amber-200'}`}>{uploadingImage ? 'Uploading... ' : ''}{imageStatus}</p>}
               {productImageSlots(editing).length > 0 && (
-                <div className="mt-4 grid grid-cols-4 gap-2">
+                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {productImageSlots(editing).map((src, index) => src ? (
                     <div key={`${src}-${index}`} className="relative">
                       <img src={src} alt={`Product image ${index + 1}`} className="h-24 w-full rounded-2xl object-cover" />
@@ -833,8 +833,8 @@ export default function AdminDashboard() {
             <Field label="Promo badge" value={editing.promo || ''} onChange={(v) => setEditing({ ...editing, promo: v, tag: v || editing.tag })} />
             <Field label="Sale/event message" value={editing.event || ''} onChange={(v) => setEditing({ ...editing, event: v })} />
 
-            <div className="mt-6 rounded-[2rem] border border-amber-300/40 bg-amber-50/70 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
-              <div className="flex items-start justify-between gap-4">
+            <div className="mt-6 min-w-0 rounded-[1.5rem] border border-amber-300/40 bg-amber-50/70 p-3 dark:border-amber-500/20 dark:bg-amber-500/10 sm:rounded-[2rem] sm:p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <h3 className="font-black">Homepage hero carousel card</h3>
                   <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/55">Turn this on to show this perfume in the big sliding hero section.</p>
@@ -858,7 +858,7 @@ export default function AdminDashboard() {
               <p className="mt-3 text-xs font-bold text-stone-500 dark:text-white/50">Tip: leave blank to automatically open this product's own detail page. Use custom links only for promo pages like /products or /checkout.</p>
             </div>
 
-            <div className="mt-6 rounded-[2rem] border border-stone-200 p-4 dark:border-white/10">
+            <div className="mt-6 min-w-0 rounded-[1.5rem] border border-stone-200 p-3 dark:border-white/10 sm:rounded-[2rem] sm:p-4">
               <h3 className="font-black">{CATEGORY_META[getCategoryKey(editing.category as string)].variantTitle}</h3>
               <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/50">Base prices are Philippine Peso. Store currency selector converts display prices.</p>
 
@@ -918,21 +918,21 @@ export default function AdminDashboard() {
             </div>
           </form>
 
-          <section className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5">
-            <div className="flex items-center justify-between gap-4">
+          <section className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
                 <h2 className="text-2xl font-black">Product catalog</h2>
                 <p className="text-sm text-stone-500 dark:text-white/50">{usingSupabase ? 'Saved in Supabase database.' : 'Demo mode: saved only in this browser.'}</p>
               </div>
-              <button onClick={resetProducts} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Seed Demo Data</button>
+              <button onClick={resetProducts} className="w-full rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10 sm:w-auto">Seed Demo Data</button>
             </div>
             <input value={productSearch} onChange={(e) => setProductSearch(e.target.value)} placeholder="Search products, family, promo..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
             {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} editing={startEditProduct} deleteProduct={deleteProduct} />}
           </section>
         </section>
 
-        <section className="mt-8 grid gap-8 lg:grid-cols-2">
-          <section className="rounded-[2rem] bg-stone-950 p-6 text-white">
+        <section className="mt-8 grid min-w-0 gap-6 lg:grid-cols-2">
+          <section className="min-w-0 rounded-[1.5rem] bg-stone-950 p-4 text-white sm:rounded-[2rem] sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-2xl font-black">Low stock alerts</h2><label className="text-xs font-black uppercase tracking-widest text-white/50">Alert at ≤ <input type="number" value={lowStockLimit} onChange={(e)=>setLowStockLimit(Number(e.target.value)||0)} className="ml-2 w-20 rounded-xl bg-white/10 px-3 py-2 text-white" /></label></div>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
               {lowStock.map((p) => <div key={p.id} className="rounded-2xl bg-white/10 p-4"><p className="font-black">{p.name}</p><p className="text-sm text-white/60">Only {p.stock} left</p></div>)}
@@ -999,7 +999,7 @@ function OrdersPanel({
     });
 
   return (
-    <section className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5 lg:col-span-2">
+    <section className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6 lg:col-span-2">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h2 className="text-2xl font-black">Orders management</h2>
@@ -1030,39 +1030,39 @@ function OrdersPanel({
           const items = Array.isArray(o.items) ? o.items : [];
           const total = Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0));
           return (
-            <article key={o.id} className="rounded-[1.5rem] border border-stone-200 p-5 text-sm dark:border-white/10">
+            <article key={o.id} className="min-w-0 rounded-[1.5rem] border border-stone-200 p-4 text-sm dark:border-white/10 sm:p-5">
               <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs font-bold uppercase tracking-widest text-stone-400">Order #{o.id?.slice(0, 8)}</p>
                   <h3 className="mt-1 text-lg font-black">{customerName}</h3>
-                  <p className="text-stone-500 dark:text-white/50">{o.customer_email || o.customer?.email || 'No email'} • {new Date(o.created_at).toLocaleString()}</p>
+                  <p className="break-words text-stone-500 dark:text-white/50">{o.customer_email || o.customer?.email || 'No email'} • {new Date(o.created_at).toLocaleString()}</p>
                   <p className="mt-1 text-stone-500 dark:text-white/50">{o.customer_phone || o.customer?.phone || ''}</p>
-                  <p className="mt-2 max-w-2xl text-stone-600 dark:text-white/60">{o.customer_address || formatAddress(o.customer)}</p>
+                  <p className="mt-2 max-w-2xl break-words text-stone-600 dark:text-white/60">{o.customer_address || formatAddress(o.customer)}</p>
                 </div>
-                <div className="grid gap-2 sm:grid-cols-2 xl:w-[360px]">
+                <div className="grid min-w-0 gap-2 sm:grid-cols-2 xl:w-[360px]">
                   <Select label="Order status" value={o.order_status || o.status || 'new'} onChange={(value) => updateOrder(o.id, { status: value, order_status: value } as Partial<OrderRow>)} options={['new', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']} disabled={savingId === o.id} />
                   <Select label="Payment" value={o.payment_status || 'Pending'} onChange={(value) => updateOrder(o.id, { payment_status: value })} options={['Pending', 'For Verification', 'COD Pending', 'Paid', 'Rejected', 'Failed', 'Refunded']} disabled={savingId === o.id} />
                 </div>
               </div>
 
-              <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_320px]">
-                <div className="rounded-2xl bg-stone-50 p-4 dark:bg-black/20">
+              <div className="mt-4 grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,320px)]">
+                <div className="min-w-0 rounded-2xl bg-stone-50 p-4 dark:bg-black/20">
                   <p className="mb-3 font-black">Items ordered</p>
                   <div className="space-y-2">
                     {items.map((item: any, index: number) => (
                       <div key={`${o.id}-${index}`} className="flex items-center justify-between gap-3 border-b border-stone-200 pb-2 last:border-0 dark:border-white/10">
-                        <div>
+                        <div className="min-w-0">
                           <p className="font-bold">{item.name || item.product_name || 'Perfume'}</p>
                           <p className="text-xs text-stone-500 dark:text-white/45">{item.size || item.ml || ''} {item.concentration || item.variation || ''} × {item.qty || item.quantity || 1}</p>
                         </div>
-                        <Price amount={Number(item.price || item.total || 0) * Number(item.qty || item.quantity || 1)} className="font-black" />
+                        <Price amount={Number(item.price || item.total || 0) * Number(item.qty || item.quantity || 1)} className="shrink-0 font-black" />
                       </div>
                     ))}
                     {items.length === 0 && <p className="text-stone-500 dark:text-white/50">No item details saved.</p>}
                   </div>
                 </div>
 
-                <div className="rounded-2xl bg-stone-50 p-4 dark:bg-black/20">
+                <div className="min-w-0 rounded-2xl bg-stone-50 p-4 dark:bg-black/20">
                   <p className="font-black">Shipping & payment</p>
                   <p className="mt-2 text-stone-500 dark:text-white/50">Shipping: <span className="font-bold text-stone-900 dark:text-white">{o.shipping_method || 'Standard'}</span></p>
                   <p className="text-stone-500 dark:text-white/50">Payment: <span className="font-bold text-stone-900 dark:text-white">{o.payment_method || o.customer?.payment_method || 'Not saved'}</span></p>
@@ -1136,8 +1136,8 @@ function Select({ label, value, onChange, options, disabled }: { label: string; 
 
 function ProductTable({ products, editing, deleteProduct }: { products: ManagedProduct[]; editing: (p: ManagedProduct) => void; deleteProduct: (id: string) => void | Promise<void>; }) {
   return (
-    <div className="mt-6 overflow-x-auto">
-      <table className="w-full min-w-[980px] text-left text-sm">
+    <div className="mt-6 max-w-full overflow-x-auto">
+      <table className="w-full min-w-[760px] text-left text-xs xl:text-sm">
         <thead className="border-b border-stone-200 text-xs uppercase tracking-widest text-stone-500 dark:border-white/10 dark:text-white/40">
           <tr><th className="py-3">Product</th><th>Hero</th><th>Promo/Event</th><th>Stock</th><th>10ml EDP</th><th>85ml Extrait</th><th>Status</th><th>Actions</th></tr>
         </thead>
@@ -1165,7 +1165,7 @@ function Status({ usingSupabase }: { usingSupabase: boolean }) {
 }
 
 function Stat({ label, value }: { label: string; value: number }) {
-  return <div className="rounded-[2rem] bg-white p-6 shadow-sm dark:bg-white/5"><p className="text-sm font-bold text-stone-500 dark:text-white/50">{label}</p><p className="mt-2 text-4xl font-black">{value}</p></div>;
+  return <div className="min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6"><p className="text-sm font-bold text-stone-500 dark:text-white/50">{label}</p><p className="mt-2 break-words text-3xl font-black sm:text-4xl">{value}</p></div>;
 }
 
 function Field({ label, value, onChange, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; type?: string; }) {
