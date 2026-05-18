@@ -1,3 +1,151 @@
 'use client';
-import Link from 'next/link';import AppImage from'@/components/ui/AppImage';import Price from'@/components/Price';import{useCart}from'@/context/CartContext';
-export default function CartDrawer(){const{cartOpen,setCartOpen,items,itemCount,subtotal,updateQuantity,removeFromCart}=useCart();return <div className={`fixed inset-0 z-[200] transition ${cartOpen?'pointer-events-auto':'pointer-events-none'}`} aria-hidden={!cartOpen}><button aria-label="Close cart" className={`absolute inset-0 bg-black/55 backdrop-blur-sm transition-opacity duration-300 ${cartOpen?'opacity-100':'opacity-0'}`} onClick={()=>setCartOpen(false)}/><aside className={`absolute right-0 top-0 h-full w-full max-w-md overflow-y-auto bg-[#fbf7ef] p-6 shadow-2xl transition-transform duration-500 ease-out dark:bg-[#120d09] ${cartOpen?'translate-x-0':'translate-x-full'}`}><div className="flex items-center justify-between border-b border-stone-200 pb-4 dark:border-white/10"><div><p className="text-xs font-bold uppercase tracking-[.25em] text-amber-800">Shopping Cart</p><h2 className="text-2xl font-black">{itemCount} item{itemCount===1?'':'s'}</h2></div><button onClick={()=>setCartOpen(false)} className="rounded-full border border-stone-300 px-3 py-1 text-sm font-bold transition hover:bg-stone-100 dark:border-white/20 dark:hover:bg-white/10">Close</button></div>{items.length===0?<div className="py-16 text-center"><div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-3xl dark:bg-amber-500/20">🛍️</div><p className="text-lg font-bold">Your cart is empty.</p><p className="mt-2 text-sm text-stone-500 dark:text-white/50">Add a fragrance and your cart will slide in here.</p><Link onClick={()=>setCartOpen(false)} href="/products" className="mt-6 inline-flex rounded-full bg-amber-800 px-6 py-3 font-bold text-white">Shop perfumes</Link></div>:<><div className="space-y-4 py-6">{items.map((item,index)=><div key={item.key} className="flex gap-4 rounded-3xl bg-white p-3 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-white/5" style={{animation:`slideUp .35s ease-out ${index*45}ms both`}}><div className="relative h-24 w-20 overflow-hidden rounded-2xl bg-stone-100"><AppImage src={item.product.image} alt={item.product.name} fill sizes="96px" className="object-cover"/></div><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-2"><div><h3 className="font-black">{item.product.name}</h3><p className="text-sm text-stone-500 dark:text-white/50">{item.size} • {item.concentration}</p><Price amount={item.unitPrice} className="text-xs font-bold text-stone-500 dark:text-white/50"/></div><Price amount={item.lineTotal} className="font-black"/></div><div className="mt-4 flex items-center justify-between"><div className="flex items-center rounded-full border border-stone-200 dark:border-white/10"><button className="px-3 py-1 font-bold" onClick={()=>updateQuantity(item.key,item.quantity-1)}>-</button><span className="px-2 text-sm font-bold">{item.quantity}</span><button className="px-3 py-1 font-bold" onClick={()=>updateQuantity(item.key,item.quantity+1)}>+</button></div><button onClick={()=>removeFromCart(item.key)} className="text-sm font-bold text-red-600">Remove</button></div></div></div>)}</div><div className="sticky bottom-0 rounded-3xl border border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-[#1a1410]"><div className="flex items-center justify-between text-lg font-black"><span>Subtotal</span><Price amount={subtotal}/></div><p className="mt-2 text-sm text-stone-500 dark:text-white/50">Shipping is calculated at checkout.</p><Link onClick={()=>setCartOpen(false)} href="/checkout" className="mt-5 flex w-full justify-center rounded-full bg-stone-950 px-6 py-4 font-black text-white transition hover:bg-amber-800 dark:bg-amber-700">Checkout</Link></div></>}</aside></div>}
+
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import Price from '@/components/Price';
+import AppImage from '@/components/ui/AppImage';
+import { useCart } from '@/context/CartContext';
+
+export default function CartDrawer() {
+  const pathname = usePathname();
+  const {
+    cartOpen,
+    setCartOpen,
+    items,
+    itemCount,
+    subtotal,
+    updateQuantity,
+    removeFromCart,
+  } = useCart();
+
+  const suppressCartDrawer = pathname === '/checkout' || pathname.startsWith('/admin');
+
+  useEffect(() => {
+    if (suppressCartDrawer && cartOpen) setCartOpen(false);
+  }, [suppressCartDrawer, cartOpen, setCartOpen]);
+
+  if (suppressCartDrawer) return null;
+
+  return (
+    <div
+      className={`fixed inset-0 z-[200] transition ${cartOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      aria-hidden={!cartOpen}
+    >
+      <button
+        aria-label="Close cart"
+        className={`absolute inset-0 bg-black/55 backdrop-blur-sm transition-opacity duration-300 ${
+          cartOpen ? 'opacity-100' : 'opacity-0'
+        }`}
+        onClick={() => setCartOpen(false)}
+      />
+
+      <aside
+        className={`absolute right-0 top-0 h-full w-full max-w-md overflow-y-auto bg-[#fbf7ef] p-6 shadow-2xl transition-transform duration-500 ease-out dark:bg-[#120d09] ${
+          cartOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex items-center justify-between border-b border-stone-200 pb-4 dark:border-white/10">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[.25em] text-amber-800">Shopping Cart</p>
+            <h2 className="text-2xl font-black">
+              {itemCount} item{itemCount === 1 ? '' : 's'}
+            </h2>
+          </div>
+          <button
+            onClick={() => setCartOpen(false)}
+            className="rounded-full border border-stone-300 px-3 py-1 text-sm font-bold transition hover:bg-stone-100 dark:border-white/20 dark:hover:bg-white/10"
+          >
+            Close
+          </button>
+        </div>
+
+        {items.length === 0 ? (
+          <div className="py-16 text-center">
+            <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-sm font-black uppercase tracking-[.16em] text-amber-900 dark:bg-amber-500/20 dark:text-amber-200">
+              Cart
+            </div>
+            <p className="text-lg font-bold">Your cart is empty.</p>
+            <p className="mt-2 text-sm text-stone-500 dark:text-white/50">
+              Add a fragrance and your cart will slide in here.
+            </p>
+            <Link
+              onClick={() => setCartOpen(false)}
+              href="/products"
+              className="mt-6 inline-flex rounded-full bg-amber-800 px-6 py-3 font-bold text-white"
+            >
+              Shop perfumes
+            </Link>
+          </div>
+        ) : (
+          <>
+            <div className="space-y-4 py-6">
+              {items.map((item, index) => (
+                <div
+                  key={item.key}
+                  className="flex gap-4 rounded-3xl bg-white p-3 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-white/5"
+                  style={{ animation: `slideUp .35s ease-out ${index * 45}ms both` }}
+                >
+                  <div className="relative h-24 w-20 overflow-hidden rounded-2xl bg-stone-100">
+                    <AppImage
+                      src={item.product.image}
+                      alt={item.product.name}
+                      fill
+                      sizes="96px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="font-black">{item.product.name}</h3>
+                        <p className="text-sm text-stone-500 dark:text-white/50">
+                          {item.size} - {item.concentration}
+                        </p>
+                        <Price
+                          amount={item.unitPrice}
+                          className="text-xs font-bold text-stone-500 dark:text-white/50"
+                        />
+                      </div>
+                      <Price amount={item.lineTotal} className="font-black" />
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-center rounded-full border border-stone-200 dark:border-white/10">
+                        <button className="px-3 py-1 font-bold" onClick={() => updateQuantity(item.key, item.quantity - 1)}>
+                          -
+                        </button>
+                        <span className="px-2 text-sm font-bold">{item.quantity}</span>
+                        <button className="px-3 py-1 font-bold" onClick={() => updateQuantity(item.key, item.quantity + 1)}>
+                          +
+                        </button>
+                      </div>
+                      <button onClick={() => removeFromCart(item.key)} className="text-sm font-bold text-red-600">
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="sticky bottom-0 rounded-3xl border border-stone-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-[#1a1410]">
+              <div className="flex items-center justify-between text-lg font-black">
+                <span>Subtotal</span>
+                <Price amount={subtotal} />
+              </div>
+              <p className="mt-2 text-sm text-stone-500 dark:text-white/50">Shipping is calculated at checkout.</p>
+              <Link
+                onClick={() => setCartOpen(false)}
+                href="/checkout"
+                className="mt-5 flex w-full justify-center rounded-full bg-stone-950 px-6 py-4 font-black text-white transition hover:bg-amber-800 dark:bg-amber-700"
+              >
+                Checkout
+              </Link>
+            </div>
+          </>
+        )}
+      </aside>
+    </div>
+  );
+}
