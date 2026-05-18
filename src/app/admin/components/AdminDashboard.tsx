@@ -172,6 +172,56 @@ function normalizeVariants(v: ProductVariant[] | undefined, base = 999) {
   return concentrations.map((c) => map.get(c) || defaultVariants(base).find((x) => x.concentration === c)!);
 }
 
+type CsvRow = Record<string, string | number | boolean | null | undefined>;
+
+function csvEscape(value: unknown) {
+  const text = String(value ?? '').replace(/\r?\n/g, ' ');
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function downloadCsv(filename: string, rows: CsvRow[], fallbackHeaders: string[]) {
+  const headers = rows.length ? Object.keys(rows[0]) : fallbackHeaders;
+  const csv = [`\ufeff${headers.join(',')}`, ...rows.map((row) => headers.map((header) => csvEscape(row[header])).join(','))].join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function getOrderCustomerName(order: OrderRow) {
+  return order.customer_name || [order.customer?.first_name, order.customer?.last_name].filter(Boolean).join(' ') || order.customer?.name || '';
+}
+
+function getOrderTotal(order: OrderRow) {
+  return Number(order.total || Number(order.subtotal || 0) + Number(order.shipping_fee || 0));
+}
+
+function isLikelyTestOrder(order: OrderRow) {
+  const itemNames = Array.isArray(order.items) ? order.items.map((item) => item?.product_name || item?.name).filter(Boolean).join(' ') : '';
+  const text = [
+    order.id,
+    getOrderCustomerName(order),
+    order.customer_email,
+    order.customer?.email,
+    order.customer_phone,
+    order.customer?.phone,
+    order.customer_address,
+    order.customer?.address,
+    order.tracking_code,
+    order.tracking_number,
+    order.payment_reference,
+    order.delivery_notes,
+    itemNames,
+  ].filter(Boolean).join(' ').toLowerCase();
+
+  return /\b(test|qa|codex|demo|sample|fake)\b|example\.com|delete after qa/.test(text);
+}
+
 export default function AdminDashboard() {
   const {
     products,
@@ -217,6 +267,7 @@ export default function AdminDashboard() {
     if (!q) return products;
     return products.filter((p) => [p.name, p.family, p.category, p.promo, p.tag, p.event].filter(Boolean).join(' ').toLowerCase().includes(q));
   }, [products, productSearch]);
+  const testOrderCount = useMemo(() => orders.filter(isLikelyTestOrder).length, [orders]);
 
   function clearAdminSession() {
     if (typeof window === 'undefined') return;
@@ -322,6 +373,64 @@ export default function AdminDashboard() {
       }
     } catch (err: any) {
       setError(`Order delete failed. ${err?.message || 'Supabase request did not finish.'}`);
+    } finally {
+      setOrderSaving('');
+    }
+  }
+
+  async function deleteTestOrders() {
+    if (!isSupabaseConfigured || !supabase) {
+      setError('Order cleanup needs Supabase connection.');
+      return;
+    }
+
+    const targets = orders.filter(isLikelyTestOrder);
+    if (targets.length === 0) {
+      window.alert('No likely test orders found. Orders must contain markers like test, qa, codex, demo, sample, fake, or example.com.');
+      return;
+    }
+
+    const preview = targets.slice(0, 5).map((order) => `${getOrderCustomerName(order) || 'Customer'} (${order.id.slice(0, 8)})`).join('\n');
+    const remaining = targets.length > 5 ? `\n...and ${targets.length - 5} more` : '';
+    if (!window.confirm(`Delete ${targets.length} likely test order(s) permanently?\n\n${preview}${remaining}\n\nThis only targets orders with clear test markers.`)) return;
+
+    setOrderSaving('bulk-test-delete');
+    setError('');
+    const deletedIds = new Set<string>();
+    const failures: string[] = [];
+
+    try {
+      for (const order of targets) {
+        try {
+          const res = await adminFetch(`/api/admin/orders?id=${encodeURIComponent(order.id)}`, {
+            method: 'DELETE',
+          });
+          if (res.status === 401) {
+            clearAdminSession();
+            setLogged(false);
+            setError('Admin session expired. Please login again before deleting orders.');
+            return;
+          }
+          const json = await res.json().catch(() => ({}));
+          if (!res.ok || json.error) {
+            failures.push(`${order.id.slice(0, 8)}: ${json.error || res.statusText || 'Delete failed'}`);
+          } else {
+            deletedIds.add(order.id);
+          }
+        } catch (err: any) {
+          failures.push(`${order.id.slice(0, 8)}: ${err?.message || 'Delete failed'}`);
+        }
+      }
+
+      if (deletedIds.size) {
+        setOrders((current) => current.filter((order) => !deletedIds.has(order.id)));
+      }
+
+      if (failures.length) {
+        setError(`Deleted ${deletedIds.size} test order(s), but ${failures.length} failed. ${failures.slice(0, 3).join(' | ')}`);
+      } else {
+        window.alert(`Deleted ${deletedIds.size} test order(s).`);
+      }
     } finally {
       setOrderSaving('');
     }
@@ -653,30 +762,49 @@ export default function AdminDashboard() {
 
   function exportOrdersCsv() {
     const rows = orders.map((o) => {
-      const customerName = o.customer_name || [o.customer?.first_name, o.customer?.last_name].filter(Boolean).join(' ') || o.customer?.name || '';
-      const total = Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0));
+      const customerName = getOrderCustomerName(o);
       return {
         id: o.id,
         created_at: o.created_at,
         customer_name: customerName,
         customer_email: o.customer_email || o.customer?.email || '',
         phone: o.customer_phone || o.customer?.phone || '',
+        address: o.customer_address || formatAddress(o.customer),
         payment_method: o.payment_method || o.customer?.payment_method || '',
         payment_status: o.payment_status || '',
         order_status: o.order_status || o.status || '',
-        total,
+        shipping_method: o.shipping_method || '',
+        shipping_fee: Number(o.shipping_fee || 0),
+        total: getOrderTotal(o),
+        tracking_code: o.tracking_code || '',
         tracking_number: o.tracking_number || '',
+        courier_name: o.courier_name || '',
       };
     });
-    const headers = Object.keys(rows[0] || { id: '', created_at: '', customer_name: '', customer_email: '', phone: '', payment_method: '', payment_status: '', order_status: '', total: '', tracking_number: '' });
-    const csv = [headers.join(','), ...rows.map((row: any) => headers.map((h) => `"${String(row[h] ?? '').replace(/"/g, '""')}"`).join(','))].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `exousia-orders-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadCsv(`exousia-orders-${new Date().toISOString().slice(0, 10)}.csv`, rows, ['id', 'created_at', 'customer_name', 'customer_email', 'phone', 'address', 'payment_method', 'payment_status', 'order_status', 'shipping_method', 'shipping_fee', 'total', 'tracking_code', 'tracking_number', 'courier_name']);
+  }
+
+  function exportProductsCsv() {
+    const rows = filteredProducts.map((p) => {
+      const slots = productImageSlots(p);
+      return {
+        id: p.id,
+        name: p.name,
+        category: p.category || 'perfumes',
+        family: p.family,
+        status: p.active === false ? 'Hidden' : 'Active',
+        stock: Number(p.stock || 0),
+        promo: p.promo || p.tag || '',
+        event: p.event || '',
+        hero_enabled: Boolean(p.hero_enabled),
+        hero_order: Number(p.hero_order || 0),
+        main_image: slots[0] || '',
+        gallery_images: slots.slice(1).join(' | '),
+        price_10ml_edp: Number(p.variants?.[0]?.prices?.['10ml'] || p.price || 0),
+        price_85ml_extrait: Number(p.variants?.[1]?.prices?.['85ml'] || 0),
+      };
+    });
+    downloadCsv(`exousia-products-${new Date().toISOString().slice(0, 10)}.csv`, rows, ['id', 'name', 'category', 'family', 'status', 'stock', 'promo', 'event', 'hero_enabled', 'hero_order', 'main_image', 'gallery_images', 'price_10ml_edp', 'price_85ml_extrait']);
   }
 
   if (!logged) {
@@ -924,7 +1052,10 @@ export default function AdminDashboard() {
                 <h2 className="text-2xl font-black">Product catalog</h2>
                 <p className="text-sm text-stone-500 dark:text-white/50">{usingSupabase ? 'Saved in Supabase database.' : 'Demo mode: saved only in this browser.'}</p>
               </div>
-              <button onClick={resetProducts} className="w-full rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10 sm:w-auto">Seed Demo Data</button>
+              <div className="flex flex-wrap gap-2 sm:justify-end">
+                <button onClick={exportProductsCsv} className="w-full rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700 sm:w-auto">Export Products CSV</button>
+                <button onClick={resetProducts} className="w-full rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10 sm:w-auto">Seed Demo Data</button>
+              </div>
             </div>
             <input value={productSearch} onChange={(e) => setProductSearch(e.target.value)} placeholder="Search products, family, promo..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
             {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} editing={startEditProduct} deleteProduct={deleteProduct} />}
@@ -949,6 +1080,8 @@ export default function AdminDashboard() {
             search={orderSearch}
             setSearch={setOrderSearch}
             exportOrders={exportOrdersCsv}
+            deleteTestOrders={deleteTestOrders}
+            testOrderCount={testOrderCount}
             refresh={loadOrders}
             updateOrder={updateOrder}
             deleteOrder={deleteOrder}
@@ -970,6 +1103,8 @@ function OrdersPanel({
   search,
   setSearch,
   exportOrders,
+  deleteTestOrders,
+  testOrderCount,
   refresh,
   updateOrder,
   deleteOrder,
@@ -984,6 +1119,8 @@ function OrdersPanel({
   search: string;
   setSearch: (v: string) => void;
   exportOrders: () => void;
+  deleteTestOrders: () => void | Promise<void>;
+  testOrderCount: number;
   refresh: () => void;
   updateOrder: (id: string, changes: Partial<OrderRow>) => void | Promise<void>;
   deleteOrder: (id: string) => void | Promise<void>;
@@ -1005,7 +1142,12 @@ function OrdersPanel({
           <h2 className="text-2xl font-black">Orders management</h2>
           <p className="text-sm text-stone-500 dark:text-white/50">Manage customer orders, payment status, shipping status, and tracking numbers.</p>
         </div>
-        <div className="flex flex-wrap gap-2"><Link href="/admin/notifications" className="rounded-full bg-amber-700 px-4 py-2 text-sm font-black text-white">Notifications</Link><button onClick={exportOrders} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button><button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button></div>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/admin/notifications" className="rounded-full bg-amber-700 px-4 py-2 text-sm font-black text-white">Notifications</Link>
+          <button onClick={exportOrders} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button>
+          <button onClick={deleteTestOrders} disabled={loading || savingId === 'bulk-test-delete' || testOrderCount === 0} className="rounded-full border border-red-300 px-4 py-2 text-sm font-black text-red-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-500/40 dark:text-red-200">{savingId === 'bulk-test-delete' ? 'Deleting...' : `Delete Test Orders${testOrderCount ? ` (${testOrderCount})` : ''}`}</button>
+          <button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button>
+        </div>
       </div>
 
       <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search order ID, customer, email, phone, tracking..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />

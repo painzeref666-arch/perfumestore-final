@@ -274,19 +274,19 @@ export default function CheckoutPage() {
               <form onSubmit={submit} className="mt-8 grid gap-4">
                 {error && <p className="rounded-2xl bg-red-100 p-4 font-bold text-red-800 dark:bg-red-500/10 dark:text-red-200">{error}</p>}
                 <div className="grid gap-4 md:grid-cols-2">
-                  <input name="first_name" required value={customerForm.first_name} onChange={(e) => updateCustomerField('first_name', e.target.value)} placeholder="First name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-                  <input name="last_name" required value={customerForm.last_name} onChange={(e) => updateCustomerField('last_name', e.target.value)} placeholder="Last name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                  <input id="checkout-first-name" name="first_name" autoComplete="given-name" required value={customerForm.first_name} onChange={(e) => updateCustomerField('first_name', e.target.value)} placeholder="First name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                  <input id="checkout-last-name" name="last_name" autoComplete="family-name" required value={customerForm.last_name} onChange={(e) => updateCustomerField('last_name', e.target.value)} placeholder="Last name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
                 </div>
-                <input name="email" type="email" required value={customerForm.email} onChange={(e) => updateCustomerField('email', e.target.value)} placeholder="Email address" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-                <input name="phone" required value={customerForm.phone} onChange={(e) => updateCustomerField('phone', e.target.value)} placeholder="Phone number" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-                <textarea name="address" required value={customerForm.address} onChange={(e) => updateCustomerField('address', e.target.value)} placeholder="Complete delivery address" className="h-28 rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
-                <select value={region} onChange={(e)=>setRegion(e.target.value)} className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
+                <input id="checkout-email" name="email" type="email" autoComplete="email" inputMode="email" required value={customerForm.email} onChange={(e) => updateCustomerField('email', e.target.value)} placeholder="Email address" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                <input id="checkout-phone" name="phone" autoComplete="tel" inputMode="tel" required value={customerForm.phone} onChange={(e) => updateCustomerField('phone', e.target.value)} placeholder="Phone number" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                <textarea id="checkout-address" name="address" autoComplete="street-address" required value={customerForm.address} onChange={(e) => updateCustomerField('address', e.target.value)} placeholder="Complete delivery address" className="h-28 rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
+                <select id="checkout-region" name="address_region" autoComplete="address-level1" value={region} onChange={(e)=>setRegion(e.target.value)} className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
                   {regions.map((r)=><option key={r}>{r}</option>)}
                 </select>
 
                 <div className="rounded-[2rem] border border-stone-200 p-4 dark:border-white/10 dark:bg-black/20">
                   <p className="font-black">Payment method</p>
-                  <select name="payment_method" required value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)} className="mt-3 w-full rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
+                  <select id="checkout-payment-method" name="payment_method" autoComplete="off" required value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)} className="mt-3 w-full rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
                     <option>Cash on Delivery</option>
                     <option>GCash manual verification</option>
                     <option>Maya manual verification</option>
@@ -306,7 +306,7 @@ export default function CheckoutPage() {
                           <p className="mt-2 text-xs font-bold opacity-80">Tip: replace public/gcash-qr.jpeg with your real QR image.</p>
                         </div>
                       </div>
-                      <input name="payment_reference" placeholder="Reference number / transaction ID" className="mt-4 w-full rounded-2xl border border-amber-200 px-5 py-4 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
+                      <input id="checkout-payment-reference" name="payment_reference" autoComplete="off" placeholder="Reference number / transaction ID" className="mt-4 w-full rounded-2xl border border-amber-200 px-5 py-4 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
                       <label className="mt-4 block text-sm font-black">Upload payment screenshot</label>
                       <input type="file" accept="image/*" onChange={(e)=>handleProof(e.target.files?.[0] || null)} className="mt-2 w-full rounded-2xl border border-amber-200 bg-white px-4 py-3 text-sm text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
                       {proofPreview && <img src={proofPreview} alt="Payment proof preview" className="mt-4 max-h-56 w-full rounded-2xl object-cover" />}
@@ -317,7 +317,7 @@ export default function CheckoutPage() {
                 <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
                   <p className="font-black text-amber-900 dark:text-amber-100">Coupon</p>
                   <div className="mt-3 flex gap-2">
-                    <input value={coupon} onChange={(e)=>setCoupon(e.target.value)} placeholder="WELCOME10 or FREESHIP" className="min-w-0 flex-1 rounded-full border border-amber-200 px-5 py-3 dark:border-white/10 dark:bg-black/20" />
+                    <input id="checkout-coupon" name="coupon_code" autoComplete="off" autoCapitalize="characters" value={coupon} onChange={(e)=>setCoupon(e.target.value)} placeholder="WELCOME10 or FREESHIP" className="min-w-0 flex-1 rounded-full border border-amber-200 px-5 py-3 dark:border-white/10 dark:bg-black/20" />
                     <button type="button" onClick={applyCoupon} className="rounded-full bg-amber-800 px-5 py-3 font-black text-white">Apply</button>
                   </div>
                   {couponMessage && <p className="mt-2 text-sm font-bold text-amber-900 dark:text-amber-100">{couponMessage}</p>}
