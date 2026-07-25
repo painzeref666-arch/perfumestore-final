@@ -67,14 +67,23 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     } catch {}
   };
 
-  const loadLocal = () => {
+  const getLocalProducts = () => {
     try {
       const saved = localStorage.getItem(KEY);
       if (saved) {
-        setProducts(JSON.parse(saved));
-        return;
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
       }
     } catch {}
+    return null;
+  };
+
+  const loadLocal = () => {
+    const savedProducts = getLocalProducts();
+    if (savedProducts) {
+      setProducts(savedProducts);
+      return;
+    }
     setProducts(seed);
   };
 
@@ -96,7 +105,13 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         setError(`Products are using backup mode. ${json.error}`);
         loadLocal();
       } else if (!json.data || json.data.length === 0) {
-        setProducts(seed);
+        const savedProducts = getLocalProducts();
+        if (savedProducts) {
+          setError('Supabase products table is empty. Showing this browser backup so saved admin products can be recovered.');
+          setProducts(savedProducts);
+        } else {
+          setProducts(seed);
+        }
       } else {
         setProducts(json.data.map(rowToProduct));
       }
