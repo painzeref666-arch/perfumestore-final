@@ -106,7 +106,7 @@ export default function TrackPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#0b0907] px-6 py-10 text-white">
+    <main className="min-h-screen bg-[#160508] px-6 py-10 text-white">
       <div className="mx-auto max-w-5xl">
         <Link href="/" className="text-sm font-black text-amber-500">← Back home</Link>
 

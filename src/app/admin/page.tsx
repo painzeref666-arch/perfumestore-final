@@ -111,13 +111,13 @@ export default function AdminPage() {
   }
 
   if (!ready) {
-    return <main className="min-h-screen bg-[#0b0907] p-8 text-white"><p className="font-bold">Checking admin access...</p></main>;
+    return <main className="min-h-screen bg-[#160508] p-8 text-white"><p className="font-bold">Checking admin access...</p></main>;
   }
 
   if (logged) return <AdminDashboard />;
 
   return (
-    <main className="min-h-screen bg-[#0b0907] px-6 py-12 text-white">
+    <main className="min-h-screen bg-[#160508] px-6 py-12 text-white">
       <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-2">
         <section>
           <Link href="/" className="text-sm font-black text-amber-500">← Back to store</Link>

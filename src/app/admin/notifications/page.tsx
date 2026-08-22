@@ -76,7 +76,7 @@ export default function NotificationsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0b0907] px-6 py-12 text-white">
+    <main className="min-h-screen bg-[#160508] px-6 py-12 text-white">
       <div className="mx-auto max-w-6xl">
         <Link href="/admin" className="text-sm font-black text-amber-500">← Back to Admin</Link>
 

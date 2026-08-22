@@ -43,7 +43,7 @@ export default function MarketingAdminPage(){
     load();
   }
 
-  return <main className="min-h-screen bg-[#0f0d0a] px-4 py-8 text-white sm:px-6">
+  return <main className="min-h-screen bg-[#160508] px-4 py-8 text-white sm:px-6">
     <div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div><Link href="/admin" className="font-bold text-amber-300">← Back to admin</Link><h1 className="mt-4 text-4xl font-black md:text-6xl">Marketing tools</h1><p className="mt-2 text-white/60">Coupons, customer notifications, GCash QR reminder, and growth tools.</p></div>

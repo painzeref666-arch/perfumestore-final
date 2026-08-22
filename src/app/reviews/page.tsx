@@ -93,7 +93,7 @@ export default function ReviewsPage() {
   const productName = (id: string) => activeProducts.find((product) => product.id === id)?.name || 'Exousia product';
 
   return (
-    <main className="min-h-screen bg-[#fbf7ef] px-6 py-16 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
+    <main className="min-h-screen bg-[#fff7f7] px-6 py-16 text-stone-950 dark:bg-[#160508] dark:text-white">
       <div className="mx-auto max-w-6xl">
         <Link href="/products" className="font-bold text-amber-800">Back to products</Link>
         <div className="mt-8 grid gap-8 lg:grid-cols-[.8fr_1.2fr]">

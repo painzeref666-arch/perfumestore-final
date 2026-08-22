@@ -68,7 +68,7 @@ function ThemeToggle() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-11 w-36 bg-card dark:bg-[#1A1410] border border-border dark:border-white/10 rounded-2xl shadow-xl shadow-foreground/10 dark:shadow-black/40 overflow-hidden z-50">
+        <div className="absolute right-0 top-11 w-36 bg-card dark:bg-[#24080D] border border-border dark:border-white/10 rounded-2xl shadow-xl shadow-foreground/10 dark:shadow-black/40 overflow-hidden z-50">
           {options.map((opt) => (
             <button
               key={opt.value}
@@ -256,7 +256,7 @@ export default function Header() {
 
       {searchOpen && (
         <div className="fixed inset-0 z-[120] bg-black/45 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
-          <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-card p-5 shadow-2xl dark:border-white/10 dark:bg-[#1A1410]" onClick={(event) => event.stopPropagation()}>
+          <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-card p-5 shadow-2xl dark:border-white/10 dark:bg-[#24080D]" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-center gap-3">
               <input
                 autoFocus

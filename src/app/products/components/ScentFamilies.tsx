@@ -28,7 +28,7 @@ const families: ScentFamily[] = [
   count: 48,
   image: "https://img.rocket.new/generatedImages/rocket_gen_img_1fb2c9bd6-1772983494374.png",
   imageAlt: 'Woody fragrance bottle on weathered oak wood with cedar bark',
-  accent: '#C9974A',
+  accent: '#B11226',
   examples: ['Sandalwood', 'Cedarwood', 'Vetiver', 'Oud']
 },
 {

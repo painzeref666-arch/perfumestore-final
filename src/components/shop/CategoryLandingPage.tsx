@@ -31,7 +31,7 @@ export default function CategoryLandingPage({ category }: { category: CategoryKe
     <>
       <div className="grain" aria-hidden="true" />
       <Header />
-      <main className="min-h-screen bg-[#fbf7ef] pt-28 dark:bg-[#0f0d0a] dark:text-white">
+      <main className="min-h-screen bg-[#fff7f7] pt-28 dark:bg-[#160508] dark:text-white">
         <section className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-12 md:grid-cols-[1fr_420px]">
           <div>
             <p className="font-black uppercase tracking-[.35em] text-amber-700">{h.eyebrow}</p>

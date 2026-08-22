@@ -4,7 +4,7 @@ import AppLogo from '@/components/ui/AppLogo';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border dark:border-white/8 py-8 px-4 md:px-6 bg-background dark:bg-[#0F0D0A]">
+    <footer className="border-t border-border dark:border-white/8 py-8 px-4 md:px-6 bg-background dark:bg-[#160508]">
       <div className="max-w-7xl mx-auto">
         {/* Pattern 3: Vercel Horizontal Flow */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">

@@ -37,7 +37,7 @@ export default function AdminLogoutPage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#080604] px-6 text-white">
+    <main className="flex min-h-screen items-center justify-center bg-[#160508] px-6 text-white">
       <div className="max-w-md rounded-[2rem] border border-white/10 bg-white/5 p-8 text-center">
         <p className="text-sm font-bold uppercase tracking-[0.25em] text-amber-400">Signing out</p>
         <h1 className="mt-3 text-3xl font-black">Logging out of admin...</h1>

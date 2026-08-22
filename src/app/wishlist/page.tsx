@@ -13,7 +13,7 @@ export default function WishlistPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#fbf7ef] px-6 py-32 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
+      <main className="min-h-screen bg-[#fff7f7] px-6 py-32 text-stone-950 dark:bg-[#160508] dark:text-white">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-black uppercase tracking-[.3em] text-amber-700">Customer Features</p>
           <h1 className="mt-4 text-5xl font-black md:text-7xl">Your wishlist</h1>

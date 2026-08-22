@@ -59,7 +59,7 @@ export default function ConnectionTestPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fbf7ef] px-6 py-16 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
+    <main className="min-h-screen bg-[#fff7f7] px-6 py-16 text-stone-950 dark:bg-[#160508] dark:text-white">
       <div className="mx-auto max-w-3xl rounded-[2rem] bg-white p-8 shadow-xl dark:bg-white/5">
         <Link href="/" className="font-bold text-amber-800">← Back home</Link>
         <h1 className="mt-6 text-4xl font-black">Supabase Connection Test</h1>

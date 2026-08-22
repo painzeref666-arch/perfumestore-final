@@ -5,29 +5,29 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,600&display=swap');
 
 :root {
-  --background: #FAF7F2;
-  --foreground: #0F0D0A;
-  --primary: #C9974A;
-  --primary-dark: #8B5E2A;
-  --primary-light: #E8C98A;
-  --accent: #2A1F14;
-  --muted: #7A6A58;
-  --border: #E8DDD0;
+  --background: #FFF7F7;
+  --foreground: #1F070A;
+  --primary: #B11226;
+  --primary-dark: #7F0D1B;
+  --primary-light: #F6AEB8;
+  --accent: #4A0711;
+  --muted: #7B555A;
+  --border: #F0D7DA;
   --card: #FFFFFF;
   --radius: 1rem;
 }
 
 /* Dark mode CSS variables */
 .dark {
-  --background: #0F0D0A;
-  --foreground: #F5F0E8;
-  --primary: #C9974A;
-  --primary-dark: #8B5E2A;
-  --primary-light: #E8C98A;
-  --accent: #E8DDD0;
-  --muted: #9A8A78;
-  --border: #2A2018;
-  --card: #1A1410;
+  --background: #160508;
+  --foreground: #FFF7F8;
+  --primary: #E11D48;
+  --primary-dark: #BE123C;
+  --primary-light: #FDA4AF;
+  --accent: #FCEEEF;
+  --muted: #B58A91;
+  --border: #3A1017;
+  --card: #24080D;
   --radius: 1rem;
 }
 
@@ -65,23 +65,23 @@ body {
 
 /* Glassmorphism */
 .glass {
-  background: rgba(250, 247, 242, 0.75);
+  background: rgba(255, 247, 247, 0.84);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(201, 151, 74, 0.12);
+  border: 1px solid rgba(177, 18, 38, 0.16);
 }
 
 .glass-dark {
-  background: rgba(15, 13, 10, 0.75);
+  background: rgba(22, 5, 8, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(201, 151, 74, 0.15);
+  border: 1px solid rgba(253, 164, 175, 0.18);
 }
 
 /* Dark mode glass override */
 .dark .glass {
-  background: rgba(15, 13, 10, 0.80);
-  border: 1px solid rgba(201, 151, 74, 0.15);
+  background: rgba(22, 5, 8, 0.84);
+  border: 1px solid rgba(253, 164, 175, 0.18);
 }
 
 /* Reveal animation */
@@ -104,7 +104,7 @@ body {
 .arch-image:hover {
   transform: scale(1.12) !important;
   z-index: 50;
-  box-shadow: 0 24px 60px rgba(201, 151, 74, 0.3);
+  box-shadow: 0 24px 60px rgba(177, 18, 38, 0.26);
 }
 
 /* Product card hover */
@@ -149,7 +149,7 @@ body {
 .btn-amber:hover {
   background: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(201, 151, 74, 0.35);
+  box-shadow: 0 8px 24px rgba(177, 18, 38, 0.32);
 }
 .btn-amber:active {
   transform: translateY(0);
@@ -205,7 +205,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 .gift-bg {
-  background: linear-gradient(135deg, #0F0D0A 0%, #2A1F14 40%, #1A120A 70%, #0F0D0A 100%);
+  background: linear-gradient(135deg, #160508 0%, #4A0711 44%, #2D070D 72%, #160508 100%);
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
 }

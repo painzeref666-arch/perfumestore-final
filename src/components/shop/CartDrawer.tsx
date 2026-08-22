@@ -41,7 +41,7 @@ export default function CartDrawer() {
       />
 
       <aside
-        className={`absolute right-0 top-0 h-full w-full max-w-md overflow-y-auto bg-[#fbf7ef] p-6 shadow-2xl transition-transform duration-500 ease-out dark:bg-[#120d09] ${
+        className={`absolute right-0 top-0 h-full w-full max-w-md overflow-y-auto bg-[#fff7f7] p-6 shadow-2xl transition-transform duration-500 ease-out dark:bg-[#1f070c] ${
           cartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

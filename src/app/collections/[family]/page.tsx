@@ -63,7 +63,7 @@ export default function CollectionPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#0f0d0a] px-4 py-32 text-white md:px-6">
+      <main className="min-h-screen bg-[#160508] px-4 py-32 text-white md:px-6">
         <section className="mx-auto max-w-7xl">
           <nav className="mb-8 text-xs font-bold text-white/45">
             <Link href="/" className="hover:text-amber-300">Home</Link> <span className="mx-2">/</span>

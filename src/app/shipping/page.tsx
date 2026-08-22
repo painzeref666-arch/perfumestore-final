@@ -15,7 +15,7 @@ export default function ShippingCalculatorPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#0f0d0a] px-6 py-32 text-white">
+      <main className="min-h-screen bg-[#160508] px-6 py-32 text-white">
         <div className="mx-auto max-w-3xl rounded-[2.5rem] border border-white/10 bg-white/5 p-8 md:p-10">
           <Link href="/products" className="font-bold text-amber-300">← Back to shop</Link>
           <p className="mt-8 text-xs font-black uppercase tracking-[.25em] text-amber-400">Shipping Fee Calculator</p>

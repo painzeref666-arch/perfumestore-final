@@ -10,13 +10,13 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  mode: 'system',
+  mode: 'light',
   resolvedTheme: 'light',
   setMode: () => {},
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setModeState] = useState<ThemeMode>('system');
+  const [mode, setModeState] = useState<ThemeMode>('light');
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
 
   // Resolve actual theme based on mode + system preference
@@ -41,7 +41,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Initialize from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem('theme-mode') as ThemeMode | null;
-    const initial = stored ?? 'system';
+    const initial = stored ?? 'light';
     setModeState(initial);
     applyTheme(resolveTheme(initial));
 

@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
   const maxDailyRevenue = Math.max(...dailySales.map((day) => day.revenue), 1);
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#fbf7ef] px-4 py-8 text-stone-950 dark:bg-[#0f0d0a] dark:text-white sm:px-6 lg:px-8">
+    <main className="min-h-screen overflow-x-hidden bg-[#fff7f7] px-4 py-8 text-stone-950 dark:bg-[#160508] dark:text-white sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>

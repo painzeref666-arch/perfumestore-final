@@ -98,7 +98,7 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
           </div>
         ))}
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/15" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#fbf7ef] to-transparent dark:from-[#0f0d0a]" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#fff7f7] to-transparent dark:from-[#160508]" />
       </div>
 
       <div className="relative mx-auto flex min-h-[560px] max-w-7xl items-center px-6 py-16 md:min-h-[620px]">
@@ -149,7 +149,7 @@ export default function HomePage() {
     <>
       <div className="grain" aria-hidden="true" />
       <Header />
-      <main className="min-h-screen bg-[#fbf7ef] pt-28 text-stone-950 dark:bg-[#0f0d0a] dark:text-white">
+      <main className="min-h-screen bg-[#fff7f7] pt-28 text-stone-950 dark:bg-[#160508] dark:text-white">
         <HomepageHeroCarousel products={activeProducts} />
 
         <section className="mx-auto grid max-w-7xl gap-6 px-6 py-16 md:grid-cols-3">

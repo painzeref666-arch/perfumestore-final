@@ -12,7 +12,7 @@ export default function AbandonedCartsPage() {
   }, []);
   const clear = () => { localStorage.removeItem('exousia-abandoned-cart-log'); setSnapshots([]); };
   return (
-    <main className="min-h-screen bg-[#0f0d0a] px-6 py-10 text-white">
+    <main className="min-h-screen bg-[#160508] px-6 py-10 text-white">
       <div className="mx-auto max-w-6xl">
         <Link href="/admin" className="text-sm font-bold text-amber-400">← Back to admin</Link>
         <div className="mt-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">

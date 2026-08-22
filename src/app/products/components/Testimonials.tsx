@@ -79,7 +79,7 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="py-24 md:py-32 px-4 md:px-6 bg-background dark:bg-[#0F0D0A]"
+      className="py-24 md:py-32 px-4 md:px-6 bg-background dark:bg-[#160508]"
       aria-labelledby="testimonials-heading">
       
       <div className="max-w-7xl mx-auto">
@@ -100,7 +100,7 @@ export default function Testimonials() {
           {testimonials.map((t, i) =>
           <article
             key={t.name}
-            className={`testimonial-item bg-card dark:bg-[#1A1410] border border-border dark:border-white/8 rounded-4xl p-8 md:p-10 relative overflow-hidden`}>
+            className={`testimonial-item bg-card dark:bg-[#24080D] border border-border dark:border-white/8 rounded-4xl p-8 md:p-10 relative overflow-hidden`}>
             
               {/* Accent glow */}
               <div
@@ -153,7 +153,7 @@ export default function Testimonials() {
         </div>
 
         {/* Trust bar */}
-        <div className="mt-14 reveal grid grid-cols-2 md:grid-cols-4 gap-6 border border-border dark:border-white/8 rounded-4xl p-8 dark:bg-[#1A1410]/50">
+        <div className="mt-14 reveal grid grid-cols-2 md:grid-cols-4 gap-6 border border-border dark:border-white/8 rounded-4xl p-8 dark:bg-[#24080D]/50">
           {[
           { icon: '🚚', label: 'Same-Day Dispatch', sub: 'Orders before 3pm EST' },
           { icon: '🔁', label: '30-Day Returns', sub: 'Hassle-free exchanges' },
