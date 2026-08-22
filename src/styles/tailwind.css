@@ -6,12 +6,12 @@
 
 :root {
   --background: #FFF7F7;
-  --foreground: #1F070A;
+  --foreground: #7F0D1B;
   --primary: #B11226;
   --primary-dark: #7F0D1B;
   --primary-light: #F6AEB8;
   --accent: #4A0711;
-  --muted: #7B555A;
+  --muted: #9F1239;
   --border: #F0D7DA;
   --card: #FFFFFF;
   --radius: 1rem;
@@ -20,12 +20,12 @@
 /* Dark mode CSS variables */
 .dark {
   --background: #160508;
-  --foreground: #FFF7F8;
+  --foreground: #FFE8EC;
   --primary: #E11D48;
   --primary-dark: #BE123C;
   --primary-light: #FDA4AF;
   --accent: #FCEEEF;
-  --muted: #B58A91;
+  --muted: #FDA4AF;
   --border: #3A1017;
   --card: #24080D;
   --radius: 1rem;
