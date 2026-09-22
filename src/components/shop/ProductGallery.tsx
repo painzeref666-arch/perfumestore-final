@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 import AppImage from '@/components/ui/AppImage';
 
 type ProductGalleryProps = {
@@ -31,24 +31,20 @@ export default function ProductGallery({ product }: ProductGalleryProps) {
         ? product.image_gallery
         : [];
 
-    const uploaded = uniqueImages([
+    return uniqueImages([
       product.image,
       ...extra,
     ]).slice(0, 4);
-
-    if (uploaded.length >= 4) return uploaded;
-
-    // Fallback images keep older one-photo products presentable without hiding uploaded product images.
-    return uniqueImages([
-      ...uploaded,
-      'https://images.unsplash.com/photo-1587017539504-67cfbddac569?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1615634260167-c8cdede054de?q=80&w=1200&auto=format&fit=crop',
-    ]).slice(0, 5);
   }, [product.gallery, product.gallery_images, product.image, product.image_gallery]);
 
   const [active, setActive] = useState(images[0] || product.image);
   const [zoom, setZoom] = useState({ x: 50, y: 50, on: false });
+
+  useEffect(() => {
+    if (!images.includes(active)) {
+      setActive(images[0] || product.image);
+    }
+  }, [active, images, product.image]);
 
   function handleMove(e: MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -91,19 +87,21 @@ export default function ProductGallery({ product }: ProductGalleryProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-5 gap-3">
-        {images.map((img, index) => (
-          <button
-            key={`${img}-${index}`}
-            type="button"
-            onClick={() => setActive(img)}
-            className={`relative aspect-square overflow-hidden rounded-2xl border transition duration-300 hover:-translate-y-1 ${active === img ? 'border-amber-300 ring-2 ring-amber-400/40' : 'border-white/10 opacity-75 hover:opacity-100'}`}
-            aria-label={`View ${product.name} image ${index + 1}`}
-          >
-            <AppImage src={img} alt={`${product.name} thumbnail ${index + 1}`} fill sizes="120px" className="object-cover" />
-          </button>
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="grid grid-cols-4 gap-3">
+          {images.map((img, index) => (
+            <button
+              key={`${img}-${index}`}
+              type="button"
+              onClick={() => setActive(img)}
+              className={`relative aspect-square overflow-hidden rounded-2xl border transition duration-300 hover:-translate-y-1 ${active === img ? 'border-amber-300 ring-2 ring-amber-400/40' : 'border-white/10 opacity-75 hover:opacity-100'}`}
+              aria-label={`View ${product.name} image ${index + 1}`}
+            >
+              <AppImage src={img} alt={`${product.name} thumbnail ${index + 1}`} fill sizes="120px" className="object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
