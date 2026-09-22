@@ -34,6 +34,14 @@ type ProductContextValue = {
 
 const C = createContext<ProductContextValue | undefined>(undefined);
 const KEY = 'perfumestore-products-v5-supabase-fallback';
+const DEMO_PRODUCT_IDS = new Set([
+  'velvet-noir',
+  'bloom-eclat',
+  'oud-royale',
+  'citrus-muse',
+  'midnight-cedar',
+  'aqua-lumiere',
+]);
 const seed: ManagedProduct[] = defaultProducts.map((p, index) => ({
   ...p,
   active: true,
@@ -53,6 +61,10 @@ function mergeById(products: ManagedProduct[], product: ManagedProduct) {
   return products.some((p) => p.id === product.id)
     ? products.map((p) => (p.id === product.id ? product : p))
     : [product, ...products];
+}
+
+function isDemoProduct(product: ManagedProduct) {
+  return DEMO_PRODUCT_IDS.has(product.id);
 }
 
 export function ProductProvider({ children }: { children: React.ReactNode }) {
@@ -127,7 +139,10 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     refreshProducts();
   }, []);
 
-  const activeProducts = useMemo(() => products.filter((p) => p.active !== false), [products]);
+  const activeProducts = useMemo(
+    () => products.filter((p) => p.active !== false && !isDemoProduct(p)),
+    [products]
+  );
 
   const saveProductViaApi = async (product: ManagedProduct) => {
     const row = productToRow(product);
