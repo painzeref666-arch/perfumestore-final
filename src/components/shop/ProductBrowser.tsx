@@ -1,14 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AppImage from '@/components/ui/AppImage';
 import CurrencySelector from '@/components/CurrencySelector';
 import Price from '@/components/Price';
 import AddToCartButton from '@/components/shop/AddToCartButton';
 import WishlistButton from '@/components/shop/WishlistButton';
-import { useProducts, getVariantPrice } from '@/context/ProductContext';
-import { sizes, concentrations, type SizeOption, type ConcentrationOption } from '@/data/products';
+import { getAvailableVariantOptions, getDefaultVariantOption, getLowestVariantPrice, useProducts } from '@/context/ProductContext';
+import type { SizeOption, ConcentrationOption } from '@/data/products';
 
 const families = ['All', 'Amber', 'Floral', 'Woody', 'Fresh', 'Oud', 'Citrus', 'Skin Care', 'Makeup', 'Body Care', 'Wellness'];
 
@@ -43,16 +43,24 @@ function productCategory(product: Product): CategoryKey {
 }
 
 function ProductCard({ product }: { product: Product }) {
-  const [firstSize] = sizes;
-  const [firstConcentration] = concentrations;
-  const [size, setSize] = useState<SizeOption>(firstSize);
-  const [concentration, setConcentration] = useState<ConcentrationOption>(firstConcentration);
-
   const category = productCategory(product);
   const isPerfume = category === 'perfumes';
+  const availableVariants = useMemo(() => getAvailableVariantOptions(product), [product]);
+  const defaultVariant = useMemo(() => getDefaultVariantOption(product), [product]);
+  const [variantKey, setVariantKey] = useState(defaultVariant?.key || '');
+
+  useEffect(() => {
+    if (!availableVariants.some((option) => option.key === variantKey)) {
+      setVariantKey(defaultVariant?.key || '');
+    }
+  }, [availableVariants, defaultVariant, variantKey]);
+
+  const selectedVariant = availableVariants.find((option) => option.key === variantKey) || defaultVariant;
+  const size = (selectedVariant?.size || '10ml') as SizeOption;
+  const concentration = (selectedVariant?.concentration || 'EDP') as ConcentrationOption;
   const price = isPerfume
-    ? getVariantPrice(product, size, concentration)
-    : Number(product.price || getVariantPrice(product, '10ml', 'EDP') || 0);
+    ? (selectedVariant?.price || getLowestVariantPrice(product))
+    : Number(product.price || 0);
   const productType = category === 'cosmetics' ? 'Beauty' : category === 'wellness' ? 'Wellness' : concentration;
   const detailLabel = category === 'cosmetics' ? 'Shade / finish' : category === 'wellness' ? 'Benefit / variant' : 'Variation';
   const detailValue = category === 'cosmetics'
@@ -91,19 +99,26 @@ function ProductCard({ product }: { product: Product }) {
         </div>
 
         {isPerfume ? (
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <label className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white/40">
-              Size
-              <select value={size} onChange={(event) => setSize(event.target.value as SizeOption)} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-3 py-3 text-sm font-bold normal-case text-stone-950 outline-none dark:border-white/10 dark:bg-black/20 dark:text-white">
-                {sizes.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
-            </label>
-            <label className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white/40">
-              Variation
-              <select value={concentration} onChange={(event) => setConcentration(event.target.value as ConcentrationOption)} className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-3 py-3 text-sm font-bold normal-case text-stone-950 outline-none dark:border-white/10 dark:bg-black/20 dark:text-white">
-                {concentrations.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
-            </label>
+          <div className="mt-5">
+            {availableVariants.length > 1 ? (
+              <label className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white/40">
+                Choose option
+                <select
+                  value={selectedVariant?.key || ''}
+                  onChange={(event) => setVariantKey(event.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-3 py-3 text-sm font-bold normal-case text-stone-950 outline-none dark:border-white/10 dark:bg-black/20 dark:text-white"
+                >
+                  {availableVariants.map((option) => (
+                    <option key={option.key} value={option.key}>{option.label} — ₱{option.price.toLocaleString()}</option>
+                  ))}
+                </select>
+              </label>
+            ) : (
+              <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-white/10 dark:bg-black/20">
+                <p className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white/40">Available option</p>
+                <p className="mt-1 text-sm font-black">{selectedVariant?.label || 'Unavailable'}</p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="mt-5 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-white/10 dark:bg-black/20">
@@ -114,7 +129,13 @@ function ProductCard({ product }: { product: Product }) {
 
         <div className="mt-6 flex items-center justify-between gap-3">
           <p className="text-xs font-bold text-stone-500 dark:text-white/50">{product.stock} stocks - {product.reviews} reviews</p>
-          <AddToCartButton productId={product.id} size={isPerfume ? size : '10ml'} concentration={isPerfume ? concentration : 'EDP'} className="rounded-full bg-stone-950 px-5 py-3 text-sm font-black text-white transition hover:bg-amber-800 dark:bg-amber-700">
+          <AddToCartButton
+            productId={product.id}
+            size={isPerfume ? size : '10ml'}
+            concentration={isPerfume ? concentration : 'EDP'}
+            disabled={isPerfume && availableVariants.length === 0}
+            className="rounded-full bg-stone-950 px-5 py-3 text-sm font-black text-white transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-amber-700"
+          >
             Add to Cart
           </AddToCartButton>
         </div>
@@ -142,8 +163,8 @@ export default function ProductBrowser({ category = 'perfumes', title, descripti
         return inFamily && inStock && matchesQuery;
       })
       .sort((a, b) => {
-        const priceA = productCategory(a) === 'perfumes' ? getVariantPrice(a, '10ml', 'EDP') : Number(a.price || 0);
-        const priceB = productCategory(b) === 'perfumes' ? getVariantPrice(b, '10ml', 'EDP') : Number(b.price || 0);
+        const priceA = productCategory(a) === 'perfumes' ? getLowestVariantPrice(a) : Number(a.price || 0);
+        const priceB = productCategory(b) === 'perfumes' ? getLowestVariantPrice(b) : Number(b.price || 0);
         if (sort === 'price-low') return priceA - priceB;
         if (sort === 'price-high') return priceB - priceA;
         if (sort === 'rating') return b.rating - a.rating;

@@ -255,13 +255,81 @@ export function makeProductId(name: string) {
   );
 }
 
+export type AvailableVariantOption = {
+  key: string;
+  concentration: ConcentrationOption;
+  size: SizeOption;
+  price: number;
+};
+
+export const perfumeVariantOptions: Array<{
+  concentration: ConcentrationOption;
+  size: SizeOption;
+  label: string;
+}> = [
+  { concentration: 'EDP', size: '10ml', label: '10ml · EDP' },
+  { concentration: 'EDP', size: '85ml', label: '85ml · EDP' },
+  { concentration: 'Extrait', size: '50ml', label: '50ml · Extrait' },
+  { concentration: 'EDT', size: '50ml', label: '50ml · EDT' },
+];
+
+function variantPriceValue(product: ManagedProduct, concentration: ConcentrationOption, size: SizeOption) {
+  const isSupported = perfumeVariantOptions.some(
+    (option) => option.concentration === concentration && option.size === size
+  );
+  if (!isSupported) return 0;
+
+  const variant = product.variants?.find((item) => item.concentration === concentration);
+  const value = Number(variant?.prices?.[size] || 0);
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+export function getAvailableVariantOptions(product: ManagedProduct): AvailableVariantOption[] {
+  const options = perfumeVariantOptions
+    .map((option) => ({
+      ...option,
+      key: `${option.size}__${option.concentration}`,
+      price: variantPriceValue(product, option.concentration, option.size),
+    }))
+    .filter((option) => option.price > 0);
+
+  if (options.length > 0) return options;
+
+  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  const fallback = Number(product.salePrice || product.price || 0);
+  if (hasVariants || fallback <= 0) return [];
+
+  return [{
+    key: `fallback__${product.id}`,
+    concentration: 'EDP',
+    size: '10ml',
+    label: '10ml · EDP',
+    price: fallback,
+  }];
+}
+
+export function getDefaultVariantOption(product: ManagedProduct): AvailableVariantOption | null {
+  const options = getAvailableVariantOptions(product);
+  if (!options.length) return null;
+
+  return [...options].sort((a, b) => a.price - b.price)[0];
+}
+
+export function getLowestVariantPrice(product: ManagedProduct) {
+  const option = getDefaultVariantOption(product);
+  if (option) return option.price;
+  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  return hasVariants ? 0 : Number(product.salePrice || product.price || 0);
+}
+
 export function getVariantPrice(
   product: ManagedProduct,
   size: SizeOption,
   concentration: ConcentrationOption
 ) {
-  const v = product.variants?.find((x) => x.concentration === concentration);
-  return v?.prices?.[size] ?? product.salePrice ?? product.price;
+  const exact = variantPriceValue(product, concentration, size);
+  if (exact > 0) return exact;
+  return getLowestVariantPrice(product);
 }
 
 export function defaultVariants(base = 999): ProductVariant[] {
@@ -270,18 +338,27 @@ export function defaultVariants(base = 999): ProductVariant[] {
       concentration: 'EDP',
       prices: {
         '10ml': base,
-        '15ml': Math.round(base * 1.35),
-        '50ml': Math.round(base * 3.5),
+        '15ml': 0,
+        '50ml': 0,
         '85ml': Math.round(base * 5.2),
       },
     },
     {
       concentration: 'Extrait',
       prices: {
-        '10ml': Math.round(base * 1.3),
-        '15ml': Math.round(base * 1.8),
+        '10ml': 0,
+        '15ml': 0,
         '50ml': Math.round(base * 4.6),
-        '85ml': Math.round(base * 6.9),
+        '85ml': 0,
+      },
+    },
+    {
+      concentration: 'EDT',
+      prices: {
+        '10ml': 0,
+        '15ml': 0,
+        '50ml': Math.round(base * 3.2),
+        '85ml': 0,
       },
     },
   ];

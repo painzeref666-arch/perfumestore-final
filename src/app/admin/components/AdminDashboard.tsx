@@ -6,13 +6,15 @@ import Price from '@/components/Price';
 import CurrencySelector from '@/components/CurrencySelector';
 import {
   defaultVariants,
+  getDefaultVariantOption,
+  getLowestVariantPrice,
   makeProductId,
+  perfumeVariantOptions,
   type ManagedProduct,
   useProducts,
 } from '@/context/ProductContext';
 import {
   concentrations,
-  sizes,
   type ConcentrationOption,
   type ProductVariant,
   type SizeOption,
@@ -91,11 +93,11 @@ const CATEGORY_META = {
     familyLabel: 'Scent family',
     notesLabel: 'Notes, separated by comma',
     variantTitle: 'Perfume prices by ML and concentration',
-    description: 'Use EDP/Extrait and perfume bottle sizes.',
+    description: 'Set only the perfume combinations you actually sell: EDP 10ml/85ml, Extrait 50ml, and EDT 50ml. Leave a price blank to hide that option.',
     kindLabel: 'Perfume type',
     defaultFamily: 'Floral',
     defaultNotes: 'Rose, Pear, White Floral',
-    defaultVariants: ['EDP', 'Extrait'],
+    defaultVariants: ['EDP', 'Extrait', 'EDT'],
   },
   cosmetics: {
     familyLabel: 'Cosmetic type',
@@ -124,9 +126,9 @@ function getCategoryKey(category?: string) {
 }
 
 function simpleVariantPrice(product: ManagedProduct) {
-  const first = product.variants?.[0];
-  const value = first?.prices?.['10ml'] || product.price || 999;
-  return Number(value) || 999;
+  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  if (hasVariants) return getLowestVariantPrice(product);
+  return Number(product.price) || 999;
 }
 
 function categoryVariants(product: ManagedProduct) {
@@ -168,8 +170,30 @@ function normalizeImageSlots(slots: string[]) {
 }
 
 function normalizeVariants(v: ProductVariant[] | undefined, base = 999) {
-  const map = new Map((v || []).map((x) => [x.concentration, x]));
-  return concentrations.map((c) => map.get(c) || defaultVariants(base).find((x) => x.concentration === c)!);
+  const hasVariants = Array.isArray(v) && v.length > 0;
+  const source = hasVariants ? v : defaultVariants(base);
+  const map = new Map(source.map((x) => [x.concentration, x]));
+  const defaults = new Map(defaultVariants(base).map((x) => [x.concentration, x]));
+
+  return concentrations.map((concentration) => {
+    const existing = map.get(concentration);
+    const fallback = defaults.get(concentration)!;
+    const prices = existing?.prices || (hasVariants
+      ? { '10ml': 0, '15ml': 0, '50ml': 0, '85ml': 0 }
+      : fallback.prices);
+
+    return {
+      ...fallback,
+      ...existing,
+      concentration,
+      prices: {
+        '10ml': Number(prices?.['10ml'] || 0),
+        '15ml': Number(prices?.['15ml'] || 0),
+        '50ml': Number(prices?.['50ml'] || 0),
+        '85ml': Number(prices?.['85ml'] || 0),
+      },
+    };
+  });
 }
 
 type CsvRow = Record<string, string | number | boolean | null | undefined>;
@@ -254,7 +278,7 @@ export default function AdminDashboard() {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const totalInventory = products.reduce((s, p) => s + p.stock, 0);
-  const totalValue = products.reduce((s, p) => s + p.stock * (p.variants?.[0]?.prices?.['10ml'] || p.price), 0);
+  const totalValue = products.reduce((s, p) => s + p.stock * simpleVariantPrice(p), 0);
   const activeCount = useMemo(() => products.filter((p) => p.active !== false).length, [products]);
   const lowStock = products.filter((p) => Number(p.stock || 0) <= lowStockLimit);
   const orderRevenue = orders.reduce((sum, o) => sum + Number(o.total || Number(o.subtotal || 0) + Number(o.shipping_fee || 0)), 0);
@@ -671,10 +695,13 @@ export default function AdminDashboard() {
         ? { ...variant, prices: { ...variant.prices, [size]: amount } }
         : variant
     ));
+    const nextProduct = { ...editing, variants } as ManagedProduct;
+    const defaultOption = getDefaultVariantOption(nextProduct);
 
     setEditing({
       ...editing,
-      price: variants[0]?.prices?.['10ml'] || amount || editing.price,
+      price: defaultOption?.price || 0,
+      size: defaultOption?.size || editing.size || '10ml',
       variants,
     });
   }
@@ -715,8 +742,12 @@ export default function AdminDashboard() {
         id,
         notes: notes.split(',').map((n) => n.trim()).filter(Boolean),
         category,
-        price: variants[0].prices['10ml'],
-        size: category === 'perfumes' ? '10ml' : (editing.size || 'Default'),
+        price: category === 'perfumes'
+          ? simpleVariantPrice({ ...editing, variants } as ManagedProduct)
+          : variants[0].prices['10ml'],
+        size: category === 'perfumes'
+          ? (getDefaultVariantOption({ ...editing, variants } as ManagedProduct)?.size || '10ml')
+          : (editing.size || 'Default'),
         variants,
         stock: Number(editing.stock) || 0,
         rating: Number(editing.rating) || 5,
@@ -800,11 +831,13 @@ export default function AdminDashboard() {
         hero_order: Number(p.hero_order || 0),
         main_image: slots[0] || '',
         gallery_images: slots.slice(1).join(' | '),
-        price_10ml_edp: Number(p.variants?.[0]?.prices?.['10ml'] || p.price || 0),
-        price_85ml_extrait: Number(p.variants?.[1]?.prices?.['85ml'] || 0),
+        price_10ml_edp: Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['10ml'] || 0),
+        price_85ml_edp: Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0),
+        price_50ml_extrait: Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0),
+        price_50ml_edt: Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0),
       };
     });
-    downloadCsv(`exousia-products-${new Date().toISOString().slice(0, 10)}.csv`, rows, ['id', 'name', 'category', 'family', 'status', 'stock', 'promo', 'event', 'hero_enabled', 'hero_order', 'main_image', 'gallery_images', 'price_10ml_edp', 'price_85ml_extrait']);
+    downloadCsv(`exousia-products-${new Date().toISOString().slice(0, 10)}.csv`, rows, ['id', 'name', 'category', 'family', 'status', 'stock', 'promo', 'event', 'hero_enabled', 'hero_order', 'main_image', 'gallery_images', 'price_10ml_edp', 'price_85ml_edp', 'price_50ml_extrait', 'price_50ml_edt']);
   }
 
   if (!logged) {
@@ -991,16 +1024,25 @@ export default function AdminDashboard() {
               <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/50">Base prices are Philippine Peso. Store currency selector converts display prices.</p>
 
               {getCategoryKey(editing.category as string) === 'perfumes' ? (
-                normalizeVariants(editing.variants, editing.price).map((v) => (
-                  <div key={v.concentration} className="mt-5">
-                    <p className="mb-3 font-black text-amber-800">{v.concentration}</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      {sizes.map((s) => (
-                        <Field key={`${v.concentration}-${s}`} label={s} type="number" value={String(v.prices[s] || '')} onChange={(val) => setVariantPrice(v.concentration, s, val)} />
-                      ))}
-                    </div>
-                  </div>
-                ))
+                <div className="mt-5 space-y-4">
+                  {perfumeVariantOptions.map((option) => {
+                    const variant = normalizeVariants(editing.variants, editing.price).find((item) => item.concentration === option.concentration);
+                    const value = Number(variant?.prices?.[option.size] || 0);
+                    return (
+                      <div key={option.key} className="rounded-2xl border border-stone-200 p-4 dark:border-white/10">
+                        <Field
+                          label={`${option.label} price`}
+                          type="number"
+                          value={value > 0 ? String(value) : ''}
+                          onChange={(val) => setVariantPrice(option.concentration, option.size, val)}
+                        />
+                        <p className="mt-2 text-xs font-bold text-stone-500 dark:text-white/45">
+                          {value > 0 ? 'Visible to customers.' : 'Blank = unavailable and hidden from the shop.'}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
               ) : (
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   <Field
@@ -1281,7 +1323,7 @@ function ProductTable({ products, editing, deleteProduct }: { products: ManagedP
     <div className="mt-6 max-w-full overflow-x-auto">
       <table className="w-full min-w-[760px] text-left text-xs xl:text-sm">
         <thead className="border-b border-stone-200 text-xs uppercase tracking-widest text-stone-500 dark:border-white/10 dark:text-white/40">
-          <tr><th className="py-3">Product</th><th>Hero</th><th>Promo/Event</th><th>Stock</th><th>10ml EDP</th><th>85ml Extrait</th><th>Status</th><th>Actions</th></tr>
+          <tr><th className="py-3">Product</th><th>Hero</th><th>Promo/Event</th><th>Stock</th><th>10ml EDP</th><th>85ml EDP</th><th>50ml Extrait</th><th>50ml EDT</th><th>Status</th><th>Actions</th></tr>
         </thead>
         <tbody>
           {products.map((p) => (
@@ -1290,8 +1332,10 @@ function ProductTable({ products, editing, deleteProduct }: { products: ManagedP
               <td><span className={`rounded-full px-3 py-1 text-xs font-black ${p.hero_enabled ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-500'}`}>{p.hero_enabled ? `Hero #${p.hero_order || 0}` : 'Not hero'}</span><p className="mt-1 max-w-xs truncate text-xs text-stone-500">{p.hero_button_text || 'View Perfume'}</p></td>
               <td><p className="font-bold">{p.promo || p.tag}</p><p className="max-w-xs truncate text-xs text-stone-500">{p.event || 'No event'}</p></td>
               <td>{p.stock}</td>
-              <td><Price amount={p.variants?.[0]?.prices?.['10ml'] || p.price} className="font-black" /></td>
-              <td><Price amount={p.variants?.[1]?.prices?.['85ml'] || p.price} className="font-black" /></td>
+              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['10ml'] || 0)} className="font-black" /></td>
+              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></td>
+              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></td>
+              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></td>
               <td><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></td>
               <td><div className="flex gap-2"><button onClick={() => editing(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></td>
             </tr>

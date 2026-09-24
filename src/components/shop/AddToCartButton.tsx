@@ -3,12 +3,12 @@ import { ReactNode, useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import type { ConcentrationOption, SizeOption } from '@/data/products';
 
-export default function AddToCartButton({ productId, size = '10ml', concentration = 'EDP', className = '', children = 'Add to Cart' }: { productId: string; size?: SizeOption; concentration?: ConcentrationOption; className?: string; children?: ReactNode }) {
+export default function AddToCartButton({ productId, size = '10ml', concentration = 'EDP', className = '', children = 'Add to Cart', disabled = false }: { productId: string; size?: SizeOption; concentration?: ConcentrationOption; className?: string; children?: ReactNode; disabled?: boolean }) {
   const { addToCart } = useCart();
   const [checking, setChecking] = useState(false);
 
   async function handleClick() {
-    if (checking) return;
+    if (checking || disabled) return;
 
     setChecking(true);
 
@@ -36,10 +36,10 @@ export default function AddToCartButton({ productId, size = '10ml', concentratio
     <button
       type="button"
       onClick={handleClick}
-      disabled={checking}
+      disabled={checking || disabled}
       className={className || 'rounded-full bg-stone-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-amber-800 disabled:cursor-wait disabled:opacity-70'}
     >
-      {checking ? 'Checking account...' : children}
+      {disabled ? 'Unavailable' : checking ? 'Checking account...' : children}
     </button>
   );
 }

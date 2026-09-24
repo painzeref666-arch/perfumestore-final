@@ -7,8 +7,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AppImage from '@/components/ui/AppImage';
 import Price from '@/components/Price';
-import { concentrations, sizes, type ConcentrationOption, type SizeOption } from '@/data/products';
-import { getVariantPrice, useProducts } from '@/context/ProductContext';
+import type { ConcentrationOption, SizeOption } from '@/data/products';
+import { getAvailableVariantOptions, getDefaultVariantOption, getLowestVariantPrice, useProducts } from '@/context/ProductContext';
 import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
 import WishlistButton from '@/components/shop/WishlistButton';
@@ -36,9 +36,13 @@ export default function ProductDetailPage() {
   const { activeProducts, loading } = useProducts();
   const { addToCart } = useCart();
   const product = useMemo(() => activeProducts.find((p) => p.id === productId), [activeProducts, productId]);
-  const [selectedSize, setSelectedSize] = useState<SizeOption>('10ml');
-  const [selectedConcentration, setSelectedConcentration] = useState<ConcentrationOption>('EDP');
+  const [selectedVariantKey, setSelectedVariantKey] = useState('');
   const [added, setAdded] = useState(false);
+  const availableVariants = useMemo(() => product ? getAvailableVariantOptions(product) : [], [product]);
+  const defaultVariant = useMemo(() => product ? getDefaultVariantOption(product) : null, [product]);
+  const selectedVariant = availableVariants.find((option) => option.key === selectedVariantKey) || defaultVariant;
+  const selectedSize = (selectedVariant?.size || '10ml') as SizeOption;
+  const selectedConcentration = (selectedVariant?.concentration || 'EDP') as ConcentrationOption;
   const [reviews, setReviews] = useState<any[]>([]);
   const [reviewMsg, setReviewMsg] = useState('');
 
@@ -58,6 +62,12 @@ export default function ProductDetailPage() {
     loadReviews();
     return () => { active = false; };
   }, [productId]);
+
+  useEffect(() => {
+    if (!availableVariants.some((option) => option.key === selectedVariantKey)) {
+      setSelectedVariantKey(defaultVariant?.key || '');
+    }
+  }, [availableVariants, defaultVariant, selectedVariantKey]);
 
   async function submitReview(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -118,7 +128,7 @@ export default function ProductDetailPage() {
   const isPerfume = category === 'perfumes';
   const isCosmetics = category === 'cosmetics';
   const isWellness = category === 'wellness';
-  const price = isPerfume ? getVariantPrice(product, selectedSize, selectedConcentration) : Number(product.price || getVariantPrice(product, '10ml', 'EDP') || 0);
+  const price = isPerfume ? (selectedVariant?.price || getLowestVariantPrice(product)) : Number(product.price || 0);
   const notes = product.notes?.length ? product.notes : product.family ? [product.family] : [isCosmetics ? 'Beauty essential' : isWellness ? 'Self-care essential' : 'Signature scent'];
   const productKindLabel = isCosmetics ? 'Cosmetic Type' : isWellness ? 'Wellness Type' : 'Scent Family';
   const variantLabel = isCosmetics ? 'Shade / Finish' : isWellness ? 'Variant / Benefit' : 'Variation';
@@ -171,7 +181,16 @@ export default function ProductDetailPage() {
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 {isPerfume ? (
                   <>
-                    <InfoCard label="Variation" value={selectedConcentration === 'EDP' ? 'Eau de Parfum' : 'Extrait de Parfum'} />
+                    <InfoCard
+                      label="Variation"
+                      value={
+                        selectedConcentration === 'EDP'
+                          ? 'Eau de Parfum'
+                          : selectedConcentration === 'Extrait'
+                            ? 'Extrait de Parfum'
+                            : 'Eau de Toilette'
+                      }
+                    />
                     <InfoCard label="Size" value={selectedSize} />
                     <InfoCard label="Scent Family" value={product.family} />
                     <InfoCard label="Notes" value={notes.slice(0, 3).join(' · ')} />
@@ -187,25 +206,27 @@ export default function ProductDetailPage() {
               </div>
 
               {isPerfume && (
-                <>
-                  <section className="mt-8">
-                    <p className="mb-3 text-xs font-black uppercase tracking-[.2em] text-white/45">Choose perfume type</p>
-                    <div className="flex flex-wrap gap-3">
-                      {concentrations.map((c) => (
-                        <button key={c} type="button" onClick={() => setSelectedConcentration(c)} className={`rounded-full border px-5 py-3 text-sm font-black transition ${selectedConcentration === c ? 'border-amber-400 bg-amber-600 text-white' : 'border-white/15 bg-white/5 text-white hover:border-amber-400/60'}`}>{c}</button>
+                <section className="mt-8">
+                  <p className="mb-3 text-xs font-black uppercase tracking-[.2em] text-white/45">Choose available perfume option</p>
+                  {availableVariants.length > 1 ? (
+                    <select
+                      value={selectedVariant?.key || ''}
+                      onChange={(event) => setSelectedVariantKey(event.target.value)}
+                      className="w-full rounded-2xl border border-white/15 bg-white/5 px-5 py-4 font-black text-white outline-none focus:border-amber-400"
+                    >
+                      {availableVariants.map((option) => (
+                        <option key={option.key} value={option.key} className="text-stone-950">
+                          {option.label} — ₱{option.price.toLocaleString()}
+                        </option>
                       ))}
+                    </select>
+                  ) : (
+                    <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 px-5 py-4">
+                      <p className="font-black">{selectedVariant?.label || 'Unavailable'}</p>
+                      <p className="mt-1 text-sm text-white/55">This is the only priced option currently available.</p>
                     </div>
-                  </section>
-
-                  <section className="mt-7">
-                    <p className="mb-3 text-xs font-black uppercase tracking-[.2em] text-white/45">Choose bottle size</p>
-                    <div className="flex flex-wrap gap-3">
-                      {sizes.map((s) => (
-                        <button key={s} type="button" onClick={() => setSelectedSize(s)} className={`rounded-full border px-5 py-3 text-sm font-black transition ${selectedSize === s ? 'border-amber-400 bg-amber-600 text-white' : 'border-white/15 bg-white/5 text-white hover:border-amber-400/60'}`}>{s}</button>
-                      ))}
-                    </div>
-                  </section>
-                </>
+                  )}
+                </section>
               )}
 
               <div className="mt-8 flex items-end gap-4">
@@ -215,7 +236,7 @@ export default function ProductDetailPage() {
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <WishlistButton productId={product.id} className="h-14 w-full text-2xl sm:w-16" />
-                <button onClick={handleAdd} disabled={product.stock <= 0} className="flex-1 rounded-2xl bg-amber-600 px-7 py-4 font-black text-white transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50">
+                <button onClick={handleAdd} disabled={product.stock <= 0 || (isPerfume && availableVariants.length === 0)} className="flex-1 rounded-2xl bg-amber-600 px-7 py-4 font-black text-white transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50">
                   {added ? 'Added to Cart ✓' : <>Add to Cart — <Price amount={price} /></>}
                 </button>
                 <Link href="/checkout" className="rounded-2xl border border-white/15 bg-white/5 px-7 py-4 text-center font-black transition hover:bg-white/10">Checkout</Link>
@@ -289,7 +310,7 @@ export default function ProductDetailPage() {
           )}
         </div>
       </main>
-      <StickyMobileAddToCart price={price} disabled={product.stock <= 0} added={added} onAdd={handleAdd} />
+      <StickyMobileAddToCart price={price} disabled={product.stock <= 0 || (isPerfume && availableVariants.length === 0)} added={added} onAdd={handleAdd} />
       <Footer />
     </>
   );

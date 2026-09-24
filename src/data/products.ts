@@ -1,5 +1,5 @@
 export type SizeOption = '10ml' | '15ml' | '50ml' | '85ml';
-export type ConcentrationOption = 'EDP' | 'Extrait';
+export type ConcentrationOption = 'EDP' | 'Extrait' | 'EDT';
 export type ProductVariant = {
   concentration: ConcentrationOption;
   prices: Record<SizeOption, number>;
@@ -32,7 +32,7 @@ export type Product = {
 };
 
 export const sizes: SizeOption[] = ['10ml', '15ml', '50ml', '85ml'];
-export const concentrations: ConcentrationOption[] = ['EDP', 'Extrait'];
+export const concentrations: ConcentrationOption[] = ['EDP', 'Extrait', 'EDT'];
 
 export const products: Product[] = [
   {id:'velvet-noir',name:'Velvet Noir',family:'Amber',notes:['Amber','Vanilla','Musk'],price:1299,size:'10ml',image:'https://images.unsplash.com/photo-1594035910663-369b72b7abe2?q=80&w=1200&auto=format&fit=crop',rating:4.9,reviews:186,stock:18,tag:'Best Seller',description:'Warm amber, creamy vanilla, and soft musk for evening confidence.',variants:[{concentration:'EDP',prices:{'10ml':1299,'15ml':1699,'50ml':4299,'85ml':6499}},{concentration:'Extrait',prices:{'10ml':1599,'15ml':2199,'50ml':5599,'85ml':8299}}]},
