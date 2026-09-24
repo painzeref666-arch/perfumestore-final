@@ -1320,28 +1320,59 @@ function Select({ label, value, onChange, options, disabled }: { label: string; 
 
 function ProductTable({ products, editing, deleteProduct }: { products: ManagedProduct[]; editing: (p: ManagedProduct) => void; deleteProduct: (id: string) => void | Promise<void>; }) {
   return (
-    <div className="mt-6 max-w-full overflow-x-auto">
-      <table className="w-full min-w-[760px] text-left text-xs xl:text-sm">
-        <thead className="border-b border-stone-200 text-xs uppercase tracking-widest text-stone-500 dark:border-white/10 dark:text-white/40">
-          <tr><th className="py-3">Product</th><th>Hero</th><th>Promo/Event</th><th>Stock</th><th>10ml EDP</th><th>85ml EDP</th><th>50ml Extrait</th><th>50ml EDT</th><th>Status</th><th>Actions</th></tr>
-        </thead>
-        <tbody>
-          {products.map((p) => (
-            <tr key={p.id} className="border-b border-stone-100 dark:border-white/5">
-              <td className="py-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 rounded-2xl object-cover" /><div><p className="font-black">{p.name}</p><p className="text-xs text-stone-500">{p.family} • {p.category || 'perfumes'}</p></div></div></td>
-              <td><span className={`rounded-full px-3 py-1 text-xs font-black ${p.hero_enabled ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-500'}`}>{p.hero_enabled ? `Hero #${p.hero_order || 0}` : 'Not hero'}</span><p className="mt-1 max-w-xs truncate text-xs text-stone-500">{p.hero_button_text || 'View Perfume'}</p></td>
-              <td><p className="font-bold">{p.promo || p.tag}</p><p className="max-w-xs truncate text-xs text-stone-500">{p.event || 'No event'}</p></td>
-              <td>{p.stock}</td>
-              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['10ml'] || 0)} className="font-black" /></td>
-              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></td>
-              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></td>
-              <td><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></td>
-              <td><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></td>
-              <td><div className="flex gap-2"><button onClick={() => editing(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></td>
+    <div className="mt-6">
+      <div className="mb-2 flex items-center justify-between gap-3 text-xs font-bold text-stone-500 dark:text-white/40">
+        <span>Product catalog</span>
+        <span className="whitespace-nowrap">← Scroll horizontally to see all fields →</span>
+      </div>
+      <div className="max-w-full overflow-x-auto overflow-y-hidden rounded-2xl border border-stone-200/70 bg-white/5 pb-3 dark:border-white/10">
+        <div className="min-w-[1450px]">
+        <table className="w-full table-fixed text-left text-xs xl:text-sm">
+          <colgroup>
+            <col className="w-[260px]" />
+            <col className="w-[190px]" />
+            <col className="w-[190px]" />
+            <col className="w-[80px]" />
+            <col className="w-[130px]" />
+            <col className="w-[130px]" />
+            <col className="w-[150px]" />
+            <col className="w-[130px]" />
+            <col className="w-[130px]" />
+            <col className="w-[190px]" />
+          </colgroup>
+          <thead className="border-b border-stone-200 text-xs uppercase tracking-widest text-stone-500 dark:border-white/10 dark:text-white/40">
+            <tr>
+              <th className="whitespace-nowrap py-3 pr-4">Product</th>
+              <th className="whitespace-nowrap pr-4">Hero</th>
+              <th className="whitespace-nowrap pr-4">Promo/Event</th>
+              <th className="whitespace-nowrap pr-4">Stock</th>
+              <th className="whitespace-nowrap pr-4">10ml EDP</th>
+              <th className="whitespace-nowrap pr-4">85ml EDP</th>
+              <th className="whitespace-nowrap pr-4">50ml Extrait</th>
+              <th className="whitespace-nowrap pr-4">50ml EDT</th>
+              <th className="whitespace-nowrap pr-4">Status</th>
+              <th className="sticky right-0 z-10 whitespace-nowrap bg-[#fff7f7] pr-4 text-stone-700 dark:bg-[#160508] dark:text-white/70 shadow-[-10px_0_18px_rgba(0,0,0,0.16)]">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {products.map((p) => (
+              <tr key={p.id} className="border-b border-stone-100 dark:border-white/5">
+                <td className="py-4 pr-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" /><div className="min-w-0"><p className="font-black">{p.name}</p><p className="text-xs text-stone-500">{p.family} • {p.category || 'perfumes'}</p></div></div></td>
+                <td className="pr-4"><span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-black ${p.hero_enabled ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-500'}`}>{p.hero_enabled ? `Hero #${p.hero_order || 0}` : 'Not hero'}</span><p className="mt-1 max-w-[170px] truncate text-xs text-stone-500">{p.hero_button_text || 'View Perfume'}</p></td>
+                <td className="pr-4"><p className="truncate font-bold">{p.promo || p.tag}</p><p className="max-w-[170px] truncate text-xs text-stone-500">{p.event || 'No event'}</p></td>
+                <td className="pr-4">{p.stock}</td>
+                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['10ml'] || 0)} className="font-black" /></td>
+                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></td>
+                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></td>
+                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></td>
+                <td className="pr-4"><span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></td>
+                <td className="sticky right-0 z-10 bg-[#fff7f7] pr-4 shadow-[-10px_0_18px_rgba(0,0,0,0.16)] dark:bg-[#160508]"><div className="flex gap-2"><button onClick={() => editing(p)} className="whitespace-nowrap rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="whitespace-nowrap rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      </div>
     </div>
   );
 }
