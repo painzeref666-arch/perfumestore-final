@@ -8,3 +8,24 @@
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+
+/* Admin product catalog: each product gets its own horizontal scrollbar. */
+.admin-product-row-scroll {
+  scrollbar-width: auto;
+  scrollbar-color: #be123c rgba(127, 13, 27, 0.10);
+}
+.admin-product-row-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+.admin-product-row-scroll::-webkit-scrollbar-track {
+  background: rgba(127, 13, 27, 0.08);
+  border-radius: 999px;
+}
+.admin-product-row-scroll::-webkit-scrollbar-thumb {
+  background: #be123c;
+  border-radius: 999px;
+}
+.admin-product-row-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9f1239;
+}

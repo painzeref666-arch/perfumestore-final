@@ -144,6 +144,12 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
 export default function HomePage() {
   const { activeProducts } = useProducts();
   const featured = activeProducts.slice(0, 4);
+  const upcoming = useMemo(
+    () => activeProducts
+      .filter((product) => product.upcoming_enabled === true)
+      .sort((a, b) => Number(a.upcoming_order || 999) - Number(b.upcoming_order || 999)),
+    [activeProducts]
+  );
 
   return (
     <>
@@ -170,6 +176,77 @@ export default function HomePage() {
         </section>
 
         <div className="mx-auto max-w-7xl px-6 pb-12"><HomepageVideoBanner /></div>
+
+        {upcoming.length > 0 && (
+          <section className="relative overflow-hidden border-y border-violet-200/60 bg-gradient-to-br from-[#fff8fb] via-white to-violet-50/70 py-20 dark:border-violet-400/10 dark:from-[#1b070c] dark:via-[#160508] dark:to-[#241027]">
+            <div className="pointer-events-none absolute -left-32 top-10 h-72 w-72 rounded-full bg-violet-300/20 blur-3xl dark:bg-violet-500/10" />
+            <div className="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-rose-300/20 blur-3xl dark:bg-rose-500/10" />
+
+            <div className="relative mx-auto max-w-7xl px-6">
+              <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <span className="h-px w-10 bg-violet-500" />
+                    <p className="text-xs font-black uppercase tracking-[.35em] text-violet-700 dark:text-violet-300">A new chapter is coming</p>
+                  </div>
+                  <h2 className="mt-3 text-4xl font-black tracking-tight md:text-6xl">Coming Soon</h2>
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600 dark:text-white/60">Discover the next Exousia & Co. creations before they officially arrive. Swipe through the collection to preview what is coming next.</p>
+                </div>
+                <div className="shrink-0 rounded-full border border-stone-200 bg-white/80 px-4 py-2 text-xs font-black uppercase tracking-[.18em] text-stone-600 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-white/55">
+                  {upcoming.length} {upcoming.length === 1 ? 'upcoming creation' : 'upcoming creations'}
+                </div>
+              </div>
+
+              <div className="-mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-5 [scrollbar-width:thin] md:gap-6">
+                {upcoming.map((p, index) => {
+                  const category = String(p.category || 'other').toLowerCase();
+                  const categoryLabel = category === 'perfumes' ? 'Perfumes' : category === 'cosmetics' ? 'Cosmetics' : category === 'wellness' ? 'Wellness' : String(p.category || 'Exousia');
+                  const collectionLabel = category === 'perfumes'
+                    ? (p.family || 'Signature collection')
+                    : category === 'cosmetics'
+                      ? 'Beauty collection'
+                      : category === 'wellness'
+                        ? 'Wellness collection'
+                        : `${categoryLabel} collection`;
+
+                  return (
+                  <Link
+                    key={p.id}
+                    href={`/products/${p.id}`}
+                    className="group relative flex-none snap-start overflow-hidden rounded-[2rem] border border-violet-200/70 bg-white/90 shadow-lg shadow-violet-900/5 transition duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-900/10 dark:border-violet-400/15 dark:bg-white/[0.06] sm:w-[330px] lg:w-[360px]"
+                  >
+                    <div className="relative aspect-[4/5] overflow-hidden bg-stone-100 dark:bg-black/20">
+                      <AppImage
+                        src={p.image}
+                        alt={p.name}
+                        fill
+                        sizes="(max-width:640px) 82vw, (max-width:1024px) 330px, 360px"
+                        className="object-cover transition duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                      <div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/55 px-3 py-2 text-[10px] font-black uppercase tracking-[.22em] text-white backdrop-blur">
+                        {p.upcoming_badge || 'Coming Soon'}
+                      </div>
+                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white">
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-[.25em] text-violet-200">{categoryLabel}</p>
+                          <h3 className="mt-1 text-2xl font-black leading-tight">{p.name}</h3>
+                        </div>
+                        <span className="rounded-full border border-white/20 bg-white/10 px-3 py-2 text-[10px] font-black backdrop-blur">#{String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <p className="text-xs font-black uppercase tracking-[.25em] text-violet-700 dark:text-violet-300">{collectionLabel}</p>
+                      <p className="mt-2 line-clamp-2 min-h-12 text-sm leading-6 text-stone-600 dark:text-white/55">{p.upcoming_description || p.description}</p>
+                      <span className="mt-5 inline-flex w-full items-center justify-center rounded-full border border-stone-200 px-5 py-3 text-sm font-black transition group-hover:border-stone-950 group-hover:bg-stone-950 group-hover:text-white dark:border-white/10 dark:group-hover:border-white dark:group-hover:bg-white dark:group-hover:text-stone-950">View product</span>
+                    </div>
+                  </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="mx-auto max-w-7xl px-6 py-16">
           <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">

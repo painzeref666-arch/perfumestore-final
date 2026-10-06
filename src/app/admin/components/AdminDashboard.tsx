@@ -85,6 +85,10 @@ const blank: ManagedProduct = {
   hero_button_text: 'View Perfume',
   hero_button_link: '',
   hero_order: 0,
+  upcoming_enabled: false,
+  upcoming_badge: 'Coming Soon',
+  upcoming_description: '',
+  upcoming_order: 0,
 };
 
 
@@ -762,6 +766,10 @@ export default function AdminDashboard() {
         hero_button_text: editing.hero_button_text || (category === 'perfumes' ? 'View Perfume' : 'View Product'),
         hero_button_link: editing.hero_button_link && !editing.hero_button_link.startsWith('/products/') ? editing.hero_button_link : `/products/${id}`,
         hero_order: Number(editing.hero_order) || 0,
+        upcoming_enabled: editing.upcoming_enabled === true,
+        upcoming_badge: editing.upcoming_badge || 'Coming Soon',
+        upcoming_description: editing.upcoming_description || '',
+        upcoming_order: Number(editing.upcoming_order) || 0,
       };
 
       const savePromise = products.some((p) => p.id === id)
@@ -1079,6 +1087,25 @@ export default function AdminDashboard() {
               )}
             </div>
 
+            <div className="mt-6 min-w-0 rounded-[1.5rem] border border-violet-300/40 bg-violet-50/70 p-3 dark:border-violet-500/20 dark:bg-violet-500/10 sm:rounded-[2rem] sm:p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h3 className="font-black">Upcoming collection card</h3>
+                  <p className="mt-1 text-xs font-bold text-stone-500 dark:text-white/55">Show this product in the homepage Coming Soon section without changing its normal product/shop visibility.</p>
+                </div>
+                <label className="flex items-center gap-2 text-sm font-black">
+                  <input type="checkbox" checked={editing.upcoming_enabled === true} onChange={(e) => setEditing({ ...editing, upcoming_enabled: e.target.checked })} />
+                  Show
+                </label>
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <Field label="Upcoming order" type="number" value={String(editing.upcoming_order || 0)} onChange={(v) => setEditing({ ...editing, upcoming_order: Number(v) || 0 })} />
+                <Field label="Upcoming badge" value={editing.upcoming_badge || ''} onChange={(v) => setEditing({ ...editing, upcoming_badge: v })} />
+              </div>
+              <label className="mt-4 block text-sm font-bold text-stone-500 dark:text-white/50">Upcoming description</label>
+              <textarea value={editing.upcoming_description || ''} onChange={(e) => setEditing({ ...editing, upcoming_description: e.target.value })} placeholder="A new signature scent is arriving..." className="mt-2 h-20 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-violet-700 dark:border-white/10 dark:bg-black/20" />
+            </div>
+
             <label className="mt-5 flex items-center gap-3 font-bold">
               <input type="checkbox" checked={editing.active !== false} onChange={(e) => setEditing({ ...editing, active: e.target.checked })} /> Show product in shop
             </label>
@@ -1319,59 +1346,37 @@ function Select({ label, value, onChange, options, disabled }: { label: string; 
 }
 
 function ProductTable({ products, editing, deleteProduct }: { products: ManagedProduct[]; editing: (p: ManagedProduct) => void; deleteProduct: (id: string) => void | Promise<void>; }) {
+  const columns = 'grid-cols-[280px_180px_180px_80px_100px_100px_110px_100px_110px_170px]';
   return (
-    <div className="mt-6">
-      <div className="mb-2 flex items-center justify-between gap-3 text-xs font-bold text-stone-500 dark:text-white/40">
-        <span>Product catalog</span>
-        <span className="whitespace-nowrap">← Scroll horizontally to see all fields →</span>
+    <div className="admin-product-table-scroll mt-6 max-h-[72vh] max-w-full overflow-y-auto overflow-x-hidden rounded-2xl border border-stone-200/70 dark:border-white/10">
+      <div className={`admin-product-table-header sticky top-0 z-10 grid ${columns} min-w-[1390px] items-center border-b border-stone-200 bg-white px-4 py-3 text-xs uppercase tracking-widest text-stone-500 shadow-sm dark:border-white/10 dark:bg-[#1b090c] dark:text-white/40`}>
+        <span>Product</span><span>Hero</span><span>Promo/Event</span><span>Stock</span><span>10ml EDP</span><span>85ml EDP</span><span>50ml Extrait</span><span>50ml EDT</span><span>Status</span><span>Actions</span>
       </div>
-      <div className="max-w-full overflow-x-auto overflow-y-hidden rounded-2xl border border-stone-200/70 bg-white/5 pb-3 dark:border-white/10">
-        <div className="min-w-[1450px]">
-        <table className="w-full table-fixed text-left text-xs xl:text-sm">
-          <colgroup>
-            <col className="w-[260px]" />
-            <col className="w-[190px]" />
-            <col className="w-[190px]" />
-            <col className="w-[80px]" />
-            <col className="w-[130px]" />
-            <col className="w-[130px]" />
-            <col className="w-[150px]" />
-            <col className="w-[130px]" />
-            <col className="w-[130px]" />
-            <col className="w-[190px]" />
-          </colgroup>
-          <thead className="border-b border-stone-200 text-xs uppercase tracking-widest text-stone-500 dark:border-white/10 dark:text-white/40">
-            <tr>
-              <th className="whitespace-nowrap py-3 pr-4">Product</th>
-              <th className="whitespace-nowrap pr-4">Hero</th>
-              <th className="whitespace-nowrap pr-4">Promo/Event</th>
-              <th className="whitespace-nowrap pr-4">Stock</th>
-              <th className="whitespace-nowrap pr-4">10ml EDP</th>
-              <th className="whitespace-nowrap pr-4">85ml EDP</th>
-              <th className="whitespace-nowrap pr-4">50ml Extrait</th>
-              <th className="whitespace-nowrap pr-4">50ml EDT</th>
-              <th className="whitespace-nowrap pr-4">Status</th>
-              <th className="sticky right-0 z-10 whitespace-nowrap bg-[#fff7f7] pr-4 text-stone-700 dark:bg-[#160508] dark:text-white/70 shadow-[-10px_0_18px_rgba(0,0,0,0.16)]">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((p) => (
-              <tr key={p.id} className="border-b border-stone-100 dark:border-white/5">
-                <td className="py-4 pr-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" /><div className="min-w-0"><p className="font-black">{p.name}</p><p className="text-xs text-stone-500">{p.family} • {p.category || 'perfumes'}</p></div></div></td>
-                <td className="pr-4"><span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-black ${p.hero_enabled ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-500'}`}>{p.hero_enabled ? `Hero #${p.hero_order || 0}` : 'Not hero'}</span><p className="mt-1 max-w-[170px] truncate text-xs text-stone-500">{p.hero_button_text || 'View Perfume'}</p></td>
-                <td className="pr-4"><p className="truncate font-bold">{p.promo || p.tag}</p><p className="max-w-[170px] truncate text-xs text-stone-500">{p.event || 'No event'}</p></td>
-                <td className="pr-4">{p.stock}</td>
-                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['10ml'] || 0)} className="font-black" /></td>
-                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></td>
-                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></td>
-                <td className="whitespace-nowrap pr-4"><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></td>
-                <td className="pr-4"><span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></td>
-                <td className="sticky right-0 z-10 bg-[#fff7f7] pr-4 shadow-[-10px_0_18px_rgba(0,0,0,0.16)] dark:bg-[#160508]"><div className="flex gap-2"><button onClick={() => editing(p)} className="whitespace-nowrap rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="whitespace-nowrap rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
+      <div>
+        {products.map((p) => (
+          <div key={p.id} className="admin-product-row border-b border-stone-100 dark:border-white/5">
+            <div className="admin-product-row-scroll overflow-x-auto overflow-y-hidden px-4 py-2">
+              <div className={`grid ${columns} min-w-[1390px] items-center gap-0 py-2 text-xs xl:text-sm`}>
+                <div className="py-2 pr-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" /><div className="min-w-0"><p className="font-black">{p.name}</p><p className="text-xs text-stone-500">{p.family} • {p.category || 'perfumes'}</p></div></div></div>
+                <div className="pr-4">
+                  <div className="flex flex-wrap gap-1">
+                    <span className={`rounded-full px-3 py-1 text-xs font-black ${p.hero_enabled ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-500'}`}>{p.hero_enabled ? `Hero #${p.hero_order || 0}` : 'Not hero'}</span>
+                    {p.upcoming_enabled && <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-black text-violet-800">Coming Soon #{p.upcoming_order || 0}</span>}
+                  </div>
+                  <p className="mt-1 max-w-xs truncate text-xs text-stone-500">{p.hero_button_text || 'View Perfume'}</p>
+                </div>
+                <div className="pr-4"><p className="font-bold">{p.promo || p.tag}</p><p className="max-w-xs truncate text-xs text-stone-500">{p.event || 'No event'}</p></div>
+                <div>{p.stock}</div>
+                <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['10ml'] || 0)} className="font-black" /></div>
+                <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></div>
+                <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></div>
+                <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></div>
+                <div><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></div>
+                <div><div className="flex gap-2"><button onClick={() => editing(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

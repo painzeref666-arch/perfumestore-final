@@ -90,6 +90,10 @@ export function productToRow(product: ManagedProduct) {
     hero_button_text: product.hero_button_text || 'View Perfume',
     hero_button_link: product.hero_button_link || `/products/${product.id}`,
     hero_order: product.hero_order || 0,
+    upcoming_enabled: product.upcoming_enabled || false,
+    upcoming_badge: product.upcoming_badge || 'Coming Soon',
+    upcoming_description: product.upcoming_description || '',
+    upcoming_order: product.upcoming_order || 0,
   };
 }
 
@@ -123,5 +127,9 @@ export function rowToProduct(row: any): ManagedProduct {
     hero_button_text: row.hero_button_text || 'View Perfume',
     hero_button_link: row.hero_button_link || `/products/${row.id}`,
     hero_order: Number(row.hero_order || 0),
+    upcoming_enabled: row.upcoming_enabled === true,
+    upcoming_badge: row.upcoming_badge || 'Coming Soon',
+    upcoming_description: row.upcoming_description || '',
+    upcoming_order: Number(row.upcoming_order || 0),
   };
 }

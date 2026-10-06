@@ -182,6 +182,31 @@ body {
   color: var(--primary);
 }
 
+/* Admin product catalog: keep the long product list independently scrollable so the Edit form stays in view. */
+.admin-product-table-scroll {
+  scrollbar-width: auto;
+  scrollbar-color: #8f0f2f rgba(143, 15, 47, 0.08);
+}
+.admin-product-table-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.admin-product-table-scroll::-webkit-scrollbar-track {
+  background: rgba(143, 15, 47, 0.08);
+  border-radius: 999px;
+}
+.admin-product-table-scroll::-webkit-scrollbar-thumb {
+  background: #8f0f2f;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+.admin-product-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #b3133b;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--background); }

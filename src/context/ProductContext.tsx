@@ -17,6 +17,10 @@ export type ManagedProduct = Product & {
   promo?: string;
   salePrice?: number;
   active?: boolean;
+  upcoming_enabled?: boolean;
+  upcoming_badge?: string;
+  upcoming_description?: string;
+  upcoming_order?: number;
 };
 
 type ProductContextValue = {
