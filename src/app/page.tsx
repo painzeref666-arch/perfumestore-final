@@ -15,7 +15,7 @@ const categories = [
     href: '/perfumes',
     eyebrow: 'Signature scents',
     description: 'Luxury-inspired perfumes with size, concentration, wishlist, reviews, and smooth checkout.',
-    image: 'https://images.unsplash.com/photo-1594035910663-369b72b7abe2?q=80&w=1200&auto=format&fit=crop',
+    image: '/assets/images/exousia-originals-hero.webp',
   },
   {
     title: 'Cosmetics',
@@ -158,18 +158,29 @@ export default function HomePage() {
       <main className="min-h-screen bg-[#fff7f7] pt-28 text-stone-950 dark:bg-[#160508] dark:text-white">
         <HomepageHeroCarousel products={activeProducts} />
 
-        <section className="mx-auto grid max-w-7xl gap-6 px-6 py-16 md:grid-cols-3">
+        <section className="mx-auto grid max-w-7xl items-stretch gap-6 px-6 py-16 md:grid-cols-3">
           {categories.map((cat) => (
-            <Link key={cat.href} href={cat.href} className="group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-stone-950 shadow-2xl shadow-amber-900/10 transition duration-500 hover:-translate-y-2">
-              <div className="relative aspect-[4/5]">
-                <img src={cat.image} alt={cat.title} className="h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-110 group-hover:opacity-100" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
-                  <p className="text-xs font-black uppercase tracking-[.35em] text-amber-200">{cat.eyebrow}</p>
-                  <h2 className="mt-3 text-4xl font-black">{cat.title}</h2>
-                  <p className="mt-3 min-h-16 text-sm leading-6 text-white/75">{cat.description}</p>
-                  <span className="mt-6 inline-flex rounded-full bg-amber-700 px-5 py-3 text-sm font-black text-white transition group-hover:bg-white group-hover:text-stone-950">Open {cat.title}</span>
-                </div>
+            <Link
+              key={cat.href}
+              href={cat.href}
+              className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-rose-900/60 bg-[#1b080c] shadow-2xl shadow-amber-900/10 transition duration-500 hover:-translate-y-1 hover:border-rose-700"
+            >
+              <div className="relative aspect-[3/2] w-full overflow-hidden bg-[#160508]">
+                <img
+                  src={cat.image}
+                  alt={cat.title === 'Perfumes' ? 'Exousia & Co. Originals perfume collection' : cat.title}
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                  loading="lazy"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+              </div>
+              <div className="flex flex-1 flex-col p-6 text-white">
+                <p className="text-xs font-black uppercase tracking-[.3em] text-rose-200">{cat.eyebrow}</p>
+                <h2 className="mt-2 text-3xl font-black">{cat.title}</h2>
+                <p className="mt-3 flex-1 text-sm leading-6 text-white/75">{cat.description}</p>
+                <span className="mt-6 inline-flex w-fit rounded-full bg-rose-700 px-5 py-3 text-sm font-black text-white transition group-hover:bg-white group-hover:text-stone-950">
+                  Open {cat.title} <span aria-hidden="true" className="ml-2">→</span>
+                </span>
               </div>
             </Link>
           ))}

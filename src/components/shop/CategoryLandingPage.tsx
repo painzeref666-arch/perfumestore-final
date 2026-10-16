@@ -38,8 +38,12 @@ export default function CategoryLandingPage({ category }: { category: CategoryKe
             <h1 className="mt-5 max-w-3xl text-5xl font-black leading-tight tracking-tight md:text-7xl">{h.title}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600 dark:text-white/60">{h.description}</p>
           </div>
-          <div className="overflow-hidden rounded-[3rem] border border-white/10 bg-white/5 p-3 shadow-2xl shadow-amber-900/10">
-            <img src={h.image} alt={category === 'perfumes' ? 'Exousia & Co. Originals perfume collection featuring Strawberry Velvet, Every Bloom, and Noir Elan' : h.title} className="aspect-[4/5] w-full rounded-[2.3rem] bg-[#160508] object-contain" />
+          <div className="w-full overflow-hidden rounded-[2rem] border border-rose-900/60 bg-[#160508] shadow-2xl shadow-amber-900/10">
+            <img
+              src={h.image}
+              alt={category === 'perfumes' ? 'Exousia & Co. Originals perfume collection featuring Strawberry Velvet, Every Bloom, and Noir Elan' : h.title}
+              className="block aspect-[3/2] w-full object-cover"
+            />
           </div>
         </section>
         <ProductBrowser category={category} />
