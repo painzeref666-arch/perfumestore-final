@@ -9,7 +9,7 @@ const hero: Record<CategoryKey, { eyebrow: string; title: string; description: s
     eyebrow: 'Exousia Perfumes',
     title: 'Signature fragrances for every mood.',
     description: 'Luxury-inspired perfumes with size, concentration, wishlist, reviews, cart, checkout, and order tracking.',
-    image: 'https://images.unsplash.com/photo-1594035910663-369b72b7abe2?q=80&w=1200&auto=format&fit=crop',
+    image: '/assets/images/exousia-originals-hero.webp',
   },
   cosmetics: {
     eyebrow: 'Exousia Cosmetics',
@@ -39,7 +39,7 @@ export default function CategoryLandingPage({ category }: { category: CategoryKe
             <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600 dark:text-white/60">{h.description}</p>
           </div>
           <div className="overflow-hidden rounded-[3rem] border border-white/10 bg-white/5 p-3 shadow-2xl shadow-amber-900/10">
-            <img src={h.image} alt={h.title} className="aspect-[4/5] w-full rounded-[2.3rem] object-cover" />
+            <img src={h.image} alt={category === 'perfumes' ? 'Exousia & Co. Originals perfume collection featuring Strawberry Velvet, Every Bloom, and Noir Elan' : h.title} className="aspect-[4/5] w-full rounded-[2.3rem] object-cover" />
           </div>
         </section>
         <ProductBrowser category={category} />
