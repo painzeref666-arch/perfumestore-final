@@ -44,8 +44,14 @@ export default function CheckoutPage() {
   const [proofPreview, setProofPreview] = useState('');
   const [customerForm, setCustomerForm] = useState<CheckoutFormState>(emptyCheckoutForm);
 
+  const perfumeQuantity = useMemo(() => items.reduce((sum, item) => sum + (String(item.product.category || '').toLowerCase() === 'perfumes' ? item.quantity : 0), 0), [items]);
+  const cosmeticsQuantity = useMemo(() => items.reduce((sum, item) => sum + (String(item.product.category || '').toLowerCase() === 'cosmetics' ? item.quantity : 0), 0), [items]);
+  const bulkDiscountEligible = perfumeQuantity >= 10 || cosmeticsQuantity >= 15;
+  const bulkDiscount = bulkDiscountEligible ? Math.round(subtotal * 0.25 * 100) / 100 : 0;
+  // Coupon and bulk discounts do not stack; apply whichever discount is higher.
+  const appliedDiscount = Math.max(discount, bulkDiscount);
   const shipping = useMemo(() => (items.length === 0 ? 0 : computeShipping(subtotal, region)), [items.length, subtotal, region]);
-  const total = Math.max(0, subtotal + shipping - discount);
+  const total = Math.max(0, subtotal + shipping - appliedDiscount);
   const needsProof = paymentMethod.includes('GCash') || paymentMethod.includes('Maya');
 
   function updateCustomerField(field: keyof CheckoutFormState, value: string) {
@@ -204,7 +210,7 @@ export default function CheckoutPage() {
         shipping_method: region === 'NCR' ? 'Metro Manila standard' : `${region} standard`,
         shipping_fee: shipping,
         shipping,
-        discount,
+        discount: appliedDiscount,
         coupon_code: coupon.trim().toUpperCase() || null,
         total,
         payment_method: paymentMethod,
@@ -229,6 +235,18 @@ export default function CheckoutPage() {
 
         setOrderId(response.data?.id || '');
         setTrackingCode(response.data?.tracking_code || code);
+
+        // Notify the store owner using the saved order record; the API verifies it server-side.
+        try {
+          const notificationResponse = await fetch('/api/notifications/order-placed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ trackingCode: response.data?.tracking_code || code }),
+          });
+          if (!notificationResponse.ok) console.warn('Order email notification was not sent.');
+        } catch (notificationError) {
+          console.warn('Order email notification failed:', notificationError);
+        }
       } else {
         const fakeId = `DEMO-${Date.now()}`;
         setOrderId(fakeId);
@@ -340,7 +358,8 @@ export default function CheckoutPage() {
             <div className="mt-6 space-y-3 text-white/75">
               <div className="flex justify-between"><span>Subtotal</span><Price amount={subtotal} /></div>
               <div className="flex justify-between"><span>Shipping</span><Price amount={shipping} /></div>
-              <div className="flex justify-between"><span>Discount</span><Price amount={-discount} /></div>
+              <div className="flex justify-between"><span>Discount{bulkDiscountEligible ? ' (25% bulk)' : ''}</span><Price amount={-appliedDiscount} /></div>
+              {bulkDiscountEligible && <p className="text-xs text-emerald-300">Bulk discount applied: {perfumeQuantity >= 10 ? '10+ perfumes' : ''}{perfumeQuantity >= 10 && cosmeticsQuantity >= 15 ? ' and ' : ''}{cosmeticsQuantity >= 15 ? '15+ cosmetics' : ''}. One 25% discount only.</p>}
             </div>
             <div className="mt-6 flex justify-between border-t border-white/10 pt-6 text-2xl font-black"><span>Total</span><Price amount={total} /></div>
           </aside>
