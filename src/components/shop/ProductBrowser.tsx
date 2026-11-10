@@ -72,7 +72,7 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <article className="group relative overflow-hidden rounded-[2rem] border border-stone-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-white/10 dark:bg-white/5">
       <Link href={`/products/${product.id}`} className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-stone-100">
-        <AppImage src={product.image} alt={product.name} fill sizes="(max-width:768px) 100vw,33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+        <AppImage src={product.image} alt={product.name} fill smartFill sizes="(max-width:768px) 100vw,33vw" className="object-contain transition-transform duration-700 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-amber-900">{product.promo || product.tag}</span>
         <span className="absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1 text-xs font-black text-white">Rating {product.rating}</span>
       </Link>
