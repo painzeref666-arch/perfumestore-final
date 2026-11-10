@@ -8,19 +8,19 @@ const hero: Record<CategoryKey, { eyebrow: string; title: string; description: s
   perfumes: {
     eyebrow: 'Exousia Perfumes',
     title: 'Signature fragrances for every mood.',
-    description: 'Luxury-inspired perfumes with size, concentration, wishlist, reviews, cart, checkout, and order tracking.',
+    description: '',
     image: '/assets/images/exousia-originals-hero.webp',
   },
   cosmetics: {
     eyebrow: 'Exousia Cosmetics',
     title: 'Beauty essentials for polished everyday confidence.',
-    description: 'Cosmetics products use the same ecommerce flow: filters, cart, checkout, inventory, reviews, and admin controls.',
+    description: '',
     image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1200&auto=format&fit=crop',
   },
   wellness: {
     eyebrow: 'Exousia Wellness',
     title: 'Self-care essentials for daily balance.',
-    description: 'Wellness and body-care products with the same smooth shopping, cart, checkout, and tracking experience.',
+    description: '',
     image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200&auto=format&fit=crop',
   },
 };
