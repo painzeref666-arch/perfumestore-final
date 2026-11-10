@@ -304,7 +304,7 @@ export default function ProductDetailPage() {
             <section className="mt-20">
               <h2 className="text-3xl font-black">More from {product.family}</h2>
               <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {related.map((p) => <Link key={p.id} href={`/products/${p.id}`} className="group rounded-[2rem] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-1 hover:bg-white/10"><div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]"><AppImage src={p.image} alt={p.name} fill sizes="25vw" className="object-cover transition group-hover:scale-105" /></div><p className="mt-4 font-black">{p.name}</p><p className="text-sm text-white/45">{p.family}</p></Link>)}
+                {related.map((p) => <Link key={p.id} href={`/products/${p.id}`} className="group rounded-[2rem] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-1 hover:bg-white/10"><div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]"><AppImage src={p.image} alt={p.name} fill smartFill sizes="25vw" className="object-cover transition group-hover:scale-105" /></div><p className="mt-4 font-black">{p.name}</p><p className="text-sm text-white/45">{p.family}</p></Link>)}
               </div>
             </section>
           )}

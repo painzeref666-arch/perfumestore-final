@@ -14,6 +14,8 @@ interface AppImageProps {
     placeholder?: 'blur' | 'empty';
     blurDataURL?: string;
     fill?: boolean;
+    /** Shows the full image over a softly blurred, enlarged copy to fill empty frame space. */
+    smartFill?: boolean;
     sizes?: string;
     onClick?: () => void;
     fallbackSrc?: string;
@@ -33,6 +35,7 @@ const AppImage = memo(function AppImage({
     placeholder = 'empty',
     blurDataURL,
     fill = false,
+    smartFill = false,
     sizes,
     onClick,
     fallbackSrc = '/assets/images/no_image.png',
@@ -102,7 +105,25 @@ const AppImage = memo(function AppImage({
 
     if (fill) {
         return (
-            <div className="relative" style={{ width: '100%', height: '100%' }}>
+            <div className="relative h-full w-full overflow-hidden" style={{ width: '100%', height: '100%', background: '#16090b' }}>
+                {smartFill && (
+                    <Image
+                        src={imageSrc}
+                        alt=""
+                        aria-hidden="true"
+                        fill
+                        sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+                        quality={60}
+                        unoptimized={resolvedUnoptimized}
+                        draggable={false}
+                        style={{
+                            objectFit: 'cover',
+                            filter: 'blur(18px)',
+                            transform: 'scale(1.12)',
+                            opacity: 0.72,
+                        }}
+                    />
+                )}
                 <Image
                     {...imageProps}
                     fill

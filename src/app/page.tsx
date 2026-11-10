@@ -230,7 +230,7 @@ export default function HomePage() {
                       <AppImage
                         src={p.image}
                         alt={p.name}
-                        fill
+                        fill smartFill
                         sizes="(max-width:640px) 82vw, (max-width:1024px) 330px, 360px"
                         className="object-cover transition duration-700 group-hover:scale-105"
                       />
@@ -271,7 +271,7 @@ export default function HomePage() {
             {featured.map((p) => (
               <Link key={p.id} href={`/products/${p.id}`} className="group rounded-[2rem] border border-stone-200 bg-white p-4 shadow-sm transition hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-white/5">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-stone-100">
-                  <AppImage src={p.image} alt={p.name} fill sizes="(max-width:768px) 100vw,25vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <AppImage src={p.image} alt={p.name} fill smartFill sizes="(max-width:768px) 100vw,25vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 </div>
                 <div className="mt-4">
                   <p className="text-xs font-black uppercase tracking-[.25em] text-amber-700">{p.category || 'perfumes'}</p>

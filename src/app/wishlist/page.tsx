@@ -30,7 +30,7 @@ export default function WishlistPage() {
               {wishlistProducts.map((p) => (
                 <Link key={p.id} href={`/products/${p.id}`} className="group rounded-[2rem] border border-stone-200 bg-white p-4 shadow-sm transition hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-white/5">
                   <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
-                    <AppImage src={p.image} alt={p.name} fill sizes="25vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                    <AppImage src={p.image} alt={p.name} fill smartFill sizes="25vw" className="object-cover transition duration-700 group-hover:scale-105" />
                     <WishlistButton productId={p.id} className="absolute right-4 top-4 h-11 w-11 text-xl" />
                   </div>
                   <div className="mt-5">

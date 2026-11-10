@@ -56,6 +56,7 @@ export default function ProductGallery({ product }: ProductGalleryProps) {
           src={active}
           alt={product.name}
           fill
+	  smartFill
           sizes="(max-width:1024px) 100vw,50vw"
           className="object-contain p-3 transition-opacity duration-300"
           priority
@@ -82,7 +83,7 @@ export default function ProductGallery({ product }: ProductGalleryProps) {
               className={`relative aspect-square overflow-hidden rounded-2xl border transition duration-300 hover:-translate-y-1 ${active === img ? 'border-amber-300 ring-2 ring-amber-400/40' : 'border-white/10 opacity-75 hover:opacity-100'}`}
               aria-label={`View ${product.name} image ${index + 1}`}
             >
-              <AppImage src={img} alt={`${product.name} thumbnail ${index + 1}`} fill sizes="120px" className="object-contain bg-[#16090b] p-1" />
+              <AppImage src={img} alt={`${product.name} thumbnail ${index + 1}`} fill smartFill sizes="120px" className="object-contain bg-[#16090b] p-1" />
             </button>
           ))}
         </div>

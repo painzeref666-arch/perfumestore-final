@@ -71,7 +71,7 @@ export default function QuizPage() {
               </div>
               <div className="mt-8 grid gap-6 md:grid-cols-3">
                 {results.map(({ product }, index) => <Link key={product.id} href={`/products/${product.id}`} className="group rounded-[2rem] border border-stone-200 bg-white p-4 shadow-sm transition hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-white/5">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]"><AppImage src={product.image} alt={product.name} fill sizes="33vw" className="object-cover transition duration-700 group-hover:scale-105" /><span className="absolute left-4 top-4 rounded-full bg-amber-700 px-4 py-2 text-xs font-black text-white">Match #{index + 1}</span><WishlistButton productId={product.id} className="absolute right-4 top-4 h-11 w-11 text-xl" /></div>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]"><AppImage src={product.image} alt={product.name} fill smartFill sizes="33vw" className="object-cover transition duration-700 group-hover:scale-105" /><span className="absolute left-4 top-4 rounded-full bg-amber-700 px-4 py-2 text-xs font-black text-white">Match #{index + 1}</span><WishlistButton productId={product.id} className="absolute right-4 top-4 h-11 w-11 text-xl" /></div>
                   <h3 className="mt-5 text-2xl font-black">{product.name}</h3>
                   <p className="mt-1 text-sm text-stone-600 dark:text-white/50">{product.family} • {(product.notes || []).slice(0, 3).join(' · ')}</p>
                   <Price amount={product.salePrice || product.price} className="mt-4 block text-lg font-black" />

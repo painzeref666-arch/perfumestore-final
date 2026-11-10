@@ -92,7 +92,7 @@ export default function CollectionPage() {
               return (
                 <Link key={product.id} href={`/products/${product.id}`} className="luxury-card soft-slide group rounded-[2rem] border border-white/10 bg-white/[0.04] p-4" style={{ animationDelay: `${index * 80}ms` }}>
                   <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-white/5">
-                    <AppImage src={product.image} alt={product.name} fill sizes="(max-width:768px) 50vw,25vw" className="object-cover transition duration-700 group-hover:scale-105" />
+                    <AppImage src={product.image} alt={product.name} fill smartFill sizes="(max-width:768px) 50vw,25vw" className="object-cover transition duration-700 group-hover:scale-105" />
                   </div>
                   <p className="mt-4 text-xs font-black uppercase tracking-[.18em] text-amber-300">{product.tag}</p>
                   <h2 className="mt-2 text-2xl font-black">{product.name}</h2>
