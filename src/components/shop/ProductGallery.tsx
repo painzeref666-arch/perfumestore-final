@@ -64,13 +64,7 @@ export default function ProductGallery({ product }: ProductGalleryProps) {
         <div className="absolute left-6 top-6 z-20 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[.18em] text-stone-950 shadow-xl">
           {product.tag || product.promo || product.family || 'Featured'}
         </div>
-        <div className="absolute bottom-6 left-6 right-6 z-20 flex items-center justify-between rounded-3xl border border-white/15 bg-black/45 p-4 backdrop-blur-xl">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[.25em] text-amber-200">Full Product View</p>
-            <p className="mt-1 text-sm font-bold text-white/70">Entire image displayed • No cropping</p>
-          </div>
-          <span className="rounded-full bg-white/15 px-3 py-2 text-xs font-black text-white">FIT</span>
-        </div>
+        
       </div>
 
       {images.length > 1 && (
