@@ -38,6 +38,7 @@ const AppImage = memo(function AppImage({
     fallbackSrc = '/assets/images/no_image.png',
     loading = 'lazy',
     unoptimized = false,
+    style,
     ...props
 }: AppImageProps) {
     const [imageSrc, setImageSrc] = useState(src);
@@ -106,7 +107,7 @@ const AppImage = memo(function AppImage({
                     {...imageProps}
                     fill
                     sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: 'contain', ...(style || {}) }}
                     {...props}
                 />
             </div>
@@ -119,6 +120,7 @@ const AppImage = memo(function AppImage({
             width={width || 400}
             height={height || 300}
             sizes={sizes}
+            style={{ objectFit: 'contain', ...(style || {}) }}
             {...props}
         />
     );
