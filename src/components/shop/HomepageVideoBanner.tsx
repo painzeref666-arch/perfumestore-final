@@ -9,7 +9,7 @@ export default function HomepageVideoBanner() {
       <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-rose-300/10 blur-3xl" />
       <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-amber-200/10 blur-3xl" />
 
-      <div className="relative grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+      <div className="relative grid items-center gap-8 lg:grid-cols-[0.9fr_0.8fr] lg:gap-10">
         <div className="max-w-xl">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-rose-200 sm:text-xs">
             Exousia &amp; Co. Originals
@@ -31,17 +31,17 @@ export default function HomepageVideoBanner() {
           </Link>
         </div>
 
-        <div className="relative mx-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-black/20 shadow-2xl shadow-black/30">
-          <div className="relative aspect-[16/10] w-full">
+        <div className="relative mx-auto w-full max-w-lg overflow-hidden rounded-2xl border border-amber-200/20 bg-black/30 shadow-2xl shadow-black/30">
+          <div className="relative mx-auto aspect-[11/16] w-full max-h-[560px]">
             <Image
-              src="/assets/images/exousia-originals-hero.webp"
+              src="/assets/images/exousia-signature-collection-banner.png"
               alt="Exousia & Co. Originals signature perfume collection"
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 55vw"
-              className="object-cover object-center"
+              className="object-contain object-center"
             />
-            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/5" />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/5" />
           </div>
         </div>
       </div>
