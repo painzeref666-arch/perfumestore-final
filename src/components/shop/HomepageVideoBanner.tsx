@@ -1,48 +1,47 @@
-
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function HomepageVideoBanner() {
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-amber-300/20 bg-stone-950 px-6 py-7 text-white shadow-xl shadow-amber-950/10 md:px-9 md:py-9">
-      <div className="pointer-events-none absolute inset-0 opacity-30">
-        <div className="absolute -left-20 top-10 h-48 w-48 rounded-full bg-amber-500/30 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-      </div>
+    <section className="relative isolate overflow-hidden rounded-[2rem] border border-rose-200/15 bg-gradient-to-br from-[#861126] via-[#650b1b] to-[#25070d] px-6 py-8 text-white shadow-xl shadow-black/20 sm:px-9 sm:py-10 lg:px-12 lg:py-12">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-rose-300/10 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-amber-200/10 blur-3xl" />
 
-      <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_250px]">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-[.28em] text-amber-300">
-            Exousia & Co.
+      <div className="relative grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+        <div className="max-w-xl">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-rose-200 sm:text-xs">
+            Exousia &amp; Co. Originals
           </p>
-
-          <h2 className="mt-3 max-w-2xl text-3xl font-black leading-tight md:text-4xl">
-            A premium scent experience, crafted for modern confidence.
+          <h2 className="mt-4 text-3xl font-black leading-[1.08] tracking-tight sm:text-4xl lg:text-5xl">
+            A signature scent for every moment.
           </h2>
-
-          <p className="mt-3 text-sm text-white/65 md:text-base">
+          <p className="mt-4 max-w-md text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
+            Discover fragrances made to leave a lasting impression. Find the scent that makes every moment yours.
+          </p>
+          <p className="mt-4 text-xs font-semibold tracking-wide text-amber-100/90 sm:text-sm">
             Make Every Where Your Territory
           </p>
-
           <Link
             href="/products"
-            className="mt-6 inline-flex rounded-full bg-amber-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-amber-500"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-rose-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:ring-offset-2 focus:ring-offset-[#650b1b]"
           >
-            Explore perfumes
+            Explore perfumes <span aria-hidden="true">→</span>
           </Link>
         </div>
 
-        <div className="relative mx-auto aspect-square w-full max-w-[250px] rounded-3xl border border-white/10 bg-gradient-to-br from-amber-300/25 via-white/10 to-transparent p-5">
-          <div className="flex h-full items-center justify-center rounded-2xl bg-black/30 text-center">
-            <div>
-              <p className="font-display text-5xl italic text-amber-200">
-                Exousia
-              </p>
-              <p className="mt-2 text-[10px] font-bold uppercase tracking-[.22em] text-white/50">
-                Signature Collection
-              </p>
-            </div>
+        <div className="relative mx-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-black/20 shadow-2xl shadow-black/30">
+          <div className="relative aspect-[16/10] w-full">
+            <Image
+              src="/assets/images/exousia-originals-hero.webp"
+              alt="Exousia & Co. Originals signature perfume collection"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              className="object-cover object-center"
+            />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/5" />
           </div>
         </div>
       </div>
