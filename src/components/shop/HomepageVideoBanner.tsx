@@ -15,19 +15,19 @@ export default function HomepageVideoBanner() {
             Exousia &amp; Co. Originals
           </p>
           <h2 className="mt-4 text-2xl font-black leading-[1.08] tracking-tight sm:text-3xl lg:text-4xl">
-            A signature scent for every moment.
+            More Than a Scent. A Lifestyle.
           </h2>
           <p className="mt-3 max-w-md text-sm leading-5 text-white/75 sm:text-sm sm:leading-6">
-            Discover fragrances made to leave a lasting impression. Find the scent that makes every moment yours.
+            Discover the art of self-expression with Exousia & Co. Explore captivating fragrances, beauty essentials, and wellness finds thoughtfully selected to elevate your everyday moments. From personal indulgence to unforgettable celebrations, let us bring beauty, confidence, and elegance into every experience.
           </p>
-          <p className="mt-3 text-xs font-semibold tracking-wide text-amber-100/90">
-            Make Every Where Your Territory
+          <p className="mt-3 text-xs font-semibold tracking-wide text-[#D6B477]">
+            YOUR SCENT, YOUR STORY
           </p>
           <Link
             href="/products"
             className="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:ring-offset-2 focus:ring-offset-[#650b1b]"
           >
-            Explore perfumes <span aria-hidden="true">→</span>
+            Explore Exousia <span aria-hidden="true">→</span>
           </Link>
         </div>
 
