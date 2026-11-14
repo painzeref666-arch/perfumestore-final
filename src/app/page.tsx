@@ -77,6 +77,10 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
 
   const active = slides[index % slides.length];
   const activeHref = heroHref(active);
+  const rawHeroBadge = active.hero_badge || active.tag || active.promo || 'Featured';
+  const heroBadge = String(rawHeroBadge).trim().toLowerCase() === 'featured'
+    ? 'Featured Promotions'
+    : rawHeroBadge;
 
   return (
     <section className="relative min-h-[560px] overflow-hidden bg-stone-950 text-white md:min-h-[620px]">
@@ -104,7 +108,7 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
       <div className="relative mx-auto flex min-h-[560px] max-w-7xl items-center px-6 py-16 md:min-h-[620px]">
         <div className="max-w-3xl">
           <p className="inline-flex rounded-full border border-amber-300/30 bg-black/35 px-4 py-2 text-xs font-black uppercase tracking-[.3em] text-amber-200 backdrop-blur">
-            {active.hero_badge || active.tag || active.promo || 'Featured'}
+            {heroBadge}
           </p>
           <h1 className="mt-6 text-5xl font-black leading-none tracking-tight md:text-7xl">
             {active.hero_title || active.name}
@@ -262,8 +266,8 @@ export default function HomePage() {
         <section className="mx-auto max-w-7xl px-6 py-16">
           <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <p className="font-black uppercase tracking-[.35em] text-amber-700">Featured products</p>
-              <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">From the Exousia collection</h2>
+              <p className="font-black uppercase tracking-[.35em] text-amber-700">Our Collection</p>
+              <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">From the Exousia Collection</h2>
             </div>
             <Link href="/products" className="rounded-full bg-stone-950 px-6 py-3 text-center font-black text-white transition hover:bg-amber-700 dark:bg-white dark:text-stone-950">View all products</Link>
           </div>

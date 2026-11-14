@@ -25,9 +25,9 @@ export default function HomepageVideoBanner() {
       <div className="relative grid items-center gap-5 lg:grid-cols-[1fr_0.72fr] lg:gap-7">
         <div className="max-w-xl">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-rose-200 sm:text-xs">Exousia &amp; Co. Originals</p>
-          <h2 className="mt-4 text-2xl font-black leading-[1.08] tracking-tight sm:text-3xl lg:text-4xl">More Than Just a Scent. It's a Lifestyle.</h2>
+          <h2 className="mt-4 text-2xl font-black leading-[1.08] tracking-tight sm:text-3xl lg:text-4xl">More Than a Scent. A Lifestyle.</h2>
           <p className="mt-3 max-w-md text-sm leading-5 text-white/75 sm:text-sm sm:leading-6">Discover the art of self-expression with Exousia &amp; Co. Explore captivating fragrances, beauty essentials, and wellness finds thoughtfully selected to elevate your everyday moments. From personal indulgence to unforgettable celebrations, let us bring beauty, confidence, and elegance into every experience.</p>
-          <p className="mt-3 text-xs font-semibold tracking-wide text-[#D6B477]">Make Everywhere Your Territory</p>
+          <p className="mt-3 text-xs font-semibold tracking-wide text-[#D6B477]">YOUR SCENT, YOUR STORY</p>
           <Link href="/products" className="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:ring-offset-2 focus:ring-offset-[#650b1b]">Explore Exousia <span aria-hidden="true">→</span></Link>
         </div>
         <div className="relative mx-auto flex min-h-[220px] w-full max-w-[420px] items-center justify-center overflow-hidden rounded-2xl border border-amber-200/20 bg-black/30 shadow-2xl shadow-black/30 sm:min-h-[280px] lg:min-h-[350px]">
