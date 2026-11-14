@@ -9,9 +9,6 @@ import { computeShipping, makeTrackingCode, validateCoupon } from '@/lib/store-u
 import { getCustomerProfile } from '@/lib/customer-ui-utils';
 
 const regions = ['NCR', 'Luzon', 'Visayas', 'Mindanao'];
-const gcashName = 'KR******E M** R.';
-const gcashNumber = '0966 748 ****';
-
 type CheckoutFormState = {
   first_name: string;
   last_name: string;
@@ -39,7 +36,7 @@ export default function CheckoutPage() {
   const [coupon, setCoupon] = useState('');
   const [couponMessage, setCouponMessage] = useState('');
   const [discount, setDiscount] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
+  const [paymentMethod, setPaymentMethod] = useState('GCash manual verification');
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState('');
   const [customerForm, setCustomerForm] = useState<CheckoutFormState>(emptyCheckoutForm);
@@ -191,7 +188,7 @@ export default function CheckoutPage() {
       if (needsProof && proofFile) proofUrl = await uploadPaymentProof(proofFile, code);
 
       const customerName = `${customer.first_name} ${customer.last_name}`.trim();
-      const paymentStatus = paymentMethod === 'Cash on Delivery' ? 'COD Pending' : 'For Verification';
+      const paymentStatus = 'For Verification';
       const orderStatus = 'pending';
 
       const orderPayload: any = {
@@ -217,7 +214,7 @@ export default function CheckoutPage() {
         payment_status: paymentStatus,
         payment_reference: String(form.get('payment_reference') || ''),
         payment_proof_url: proofUrl,
-        payment_note: needsProof ? 'Customer uploaded manual payment proof. Admin verification required.' : 'Cash on Delivery order.',
+        payment_note: 'Customer uploaded manual payment proof. Admin verification required.',
         order_status: orderStatus,
         tracking_code: code,
         tracking_number: '',
@@ -281,7 +278,7 @@ export default function CheckoutPage() {
                 <h2 className="text-3xl font-black">Order submitted!</h2>
                 <p className="mt-3">Order ID: <span className="font-black">{orderId}</span></p>
                 <p className="mt-2">Tracking code: <span className="font-black">{trackingCode}</span></p>
-                <p className="mt-2">{paymentMethod === 'Cash on Delivery' ? 'Your COD order is now pending admin processing.' : 'Your payment proof was sent. Please wait for admin verification.'}</p>
+                <p className="mt-2">Your payment proof was sent. Please wait for admin verification.</p>
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
                   <Link href={`/track?code=${trackingCode}`} className="rounded-full bg-stone-950 px-6 py-3 font-black text-white">Track order</Link>
                   <Link href={`/invoice/${orderId || trackingCode}`} className="rounded-full bg-amber-700 px-6 py-3 font-black text-white">View invoice</Link>
@@ -305,7 +302,6 @@ export default function CheckoutPage() {
                 <div className="rounded-[2rem] border border-stone-200 p-4 dark:border-white/10 dark:bg-black/20">
                   <p className="font-black">Payment method</p>
                   <select id="checkout-payment-method" name="payment_method" autoComplete="off" required value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)} className="mt-3 w-full rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20">
-                    <option>Cash on Delivery</option>
                     <option>GCash manual verification</option>
                     <option>Maya manual verification</option>
                   </select>
@@ -315,13 +311,12 @@ export default function CheckoutPage() {
                       <h3 className="font-black">Manual payment instructions</h3>
                       <div className="mt-4 grid gap-4 sm:grid-cols-[160px_1fr]">
                         <div className="rounded-2xl bg-white p-3 shadow-sm">
-                          <a href="/gcash-qr.jpeg" target="_blank" rel="noreferrer" title="Open full GCash QR"><img src="/gcash-qr.jpeg" alt="Official GCash QR code" className="h-56 w-full rounded-xl bg-white object-contain p-2" /></a><a href="/gcash-qr.jpeg" download className="mt-3 block rounded-full bg-blue-600 px-4 py-2 text-center text-xs font-black text-white hover:bg-blue-500">Download / Save QR</a>
+                          <a href="/payment-qr.png" target="_blank" rel="noreferrer" title="Open full InstaPay QR"><img src="/payment-qr.png" alt="Security Bank InstaPay QR payment code" className="h-56 w-full rounded-xl bg-white object-contain p-2" /></a><a href="/payment-qr.png" download className="mt-3 block rounded-full bg-blue-600 px-4 py-2 text-center text-xs font-black text-white hover:bg-blue-500">Download / Save QR</a>
                         </div>
                         <div>
-                          <p className="text-sm">Scan the QR or send your payment to:</p>
-                          <p className="mt-2 font-black">Account name: {gcashName}</p>
-                          <p className="font-black">GCash/Maya number: {gcashNumber}</p>
-                          <p className="mt-2 text-xs font-bold opacity-80">Tip: replace public/gcash-qr.jpeg with your real QR image.</p>
+                          <p className="text-sm font-bold">Scan this InstaPay QR using GCash or Maya.</p>
+                          <p className="mt-2 text-sm">Please verify the recipient details shown in your payment app before confirming the transfer.</p>
+                          <p className="mt-2 text-xs font-bold opacity-80">Transfer fees may apply. Upload your payment receipt below for order verification.</p>
                         </div>
                       </div>
                       <input id="checkout-payment-reference" name="payment_reference" autoComplete="off" placeholder="Reference number / transaction ID" className="mt-4 w-full rounded-2xl border border-amber-200 px-5 py-4 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white" />
