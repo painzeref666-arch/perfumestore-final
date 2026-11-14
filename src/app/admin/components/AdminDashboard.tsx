@@ -1116,6 +1116,7 @@ export default function AdminDashboard() {
             </div>
           </form>
 
+          <div className="min-w-0 flex flex-col gap-6">
           <section className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
@@ -1130,9 +1131,7 @@ export default function AdminDashboard() {
             <input value={productSearch} onChange={(e) => setProductSearch(e.target.value)} placeholder="Search products, family, promo..." className="mt-5 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 outline-none focus:border-amber-700 dark:border-white/10 dark:bg-black/20" />
             {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} editing={startEditProduct} deleteProduct={deleteProduct} />}
           </section>
-        </section>
 
-        <section className="mt-8 grid min-w-0 gap-6 lg:grid-cols-2">
           <section className="min-w-0 rounded-[1.5rem] bg-stone-950 p-4 text-white sm:rounded-[2rem] sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-2xl font-black">Low stock alerts</h2><label className="text-xs font-black uppercase tracking-widest text-white/50">Alert at ≤ <input type="number" value={lowStockLimit} onChange={(e)=>setLowStockLimit(Number(e.target.value)||0)} className="ml-2 w-20 rounded-xl bg-white/10 px-3 py-2 text-white" /></label></div>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
@@ -1140,7 +1139,10 @@ export default function AdminDashboard() {
               {lowStock.length === 0 && <p className="text-white/60">No low stock products.</p>}
             </div>
           </section>
+          </div>
+        </section>
 
+        <section className="mt-8 min-w-0">
           <OrdersPanel
             orders={orders}
             loading={ordersLoading}
@@ -1206,7 +1208,7 @@ function OrdersPanel({
     });
 
   return (
-    <section className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6 lg:col-span-2">
+    <section className="min-w-0 rounded-[1.5rem] bg-white p-4 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h2 className="text-2xl font-black">Orders management</h2>
