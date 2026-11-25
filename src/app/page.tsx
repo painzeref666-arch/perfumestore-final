@@ -100,10 +100,53 @@ export default function HomePage() {
 
       <div className="mx-auto max-w-7xl px-5 py-12 md:px-8"><HomepageVideoBanner/></div>
 
+      
       {/* Scent discovery */}
       <section className="relative overflow-hidden bg-[#11110f] px-5 py-16 text-[#f5f0e8] md:py-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2"><div><p className="text-xs uppercase tracking-[.35em] text-[#c5a46d]">Discover your scent</p><h2 className="mt-4 font-serif text-4xl leading-tight md:text-6xl">Find your signature.</h2><p className="mt-5 max-w-lg text-sm leading-7 text-white/70">Not sure where to begin? Explore fragrance families or take the scent quiz to discover fragrances that match your preferences.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/quiz" className="rounded-full bg-[#c5a46d] px-6 py-3 text-sm font-semibold text-[#171411]">Take the Scent Quiz →</Link><Link href="/collections/floral" className="rounded-full border border-[#c5a46d]/60 px-6 py-3 text-sm">Explore scent families</Link></div></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{[['Floral','https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=600'],['Woody','https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600'],['Oriental','https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600'],['Fresh','https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=600']].map(([name,img])=><Link href={`/collections/${String(name).toLowerCase()}`} key={name} className="group relative aspect-[3/4] overflow-hidden rounded-xl"><img src={img} alt={`${name} fragrance family`} className="h-full w-full object-cover transition duration-700 group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"/><span className="absolute bottom-3 left-3 font-serif text-lg text-white sm:text-xl">{name}</span></Link>)}</div></div>
+        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2">
+          <div>
+            <p className="text-xs uppercase tracking-[.35em] text-[#c5a46d]">Discover your scent</p>
+            <h2 className="mt-4 font-serif text-4xl leading-tight md:text-6xl">Find your signature.</h2>
+            <p className="mt-5 max-w-lg text-sm leading-7 text-white/70">
+              Not sure where to begin? Explore fragrance families or take the scent quiz to discover fragrances that match your preferences.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/quiz" className="rounded-full bg-[#c5a46d] px-6 py-3 text-sm font-semibold text-[#171411]">
+                Take the Scent Quiz →
+              </Link>
+              <Link href="/collections/floral" className="rounded-full border border-[#c5a46d]/60 px-6 py-3 text-sm">
+                Explore scent families
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              ['Floral', '/assets/images/scent-family-floral.jpg'],
+              ['Woody', '/assets/images/scent-family-woody.jpg'],
+              ['Oriental', '/assets/images/scent-family-oriental.jpg'],
+              ['Fresh', '/assets/images/scent-family-fresh.jpg']
+            ].map(([name, img]) => (
+              <Link
+                href={`/collections/${String(name).toLowerCase()}`}
+                key={name}
+                className="group relative aspect-[3/4] overflow-hidden rounded-xl"
+              >
+                <img
+                  src={img}
+                  alt={`${name} fragrance family`}
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"/>
+                <span className="absolute bottom-3 left-3 font-serif text-lg text-white sm:text-xl">
+                  {name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
       </section>
+
 
       {/* Event Scents feature */}
       <section id="event-scents" className="scroll-mt-28 bg-[#eee5d7] px-5 py-16 text-[#211c17] dark:bg-[#201b16] dark:text-[#f5f0e8] md:py-24"><div className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl border border-[#c5a46d]/30 md:grid-cols-2"><div className="flex flex-col justify-center p-8 md:p-12"><p className="text-xs uppercase tracking-[.35em] text-[#9a7543]">By Exousia &amp; Co.</p><h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">Event Scents</h2><p className="mt-5 text-sm leading-7 text-current/70">A portable Perfume Bar experience for weddings, birthdays, corporate gatherings, and celebrations. Let your guests discover a scent and take home a memorable moment.</p><Link href="/reviews" className="mt-7 inline-flex w-fit rounded-full bg-[#211c17] px-6 py-3 text-sm font-semibold text-[#f5f0e8] dark:bg-[#c5a46d] dark:text-[#171411]">See guest experiences →</Link></div><div className="relative min-h-[320px] md:min-h-[440px]"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1400&auto=format&fit=crop" alt="Elegant event setting" className="absolute inset-0 h-full w-full object-cover"/><div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"/></div></div></section>
