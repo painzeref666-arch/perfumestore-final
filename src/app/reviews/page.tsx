@@ -116,7 +116,7 @@ export default function ReviewsPage() {
           <p className="mt-4 max-w-2xl text-stone-600 dark:text-white/60">Discover fragrance experiences shared by our customers. Reviews may include photos or videos.</p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <span className="rounded-full bg-[#F5F0E8] px-4 py-2 text-sm font-bold dark:bg-white/10">{reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</span>
-            <button type="button" onClick={() => { setShowForm((v) => !v); setMsg(''); }} className="rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16] hover:bg-[#B8955D]">{showForm ? 'Close review form' : 'Write a Review'}</button>
+            {reviews.length > 0 && <button type="button" onClick={() => { setShowForm((v) => !v); setMsg(''); }} className="rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16] hover:bg-[#B8955D]">{showForm ? 'Close review form' : 'Write a Review'}</button>}
           </div>
         </header>
 
