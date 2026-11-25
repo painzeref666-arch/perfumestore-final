@@ -98,3 +98,17 @@ button:disabled, [role="button"][aria-disabled="true"] {
   cursor: not-allowed;
   opacity: .58;
 }
+
+/* Admin-specific readable controls and labels */
+.dark .admin-contrast, .dark [data-admin-contrast] { color: #F5F0E8 !important; }
+html:not(.dark) .admin-contrast, html:not(.dark) [data-admin-contrast] { color: #201B16 !important; }
+.dark main button[class*="bg-white"], .dark main a[class*="bg-white"] { color: #201B16 !important; }
+.dark main button[class*="bg-amber"], .dark main a[class*="bg-amber"] { color: #171512 !important; }
+html:not(.dark) main button[class*="bg-amber"], html:not(.dark) main a[class*="bg-amber"] { color: #171512 !important; }
+.dark main button[class*="bg-stone-950"], .dark main a[class*="bg-stone-950"] { color: #F5F0E8 !important; }
+.dark main button[class*="bg-black"], .dark main a[class*="bg-black"] { color: #F5F0E8 !important; }
+html:not(.dark) main button[class*="bg-black"], html:not(.dark) main a[class*="bg-black"] { color: #F5F0E8 !important; }
+.dark main label, .dark main label span { color: #D8D0C5; }
+html:not(.dark) main label, html:not(.dark) main label span { color: #51483F; }
+.dark main input, .dark main textarea, .dark main select { background-color: #24221F; color: #F5F0E8 !important; border-color: #62594F; }
+html:not(.dark) main input, html:not(.dark) main textarea, html:not(.dark) main select { background-color: #FFFFFF; color: #201B16 !important; border-color: #8C8175; }
