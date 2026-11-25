@@ -888,12 +888,12 @@ export default function AdminDashboard() {
           </div>
           <div className="flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
             <CurrencySelector />
-            <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 sm:px-5">Analytics</Link>
-            <Link href="/admin/event-scents" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-200 sm:px-5">Event Scents Bookings</Link>
-            <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Marketing</Link>
-            <Link href="/admin/homepage-media" className="rounded-full bg-amber-100 px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-200 sm:px-5">Homepage Media</Link>
-            <Link href="/admin/activity-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Activity Logs</Link>
-            <Link href="/admin/inventory-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Inventory Logs</Link>
+            <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Analytics</Link>
+            <Link href="/admin/event-scents" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Event Scents Bookings</Link>
+            <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Marketing</Link>
+            <Link href="/admin/homepage-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Homepage Media</Link>
+            <Link href="/admin/activity-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Activity Logs</Link>
+            <Link href="/admin/inventory-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Inventory Logs</Link>
             <Link href="/products" className="rounded-full bg-stone-950 px-4 py-3 text-sm font-black text-white hover:bg-amber-800 dark:bg-amber-700 sm:px-5">View Shop</Link>
             <Link href="/admin/logout" className="rounded-full border border-stone-300 px-4 py-3 text-sm font-black dark:border-white/10 sm:px-5">Logout</Link>
           </div>
@@ -1248,7 +1248,7 @@ function OrdersPanel({
             <article key={o.id} className="min-w-0 rounded-[1.5rem] border border-stone-200 p-4 text-sm dark:border-white/10 sm:p-5">
               <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
                 <div className="min-w-0">
-                  <p className="text-xs font-bold uppercase tracking-widest text-stone-400">Order #{o.id?.slice(0, 8)}</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-stone-500">Order #{o.id?.slice(0, 8)}</p>
                   <h3 className="mt-1 text-lg font-black">{customerName}</h3>
                   <p className="break-words text-stone-500 dark:text-white/50">{o.customer_email || o.customer?.email || 'No email'} • {new Date(o.created_at).toLocaleString()}</p>
                   <p className="mt-1 text-stone-500 dark:text-white/50">{o.customer_phone || o.customer?.phone || ''}</p>
@@ -1268,7 +1268,7 @@ function OrdersPanel({
                       <div key={`${o.id}-${index}`} className="flex items-center justify-between gap-3 border-b border-stone-200 pb-2 last:border-0 dark:border-white/10">
                         <div className="min-w-0">
                           <p className="font-bold">{item.name || item.product_name || 'Perfume'}</p>
-                          <p className="text-xs text-stone-500 dark:text-white/45">{item.size || item.ml || ''} {item.concentration || item.variation || ''} × {item.qty || item.quantity || 1}</p>
+                          <p className="text-xs text-stone-600 dark:text-white/45">{item.size || item.ml || ''} {item.concentration || item.variation || ''} × {item.qty || item.quantity || 1}</p>
                         </div>
                         <Price amount={Number(item.price || item.total || 0) * Number(item.qty || item.quantity || 1)} className="shrink-0 font-black" />
                       </div>
@@ -1341,7 +1341,7 @@ function formatAddress(customer: any) {
 function Select({ label, value, onChange, options, disabled }: { label: string; value: string; onChange: (v: string) => void; options: string[]; disabled?: boolean }) {
   return (
     <label className="block">
-      <span className="text-xs font-black uppercase tracking-widest text-stone-400">{label}</span>
+      <span className="text-xs font-black uppercase tracking-widest text-stone-500">{label}</span>
       <select value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled} className="mt-2 w-full rounded-xl border border-stone-200 bg-white px-3 py-2 font-bold outline-none focus:border-amber-700 disabled:opacity-50 dark:border-white/10 dark:bg-black/30">
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
@@ -1361,15 +1361,15 @@ function ProductTable({ products, editing, deleteProduct }: { products: ManagedP
           <div key={p.id} className="admin-product-row border-b border-stone-100 dark:border-white/5">
             <div className="admin-product-row-scroll overflow-x-auto overflow-y-hidden px-4 py-2">
               <div className={`grid ${columns} min-w-[1390px] items-center gap-0 py-2 text-xs xl:text-sm`}>
-                <div className="py-2 pr-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" /><div className="min-w-0"><p className="font-black">{p.name}</p><p className="text-xs text-stone-500">{p.family} • {p.category || 'perfumes'}</p></div></div></div>
+                <div className="py-2 pr-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" /><div className="min-w-0"><p className="font-black">{p.name}</p><p className="text-xs text-stone-600">{p.family} • {p.category || 'perfumes'}</p></div></div></div>
                 <div className="pr-4">
                   <div className="flex flex-wrap gap-1">
                     <span className={`rounded-full px-3 py-1 text-xs font-black ${p.hero_enabled ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-500'}`}>{p.hero_enabled ? `Hero #${p.hero_order || 0}` : 'Not hero'}</span>
                     {p.upcoming_enabled && <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-black text-violet-800">Coming Soon #{p.upcoming_order || 0}</span>}
                   </div>
-                  <p className="mt-1 max-w-xs truncate text-xs text-stone-500">{p.hero_button_text || 'View Perfume'}</p>
+                  <p className="mt-1 max-w-xs truncate text-xs text-stone-600">{p.hero_button_text || 'View Perfume'}</p>
                 </div>
-                <div className="pr-4"><p className="font-bold">{p.promo || p.tag}</p><p className="max-w-xs truncate text-xs text-stone-500">{p.event || 'No event'}</p></div>
+                <div className="pr-4"><p className="font-bold">{p.promo || p.tag}</p><p className="max-w-xs truncate text-xs text-stone-600">{p.event || 'No event'}</p></div>
                 <div>{p.stock}</div>
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['10ml'] || 0)} className="font-black" /></div>
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></div>
