@@ -72,11 +72,14 @@ export default function ProductDetailPage() {
   async function submitReview(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!supabase) { setReviewMsg('Reviews need Supabase connection.'); return; }
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData.user) { setReviewMsg('Please sign in to submit a review.'); return; }
     const f = new FormData(e.currentTarget);
     const { error } = await supabase.from('reviews').insert({
       product_id: productId,
       customer_name: String(f.get('customer_name') || 'Customer'),
-      customer_email: String(f.get('customer_email') || ''),
+      user_id: authData.user.id,
+      customer_email: String(f.get('customer_email') || authData.user.email || ''),
       rating: Number(f.get('rating') || 5),
       title: String(f.get('title') || 'Review'),
       body: String(f.get('body') || ''),

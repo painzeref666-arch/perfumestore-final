@@ -15,6 +15,8 @@ export default function ReviewsPage() {
   const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [user, setUser] = useState<any>(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
 
   async function load() {
@@ -29,6 +31,18 @@ export default function ReviewsPage() {
   }
 
   useEffect(() => { load(); }, []);
+
+  useEffect(() => {
+    let alive = true;
+    async function checkAuth() {
+      if (!supabase) { if (alive) setAuthChecked(true); return; }
+      const { data } = await supabase.auth.getUser();
+      if (alive) { setUser(data.user || null); setAuthChecked(true); }
+    }
+    checkAuth();
+    const { data: listener } = supabase?.auth.onAuthStateChange((_event, session) => { setUser(session?.user || null); setAuthChecked(true); });
+    return () => { alive = false; listener?.subscription.unsubscribe(); };
+  }, []);
 
   useEffect(() => {
     if (showForm) formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -68,6 +82,7 @@ export default function ReviewsPage() {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault(); setMsg('');
+    if (!supabase || !user) { setMsg('Please sign in to submit a review.'); return; }
     const formElement = e.currentTarget;
     const form = new FormData(formElement);
     const required = ['product_id', 'customer_name', 'title', 'body'];
@@ -81,20 +96,14 @@ export default function ReviewsPage() {
         rating: Number(form.get('rating') || 5),
         title: String(form.get('title') || '').trim(),
         body: String(form.get('body') || '').trim(),
-        photo_url: media.find((item) => item.type === 'image')?.url || '',
         media_urls: media,
+        user_id: user.id,
         approved: true,
         created_at: new Date().toISOString(),
       };
-      if (!supabase) {
-        const local = [{ id: crypto.randomUUID(), ...payload }, ...reviews];
-        localStorage.setItem('exousia-local-reviews', JSON.stringify(local)); setReviews(local);
-        setMsg('Review saved locally. Media uploads require Supabase storage.');
-      } else {
-        const { error } = await supabase.from('reviews').insert(payload);
-        if (error) throw error;
-        setMsg('Thank you! Your review has been submitted.'); await load();
-      }
+      const { error } = await supabase.from('reviews').insert(payload);
+      if (error) throw error;
+      setMsg('Thank you! Your review has been submitted.'); await load();
       formElement.reset(); setSelectedFiles([]); setShowForm(false);
     } catch (error: any) { setMsg(error?.message || 'Could not submit review. Please try again.'); }
     finally { setUploading(false); }
@@ -116,13 +125,13 @@ export default function ReviewsPage() {
           <p className="mt-4 max-w-2xl text-stone-600 dark:text-white/60">Discover fragrance experiences shared by our customers. Reviews may include photos or videos.</p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <span className="rounded-full bg-[#F5F0E8] px-4 py-2 text-sm font-bold dark:bg-white/10">{reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</span>
-            {reviews.length > 0 && <button type="button" onClick={() => { setShowForm((v) => !v); setMsg(''); }} className="rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16] hover:bg-[#B8955D]">{showForm ? 'Close review form' : 'Write a Review'}</button>}
+            {authChecked && (user ? <button type="button" onClick={() => { setShowForm((v) => !v); setMsg(''); }} className="rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16] hover:bg-[#B8955D]">{showForm ? 'Close review form' : 'Write a Review'}</button> : <Link href="/account" className="rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Sign in to write a review</Link>)}
           </div>
         </header>
 
         {msg && !showForm && <p role="status" className="mt-4 rounded-2xl bg-white p-4 font-semibold text-stone-800 dark:bg-white/10 dark:text-white">{msg}</p>}
 
-        {showForm && (
+        {showForm && user && (
           <form ref={formRef} onSubmit={submit} noValidate className="mt-6 grid gap-4 rounded-[2rem] border border-[#C5A46D]/30 bg-white p-6 shadow-sm dark:bg-white/5 sm:p-8">
             <h2 className="text-2xl font-black">Share your experience</h2>
             <select name="product_id" required className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white">
@@ -155,7 +164,7 @@ export default function ReviewsPage() {
               </div>
             </article>
           ))}
-          {!reviews.length && !showForm && <div className="rounded-[2rem] border border-[#C5A46D]/30 bg-white p-8 dark:bg-white/5 sm:col-span-2"><h2 className="text-2xl font-black">Be the first to share your fragrance experience.</h2><p className="mt-2 text-stone-600 dark:text-white/60">Your review helps others find their signature scent.</p><button type="button" onClick={() => setShowForm(true)} className="mt-5 rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Write the first review</button></div>}
+          {!reviews.length && !showForm && <div className="rounded-[2rem] border border-[#C5A46D]/30 bg-white p-8 dark:bg-white/5 sm:col-span-2"><h2 className="text-2xl font-black">Be the first to share your fragrance experience.</h2><p className="mt-2 text-stone-600 dark:text-white/60">Your review helps others find their signature scent.</p>{user ? <button type="button" onClick={() => setShowForm(true)} className="mt-5 rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Write the first review</button> : <Link href="/account" className="mt-5 inline-block rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Sign in to review</Link>}</div>}
         </section>
       </div>
     </main>
