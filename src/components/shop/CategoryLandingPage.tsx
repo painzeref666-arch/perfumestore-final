@@ -1,3 +1,4 @@
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductBrowser from '@/components/shop/ProductBrowser';
@@ -27,27 +28,50 @@ const hero: Record<CategoryKey, { eyebrow: string; title: string; description: s
 
 export default function CategoryLandingPage({ category }: { category: CategoryKey }) {
   const h = hero[category];
+
   return (
     <>
       <div className="grain" aria-hidden="true" />
       <Header />
-      <main className="min-h-screen bg-[#fff7f7] pt-28 dark:bg-[#160508] dark:text-white">
+
+      <main className="min-h-screen bg-[#F5F0E8] pt-28 text-[#171411] dark:bg-[#11110F] dark:text-[#F5F0E8]">
+
         <section className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-12 md:grid-cols-[1fr_420px]">
+
           <div>
-            <p className="font-black uppercase tracking-[.35em] text-amber-700">{h.eyebrow}</p>
-            <h1 className="mt-5 max-w-3xl text-5xl font-black leading-tight tracking-tight md:text-7xl">{h.title}</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600 dark:text-white/60">{h.description}</p>
+            <p className="font-black uppercase tracking-[.35em] text-[#C5A46D]">
+              {h.eyebrow}
+            </p>
+
+            <h1 className="mt-5 max-w-3xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
+              {h.title}
+            </h1>
+
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#62594E] dark:text-[#F5F0E8]/60">
+              {h.description}
+            </p>
           </div>
-          <div className="w-full overflow-hidden rounded-[2rem] border border-rose-900/60 bg-[#160508] shadow-2xl shadow-amber-900/10">
+
+          <div className="w-full overflow-hidden rounded-[2rem] border border-[#C5A46D]/40 bg-[#11110F] shadow-2xl shadow-black/20 dark:shadow-black/40">
+
             <img
               src={h.image}
-              alt={category === 'perfumes' ? 'Exousia & Co. Originals perfume collection featuring Strawberry Velvet, Every Bloom, and Noir Elan' : h.title}
+              alt={
+                category === 'perfumes'
+                  ? 'Exousia & Co. Originals perfume collection featuring Strawberry Velvet, Every Bloom, and Noir Elan'
+                  : h.title
+              }
               className="block aspect-[3/2] w-full object-cover"
             />
+
           </div>
+
         </section>
+
         <ProductBrowser category={category} />
+
       </main>
+
       <Footer />
     </>
   );
