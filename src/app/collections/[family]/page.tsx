@@ -82,11 +82,13 @@ export default function CollectionPage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {loading && <p className="text-white/60">Loading collection...</p>}
             {!loading && products.length === 0 && (
-              <div className="col-span-full rounded-[2rem] border border-white/10 bg-white/5 p-8">
-                <p className="text-xl font-black">No active products in this collection yet.</p>
-                <Link href="/admin" className="mt-4 inline-flex rounded-full bg-amber-700 px-5 py-3 font-black text-white">Add product in admin</Link>
-              </div>
-            )}
+  <div className="col-span-full rounded-[2rem] border border-white/10 bg-white/5 p-8">
+    <p className="text-xl font-black">No fragrances available in this collection yet.</p>
+    <p className="mt-3 text-sm text-white/50">
+      We're continually growing our fragrance collection. Please check back soon.
+    </p>
+  </div>
+)}
             {products.map((product, index) => {
               const price = getVariantPrice(product, '10ml', 'EDP');
               return (
