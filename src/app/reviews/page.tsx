@@ -83,6 +83,9 @@ export default function ReviewsPage() {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault(); setMsg('');
     if (!supabase || !user) { setMsg('Please sign in to submit a review.'); return; }
+    // Re-check the active Supabase session at submission time (not just UI state).
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    if (authError || !authData.user) { setUser(null); setShowForm(false); setMsg('Your session has expired. Please sign in again to submit a review.'); return; }
     const formElement = e.currentTarget;
     const form = new FormData(formElement);
     const required = ['product_id', 'customer_name', 'title', 'body'];
@@ -97,7 +100,7 @@ export default function ReviewsPage() {
         title: String(form.get('title') || '').trim(),
         body: String(form.get('body') || '').trim(),
         media_urls: media,
-        user_id: user.id,
+        user_id: authData.user.id,
         approved: true,
         created_at: new Date().toISOString(),
       };
