@@ -17,16 +17,16 @@ const families: ScentFamily[] = [
   name: 'Floral',
   descriptor: 'Romantic & Feminine',
   count: 62,
-  image: "https://images.unsplash.com/photo-1526664089214-42c68e78f266",
+  image: "https://images.unsplash.com/photo-1599342166997-58552e91d9f5?auto=format&fit=crop&w=900&q=85",
   imageAlt: 'Floral perfume bottle surrounded by fresh champagne gold roses and peonies',
-  accent: '#D4A5C9',
-  examples: ['champagne gold', 'Jasmine', 'Peony', 'Lily']
+  accent: '#C5A46D',
+  examples: ['Jasmine', 'Peony', 'Lily', 'Rose']
 },
 {
   name: 'Woody',
   descriptor: 'Warm & Grounded',
   count: 48,
-  image: "https://img.rocket.new/generatedImages/rocket_gen_img_1fb2c9bd6-1772983494374.png",
+  image: "https://images.unsplash.com/photo-1720423738890-37689a6f6b95?auto=format&fit=crop&w=900&q=85",
   imageAlt: 'Woody fragrance bottle on weathered oak wood with cedar bark',
   accent: '#C5A46D',
   examples: ['Sandalwood', 'Cedarwood', 'Vetiver', 'Oud']
@@ -35,18 +35,18 @@ const families: ScentFamily[] = [
   name: 'Oriental',
   descriptor: 'Exotic & Mysterious',
   count: 41,
-  image: "https://images.unsplash.com/photo-1632928145408-ef47a7672964",
+  image: "https://images.unsplash.com/photo-1642698215110-87817f1fbe0e?auto=format&fit=crop&w=900&q=85",
   imageAlt: 'Oriental perfume bottle with spices and incense on dark velvet',
-  accent: '#9B6B4A',
+  accent: '#C5A46D',
   examples: ['Amber', 'Musk', 'Vanilla', 'Saffron']
 },
 {
   name: 'Fresh',
   descriptor: 'Light & Energising',
   count: 55,
-  image: "https://images.unsplash.com/photo-1658654482546-1b7daf94a663",
+  image: "https://images.unsplash.com/photo-1684953461064-b2591660c574?auto=format&fit=crop&w=900&q=85",
   imageAlt: 'Fresh citrus perfume bottle with sliced lemons and mint leaves',
-  accent: '#6BA8A9',
+  accent: '#C5A46D',
   examples: ['Bergamot', 'Neroli', 'Sea Salt', 'Yuzu']
 }];
 
