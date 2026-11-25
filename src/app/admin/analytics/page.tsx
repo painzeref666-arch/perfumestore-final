@@ -242,8 +242,8 @@ export default function AnalyticsPage() {
             <h2 className="text-2xl font-black">Low stock products</h2>
             <div className="mt-5 space-y-3">
               {analytics.lowStock.slice(0, 8).map((product) => (
-                <div key={product.id} className="flex justify-between rounded-2xl bg-red-50 p-4 dark:bg-red-500/10">
-                  <div><p className="font-black">{product.name || product.id}</p><p className="text-sm text-red-700 dark:text-red-200">Only {Number(product.stock || 0)} left</p></div>
+                <div key={product.id} className="flex justify-between rounded-2xl bg-[#E8D6BA] p-4 dark:bg-[#C5A46D]/10">
+                  <div><p className="font-black">{product.name || product.id}</p><p className="text-sm text-[#A98750] dark:text-[#E8D6BA]">Only {Number(product.stock || 0)} left</p></div>
                   <Link href="/admin" className="font-black text-amber-800 dark:text-amber-200">Edit</Link>
                 </div>
               ))}

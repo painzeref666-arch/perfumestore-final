@@ -12,8 +12,8 @@ import { getVariantPrice, useProducts } from '@/context/ProductContext';
 const familyCopy: Record<string, { title: string; description: string; seo: string }> = {
   floral: {
     title: 'Floral Perfumes',
-    description: 'Romantic rose, white floral, and soft petal fragrances for elegant everyday wear.',
-    seo: 'Shop floral perfumes with rose, jasmine, pear, and soft musks. Find romantic and fresh floral fragrances in EDP and Extrait variations.',
+    description: 'Romantic champagne gold, white floral, and soft petal fragrances for elegant everyday wear.',
+    seo: 'Shop floral perfumes with champagne gold, jasmine, pear, and soft musks. Find romantic and fresh floral fragrances in EDP and Extrait variations.',
   },
   woody: {
     title: 'Woody Perfumes',

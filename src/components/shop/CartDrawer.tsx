@@ -120,7 +120,7 @@ export default function CartDrawer() {
                           +
                         </button>
                       </div>
-                      <button onClick={() => removeFromCart(item.key)} className="text-sm font-bold text-red-600">
+                      <button onClick={() => removeFromCart(item.key)} className="text-sm font-bold text-[#C5A46D]">
                         Remove
                       </button>
                     </div>

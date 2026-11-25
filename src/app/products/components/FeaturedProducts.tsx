@@ -36,7 +36,7 @@ const products: Product[] = [
 },
 {
   id: 2,
-  name: 'Rose Noir',
+  name: 'champagne gold Noir',
   house: 'Atelier Floral',
   price: 195,
   size: '100ml EDP',
@@ -44,8 +44,8 @@ const products: Product[] = [
   rating: 4.8,
   reviews: 87,
   image: "https://images.unsplash.com/photo-1594035910663-369b72b7abe2",
-  imageAlt: 'Rose Noir dark rose perfume bottle with deep crimson accents',
-  notes: 'Black Rose · Oud · Patchouli',
+  imageAlt: 'champagne gold Noir dark champagne gold perfume bottle with deep crimson accents',
+  notes: 'Black champagne gold · Oud · Patchouli',
   span: 'tall'
 },
 {
@@ -71,8 +71,8 @@ const products: Product[] = [
   rating: 5.0,
   reviews: 156,
   image: "https://images.unsplash.com/photo-1706527412865-0f15b3321b7a",
-  imageAlt: 'Velvet Oud luxury perfume bottle with deep burgundy velvet packaging',
-  notes: 'Oud · Saffron · Rose Absolute',
+  imageAlt: 'Velvet Oud luxury perfume bottle with deep champagne gold velvet packaging',
+  notes: 'Oud · Saffron · champagne gold Absolute',
   span: 'normal'
 },
 {

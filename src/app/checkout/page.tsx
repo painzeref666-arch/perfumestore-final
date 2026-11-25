@@ -287,7 +287,7 @@ export default function CheckoutPage() {
               </div>
             ) : (
               <form onSubmit={submit} className="mt-8 grid gap-4">
-                {error && <p className="rounded-2xl bg-red-100 p-4 font-bold text-red-800 dark:bg-red-500/10 dark:text-red-200">{error}</p>}
+                {error && <p className="rounded-2xl bg-[#E8D6BA] p-4 font-bold text-[#201B16] dark:bg-[#C5A46D]/10 dark:text-[#E8D6BA]">{error}</p>}
                 <div className="grid gap-4 md:grid-cols-2">
                   <input id="checkout-first-name" name="first_name" autoComplete="given-name" required value={customerForm.first_name} onChange={(e) => updateCustomerField('first_name', e.target.value)} placeholder="First name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />
                   <input id="checkout-last-name" name="last_name" autoComplete="family-name" required value={customerForm.last_name} onChange={(e) => updateCustomerField('last_name', e.target.value)} placeholder="Last name" className="rounded-2xl border border-stone-200 px-5 py-4 dark:border-white/10 dark:bg-black/20" />

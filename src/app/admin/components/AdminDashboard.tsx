@@ -100,7 +100,7 @@ const CATEGORY_META = {
     description: 'Set only the perfume combinations you actually sell: EDP 10ml/85ml, Extrait 50ml, and EDT 50ml. Leave a price blank to hide that option.',
     kindLabel: 'Perfume type',
     defaultFamily: 'Floral',
-    defaultNotes: 'Rose, Pear, White Floral',
+    defaultNotes: 'champagne gold, Pear, White Floral',
     defaultVariants: ['EDP', 'Extrait', 'EDT'],
   },
   cosmetics: {
@@ -868,7 +868,7 @@ export default function AdminDashboard() {
             <input value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="admin@exousia.com" />
             <label className="mt-5 block text-sm font-bold text-white/60">Password</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="••••••••" />
-            {error && <p className="mt-4 rounded-2xl bg-red-500/10 p-4 text-sm font-bold text-red-200">{error}</p>}
+            {error && <p className="mt-4 rounded-2xl bg-[#C5A46D]/10 p-4 text-sm font-bold text-[#E8D6BA]">{error}</p>}
             <button className="mt-6 w-full rounded-full bg-amber-700 px-6 py-4 font-black text-white transition hover:bg-amber-600">Login as Admin</button>
           </form>
         </div>
@@ -898,7 +898,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {(error || productError) && <p className="mt-6 rounded-2xl bg-red-100 p-4 font-bold text-red-800 dark:bg-red-500/10 dark:text-red-200">{error || productError}</p>}
+        {(error || productError) && <p className="mt-6 rounded-2xl bg-[#E8D6BA] p-4 font-bold text-[#201B16] dark:bg-[#C5A46D]/10 dark:text-[#E8D6BA]">{error || productError}</p>}
 
         <section className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Stat label="Active Products" value={activeCount} />
@@ -960,7 +960,7 @@ export default function AdminDashboard() {
                         type="button"
                         onClick={() => removeProductImageSlot(index)}
                         disabled={!slot}
-                        className="rounded-full border border-red-200 px-3 py-1 text-xs font-black text-red-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-500/30 dark:text-red-200"
+                        className="rounded-full border border-[#C5A46D]/40 px-3 py-1 text-xs font-black text-[#A98750] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#C5A46D]/30 dark:text-[#E8D6BA]"
                       >
                         Remove
                       </button>
@@ -987,7 +987,7 @@ export default function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => removeProductImageSlot(index)}
-                        className="absolute right-2 top-2 rounded-full bg-red-700 px-2 py-1 text-[10px] font-black text-white shadow"
+                        className="absolute right-2 top-2 rounded-full bg-[#A98750] px-2 py-1 text-[10px] font-black text-white shadow"
                       >
                         Delete
                       </button>
@@ -1217,7 +1217,7 @@ function OrdersPanel({
         <div className="flex flex-wrap gap-2">
           <Link href="/admin/notifications" className="rounded-full bg-amber-700 px-4 py-2 text-sm font-black text-white">Notifications</Link>
           <button onClick={exportOrders} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button>
-          <button onClick={deleteTestOrders} disabled={loading || savingId === 'bulk-test-delete' || testOrderCount === 0} className="rounded-full border border-red-300 px-4 py-2 text-sm font-black text-red-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-500/40 dark:text-red-200">{savingId === 'bulk-test-delete' ? 'Deleting...' : `Delete Test Orders${testOrderCount ? ` (${testOrderCount})` : ''}`}</button>
+          <button onClick={deleteTestOrders} disabled={loading || savingId === 'bulk-test-delete' || testOrderCount === 0} className="rounded-full border border-[#C5A46D]/50 px-4 py-2 text-sm font-black text-[#A98750] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#C5A46D]/40 dark:text-[#E8D6BA]">{savingId === 'bulk-test-delete' ? 'Deleting...' : `Delete Test Orders${testOrderCount ? ` (${testOrderCount})` : ''}`}</button>
           <button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button>
         </div>
       </div>
@@ -1315,8 +1315,8 @@ function OrdersPanel({
                 <button onClick={() => updateOrder(o.id, { status: 'processing', order_status: 'processing' } as Partial<OrderRow>)} className="rounded-full bg-stone-100 px-4 py-2 text-xs font-black dark:bg-white/10">Mark Processing</button>
                 <button onClick={() => updateOrder(o.id, { status: 'shipped', order_status: 'shipped' } as Partial<OrderRow>)} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
                 <button onClick={() => updateOrder(o.id, { status: 'delivered', order_status: 'delivered' } as Partial<OrderRow>)} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
-                <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Cancel Order</button>
-                <button onClick={() => deleteOrder(o.id)} disabled={savingId === o.id} className="rounded-full border border-red-300 px-4 py-2 text-xs font-black text-red-700 disabled:cursor-wait disabled:opacity-60 dark:border-red-500/40 dark:text-red-200">Delete Test Order</button>
+                <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-[#C5A46D] px-4 py-2 text-xs font-black text-white">Cancel Order</button>
+                <button onClick={() => deleteOrder(o.id)} disabled={savingId === o.id} className="rounded-full border border-[#C5A46D]/50 px-4 py-2 text-xs font-black text-[#A98750] disabled:cursor-wait disabled:opacity-60 dark:border-[#C5A46D]/40 dark:text-[#E8D6BA]">Delete Test Order</button>
                 <Link href={`/invoice/${o.id}`} className="rounded-full border border-stone-300 px-4 py-2 text-xs font-black dark:border-white/10">Invoice / PDF</Link>
                 <Link href={`/track?code=${o.tracking_code || o.tracking_number || o.id}`} className="rounded-full border border-blue-300 px-4 py-2 text-xs font-black text-blue-800 dark:border-blue-500/30 dark:text-blue-200">Customer tracking page</Link>
                 <Link href="/admin/notifications" className="rounded-full border border-amber-300 px-4 py-2 text-xs font-black text-amber-800 dark:border-amber-500/30 dark:text-amber-200">Notify Customer</Link>
@@ -1374,8 +1374,8 @@ function ProductTable({ products, editing, deleteProduct }: { products: ManagedP
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></div>
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></div>
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></div>
-                <div><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></div>
-                <div><div className="flex gap-2"><button onClick={() => editing(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-red-600 px-4 py-2 text-xs font-black text-white">Delete</button></div></div>
+                <div><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-[#E8D6BA] text-[#A98750]' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></div>
+                <div><div className="flex gap-2"><button onClick={() => editing(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-[#C5A46D] px-4 py-2 text-xs font-black text-white">Delete</button></div></div>
               </div>
             </div>
           </div>

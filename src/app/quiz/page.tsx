@@ -12,7 +12,7 @@ import { useProducts } from '@/context/ProductContext';
 const questions = [
   { key: 'mood', title: 'What mood do you want your scent to express?', options: ['Elegant', 'Romantic', 'Fresh', 'Mysterious', 'Powerful'] },
   { key: 'wear', title: 'When will you wear it most?', options: ['Daily office', 'Date night', 'Special events', 'Summer daytime', 'Evening luxury'] },
-  { key: 'notes', title: 'Which notes attract you?', options: ['Rose / floral', 'Citrus / clean', 'Vanilla / sweet', 'Oud / smoky', 'Musk / amber'] },
+  { key: 'notes', title: 'Which notes attract you?', options: ['champagne gold / floral', 'Citrus / clean', 'Vanilla / sweet', 'Oud / smoky', 'Musk / amber'] },
   { key: 'strength', title: 'Preferred performance?', options: ['Light and clean', 'Balanced', 'Long-lasting', 'Beast mode'] },
 ];
 
@@ -21,7 +21,7 @@ function scoreProduct(product: any, answers: Record<string, string>) {
   let score = 0;
   Object.values(answers).forEach((answer) => {
     const a = answer.toLowerCase();
-    if (a.includes('romantic') || a.includes('rose') || a.includes('floral')) score += /rose|floral|jasmine|bloom|flower|romantic/.test(text) ? 4 : 0;
+    if (a.includes('romantic') || a.includes('champagne gold') || a.includes('floral')) score += /champagne gold|floral|jasmine|bloom|flower|romantic/.test(text) ? 4 : 0;
     if (a.includes('fresh') || a.includes('citrus') || a.includes('clean') || a.includes('summer')) score += /fresh|citrus|bergamot|lemon|neroli|clean|aqua/.test(text) ? 4 : 0;
     if (a.includes('vanilla') || a.includes('sweet')) score += /vanilla|tonka|sweet|gourmand/.test(text) ? 4 : 0;
     if (a.includes('oud') || a.includes('smoky') || a.includes('mysterious')) score += /oud|smoke|smoky|dark|noir|mystery|spice/.test(text) ? 5 : 0;

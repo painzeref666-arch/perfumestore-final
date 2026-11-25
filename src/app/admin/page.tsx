@@ -132,7 +132,7 @@ export default function AdminPage() {
           <input value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="username" className="mt-2 w-full rounded-xl border border-white/10 bg-white px-4 py-4 font-bold text-stone-950 outline-none" />
           <label className="mt-5 block text-xs font-bold text-white/60">Password</label>
           <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete="current-password" className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-4 font-bold text-white outline-none" />
-          {message && <p className="mt-4 rounded-xl bg-red-950/40 p-3 text-sm font-bold text-red-100">{message}</p>}
+          {message && <p className="mt-4 rounded-xl bg-[#201B16]/40 p-3 text-sm font-bold text-[#F5F0E8]">{message}</p>}
           <button type="submit" disabled={busy} className="mt-6 w-full rounded-full bg-amber-700 px-6 py-4 font-black hover:bg-amber-600 disabled:cursor-wait disabled:opacity-60">{busy ? 'Checking...' : 'Login as Admin'}</button>
         </form>
       </div>

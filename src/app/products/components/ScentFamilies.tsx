@@ -18,9 +18,9 @@ const families: ScentFamily[] = [
   descriptor: 'Romantic & Feminine',
   count: 62,
   image: "https://images.unsplash.com/photo-1526664089214-42c68e78f266",
-  imageAlt: 'Floral perfume bottle surrounded by fresh pink roses and peonies',
+  imageAlt: 'Floral perfume bottle surrounded by fresh champagne gold roses and peonies',
   accent: '#D4A5C9',
-  examples: ['Rose', 'Jasmine', 'Peony', 'Lily']
+  examples: ['champagne gold', 'Jasmine', 'Peony', 'Lily']
 },
 {
   name: 'Woody',

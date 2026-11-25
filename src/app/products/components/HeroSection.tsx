@@ -6,7 +6,7 @@ const archImages = [
 { src: "https://images.unsplash.com/photo-1599342166997-58552e91d9f5", alt: 'Floral perfume bottle with white flowers on marble surface', style: { left: '3%', top: '72%', transform: 'rotate(-38deg)' } },
 { src: "https://images.unsplash.com/photo-1720423738890-37689a6f6b95", alt: 'Elegant amber glass perfume bottle on dark background', style: { left: '13%', top: '42%', transform: 'rotate(-26deg)' } },
 { src: "https://images.unsplash.com/photo-1659006026407-af59b9046ce3", alt: 'Crystal clear perfume flacon with golden cap on white surface', style: { left: '24%', top: '16%', transform: 'rotate(-15deg)' } },
-{ src: "https://images.unsplash.com/photo-1595425959632-34f2822322ce", alt: 'Luxury perfume bottle surrounded by rose petals', style: { left: '37%', top: '4%', transform: 'rotate(-5deg)' } },
+{ src: "https://images.unsplash.com/photo-1595425959632-34f2822322ce", alt: 'Luxury perfume bottle surrounded by champagne gold petals', style: { left: '37%', top: '4%', transform: 'rotate(-5deg)' } },
 { src: "https://images.unsplash.com/photo-1717992411100-50402e0216fe", alt: 'Modern minimalist perfume bottle on reflective surface', style: { left: '51%', top: '4%', transform: 'rotate(5deg)' } },
 { src: "https://images.unsplash.com/photo-1609186482504-67c8fb2cedb9", alt: 'Vintage style perfume bottle with ornate details', style: { left: '64%', top: '16%', transform: 'rotate(15deg)' } },
 { src: "https://images.unsplash.com/photo-1642698215110-87817f1fbe0e", alt: 'Oud and spice fragrance bottle with wooden accents', style: { left: '76%', top: '42%', transform: 'rotate(26deg)' } },
