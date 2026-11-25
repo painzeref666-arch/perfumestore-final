@@ -112,3 +112,23 @@ html:not(.dark) main button[class*="bg-black"], html:not(.dark) main a[class*="b
 html:not(.dark) main label, html:not(.dark) main label span { color: #51483F; }
 .dark main input, .dark main textarea, .dark main select { background-color: #24221F; color: #F5F0E8 !important; border-color: #62594F; }
 html:not(.dark) main input, html:not(.dark) main textarea, html:not(.dark) main select { background-color: #FFFFFF; color: #201B16 !important; border-color: #8C8175; }
+
+/* Light-mode-only contrast corrections for Admin Dashboard controls */
+html:not(.dark) body button.bg-stone-950,
+html:not(.dark) body button.dark\:bg-amber-700,
+html:not(.dark) body button.bg-amber-700 {
+  color: #FFFFFF !important;
+}
+html:not(.dark) body button.bg-\[\#C5A46D\] {
+  color: #201B16 !important;
+}
+html:not(.dark) body input,
+html:not(.dark) body select,
+html:not(.dark) body textarea {
+  color: #201B16;
+}
+html:not(.dark) body input::placeholder,
+html:not(.dark) body textarea::placeholder {
+  color: #766653;
+  opacity: 1;
+}

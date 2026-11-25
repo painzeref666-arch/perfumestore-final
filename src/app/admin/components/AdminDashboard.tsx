@@ -1125,7 +1125,7 @@ export default function AdminDashboard() {
                 <p className="text-sm text-stone-500 dark:text-white/50">{usingSupabase ? 'Saved in Supabase database.' : 'Demo mode: saved only in this browser.'}</p>
               </div>
               <div className="flex flex-wrap gap-2 sm:justify-end">
-                <button onClick={exportProductsCsv} className="w-full rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700 sm:w-auto">Export Products CSV</button>
+                <button onClick={exportProductsCsv} style={{ backgroundColor: "#201B16", color: "#FFFFFF" }} className="w-full rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700 sm:w-auto">Export Products CSV</button>
                 <button onClick={resetProducts} className="w-full rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10 sm:w-auto">Seed Demo Data</button>
               </div>
             </div>
@@ -1217,7 +1217,7 @@ function OrdersPanel({
         </div>
         <div className="flex flex-wrap gap-2">
           <Link href="/admin/notifications" className="rounded-full bg-amber-700 px-4 py-2 text-sm font-black text-white">Notifications</Link>
-          <button onClick={exportOrders} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button>
+          <button onClick={exportOrders} style={{ backgroundColor: "#201B16", color: "#FFFFFF" }} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button>
           <button onClick={deleteTestOrders} disabled={loading || savingId === 'bulk-test-delete' || testOrderCount === 0} className="rounded-full border border-[#C5A46D]/50 px-4 py-2 text-sm font-black text-[#A98750] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#C5A46D]/40 dark:text-[#E8D6BA]">{savingId === 'bulk-test-delete' ? 'Deleting...' : `Delete Test Orders${testOrderCount ? ` (${testOrderCount})` : ''}`}</button>
           <button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button>
         </div>
@@ -1300,7 +1300,7 @@ function OrdersPanel({
                           const notes = document.getElementById(`notes-${o.id}`) as HTMLTextAreaElement | null;
                           updateOrder(o.id, { tracking_number: tracking?.value || '', courier_name: courier?.value || '', estimated_delivery: eta?.value || '', delivery_notes: notes?.value || '' } as Partial<OrderRow>);
                         }}
-                        className="rounded-xl bg-stone-950 px-4 py-2 font-black text-white dark:bg-amber-700"
+                        style={{ backgroundColor: "#201B16", color: "#FFFFFF" }} className="rounded-xl bg-stone-950 px-4 py-2 font-black text-white dark:bg-amber-700"
                         disabled={savingId === o.id}
                       >
                         Save shipping details
@@ -1376,7 +1376,7 @@ function ProductTable({ products, editing, deleteProduct }: { products: ManagedP
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></div>
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></div>
                 <div><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-[#E8D6BA] text-[#A98750]' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></div>
-                <div><div className="flex gap-2"><button onClick={() => editing(p)} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} className="rounded-full bg-[#C5A46D] px-4 py-2 text-xs font-black text-white">Delete</button></div></div>
+                <div><div className="flex gap-2"><button onClick={() => editing(p)} style={{ backgroundColor: "#201B16", color: "#FFFFFF" }} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} style={{ backgroundColor: "#C5A46D", color: "#201B16" }} className="rounded-full bg-[#C5A46D] px-4 py-2 text-xs font-black text-white">Delete</button></div></div>
               </div>
             </div>
           </div>
