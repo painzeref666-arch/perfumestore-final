@@ -68,7 +68,7 @@ function ThemeToggle() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-11 w-36 bg-card dark:bg-[#24080D] border border-border dark:border-white/10 rounded-2xl shadow-xl shadow-foreground/10 dark:shadow-black/40 overflow-hidden z-50">
+        <div className="absolute right-0 top-11 w-36 bg-card dark:bg-[#201B16] border border-border dark:border-white/10 rounded-2xl shadow-xl shadow-foreground/10 dark:shadow-black/40 overflow-hidden z-50">
           {options.map((opt) => (
             <button
               key={opt.value}

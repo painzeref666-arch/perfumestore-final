@@ -64,7 +64,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero-section"
-      className="relative min-h-screen flex flex-col items-center justify-center pt-44 pb-24 overflow-hidden bg-background dark:bg-[#160508]"
+      className="relative min-h-screen flex flex-col items-center justify-center pt-44 pb-24 overflow-hidden bg-background dark:bg-[#11110F]"
       aria-label="Hero section">
       
       {/* Subtle radial glow */}

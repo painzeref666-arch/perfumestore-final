@@ -850,7 +850,7 @@ export default function AdminDashboard() {
 
   if (!logged) {
     return (
-      <main className="min-h-screen bg-[#160508] px-6 py-16 text-white">
+      <main className="min-h-screen bg-[#11110F] px-6 py-16 text-white">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2 lg:items-center">
           <section>
             <Link href="/" className="font-bold text-amber-300">← Back to store</Link>
@@ -877,7 +877,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#fff7f7] px-4 py-10 text-stone-950 dark:bg-[#160508] dark:text-white sm:px-6 sm:py-12">
+    <main className="min-h-screen overflow-x-hidden bg-[#F5F0E8] px-4 py-10 text-stone-950 dark:bg-[#11110F] dark:text-white sm:px-6 sm:py-12">
       <div className="mx-auto min-w-0 max-w-7xl">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
@@ -1311,7 +1311,7 @@ function OrdersPanel({
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <button onClick={() => approvePayment(o)} className="rounded-full bg-emerald-700 px-4 py-2 text-xs font-black text-white">Approve Payment + Deduct Stock</button>
-                <button onClick={() => updateOrder(o.id, { payment_status: 'Rejected', order_status: 'payment_rejected' } as Partial<OrderRow>)} className="rounded-full bg-rose-700 px-4 py-2 text-xs font-black text-white">Reject Payment</button>
+                <button onClick={() => updateOrder(o.id, { payment_status: 'Rejected', order_status: 'payment_rejected' } as Partial<OrderRow>)} className="rounded-full bg-amber-700 px-4 py-2 text-xs font-black text-white">Reject Payment</button>
                 <button onClick={() => updateOrder(o.id, { status: 'processing', order_status: 'processing' } as Partial<OrderRow>)} className="rounded-full bg-stone-100 px-4 py-2 text-xs font-black dark:bg-white/10">Mark Processing</button>
                 <button onClick={() => updateOrder(o.id, { status: 'shipped', order_status: 'shipped' } as Partial<OrderRow>)} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
                 <button onClick={() => updateOrder(o.id, { status: 'delivered', order_status: 'delivered' } as Partial<OrderRow>)} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
@@ -1352,7 +1352,7 @@ function ProductTable({ products, editing, deleteProduct }: { products: ManagedP
   const columns = 'grid-cols-[280px_180px_180px_80px_100px_100px_110px_100px_110px_170px]';
   return (
     <div className="admin-product-table-scroll mt-6 max-h-[72vh] max-w-full overflow-y-auto overflow-x-hidden rounded-2xl border border-stone-200/70 dark:border-white/10">
-      <div className={`admin-product-table-header sticky top-0 z-10 grid ${columns} min-w-[1390px] items-center border-b border-stone-200 bg-white px-4 py-3 text-xs uppercase tracking-widest text-stone-500 shadow-sm dark:border-white/10 dark:bg-[#1b090c] dark:text-white/40`}>
+      <div className={`admin-product-table-header sticky top-0 z-10 grid ${columns} min-w-[1390px] items-center border-b border-stone-200 bg-white px-4 py-3 text-xs uppercase tracking-widest text-stone-500 shadow-sm dark:border-white/10 dark:bg-[#201B16] dark:text-white/40`}>
         <span>Product</span><span>Hero</span><span>Promo/Event</span><span>Stock</span><span>10ml EDP</span><span>85ml EDP</span><span>50ml Extrait</span><span>50ml EDT</span><span>Status</span><span>Actions</span>
       </div>
       <div>

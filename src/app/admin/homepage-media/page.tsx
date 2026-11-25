@@ -96,10 +96,10 @@ export default function HomepageMediaAdminPage() {
     finally { setBusy(false); }
   }
 
-  if (checking) return <main className="min-h-screen bg-[#160508] p-8 text-white">Checking admin access…</main>;
-  if (!authorized) return <main className="min-h-screen bg-[#160508] p-8 text-white"><p>{error || 'Admin access required.'}</p><Link className="mt-4 inline-block text-amber-300" href="/admin">← Admin login</Link></main>;
+  if (checking) return <main className="min-h-screen bg-[#11110F] p-8 text-white">Checking admin access…</main>;
+  if (!authorized) return <main className="min-h-screen bg-[#11110F] p-8 text-white"><p>{error || 'Admin access required.'}</p><Link className="mt-4 inline-block text-amber-300" href="/admin">← Admin login</Link></main>;
 
-  return <main className="min-h-screen bg-[#160508] px-4 py-8 text-white sm:px-8">
+  return <main className="min-h-screen bg-[#11110F] px-4 py-8 text-white sm:px-8">
     <div className="mx-auto max-w-6xl">
       <Link href="/admin" className="text-sm font-bold text-amber-300">← Back to Admin Dashboard</Link>
       <h1 className="mt-5 text-3xl font-black sm:text-4xl">Homepage Media Manager</h1>

@@ -131,7 +131,7 @@ function ProductCard({ product }: {product: Product;}) {
 
   return (
     <article
-      className={`product-card group relative bg-card dark:bg-[#24080D] rounded-4xl overflow-hidden border border-border dark:border-white/8 cursor-pointer
+      className={`product-card group relative bg-card dark:bg-[#201B16] rounded-4xl overflow-hidden border border-border dark:border-white/8 cursor-pointer
         ${isWide ? 'md:col-span-2' : ''}
         ${isTall ? 'md:row-span-2' : ''}
       `}>
@@ -229,7 +229,7 @@ export default function FeaturedProducts() {
     <section
       id="featured"
       ref={sectionRef}
-      className="py-24 md:py-32 px-4 md:px-6 bg-background dark:bg-[#160508]"
+      className="py-24 md:py-32 px-4 md:px-6 bg-background dark:bg-[#11110F]"
       aria-labelledby="featured-heading">
       
       <div className="max-w-7xl mx-auto">

@@ -13,19 +13,19 @@
 /* Admin product catalog: each product gets its own horizontal scrollbar. */
 .admin-product-row-scroll {
   scrollbar-width: auto;
-  scrollbar-color: #be123c rgba(127, 13, 27, 0.10);
+  scrollbar-color: #C5A46D rgba(197, 164, 109, 0.10);
 }
 .admin-product-row-scroll::-webkit-scrollbar {
   height: 10px;
 }
 .admin-product-row-scroll::-webkit-scrollbar-track {
-  background: rgba(127, 13, 27, 0.08);
+  background: rgba(197, 164, 109, 0.08);
   border-radius: 999px;
 }
 .admin-product-row-scroll::-webkit-scrollbar-thumb {
-  background: #be123c;
+  background: #C5A46D;
   border-radius: 999px;
 }
 .admin-product-row-scroll::-webkit-scrollbar-thumb:hover {
-  background: #9f1239;
+  background: #A98750;
 }

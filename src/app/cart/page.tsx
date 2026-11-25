@@ -8,7 +8,7 @@ export default function CartPage() {
   const { items, subtotal, updateQuantity, removeFromCart } = useCart();
 
   return (
-    <main className="min-h-screen bg-[#fff7f7] px-6 py-16 text-stone-950 dark:bg-[#160508] dark:text-white">
+    <main className="min-h-screen bg-[#F5F0E8] px-6 py-16 text-stone-950 dark:bg-[#11110F] dark:text-white">
       <div className="mx-auto max-w-5xl">
         <Link href="/products" className="font-bold text-amber-800">Continue shopping</Link>
         <h1 className="mt-6 text-5xl font-black">Your Cart</h1>

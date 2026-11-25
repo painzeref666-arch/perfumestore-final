@@ -264,7 +264,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fff7f7] px-6 py-16 text-stone-950 dark:bg-[#160508] dark:text-white">
+    <main className="min-h-screen bg-[#F5F0E8] px-6 py-16 text-stone-950 dark:bg-[#11110F] dark:text-white">
       <div className="mx-auto max-w-6xl">
         <Link href="/products" className="font-bold text-amber-800">← Back to products</Link>
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_420px]">

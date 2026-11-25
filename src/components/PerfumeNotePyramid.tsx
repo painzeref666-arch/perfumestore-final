@@ -25,7 +25,7 @@ export default function PerfumeNotePyramid({ notes, className = '' }: Props) {
   const layers = splitNotes(notes.length ? notes : ['Citrus', 'Floral Heart', 'Amber Musk']);
   const items = [
     { label: 'Top Notes', helper: 'First impression', notes: layers.top, width: 'md:w-1/2', accent: 'from-amber-300/25' },
-    { label: 'Heart Notes', helper: 'Main personality', notes: layers.heart, width: 'md:w-3/4', accent: 'from-rose-300/20' },
+    { label: 'Heart Notes', helper: 'Main personality', notes: layers.heart, width: 'md:w-3/4', accent: 'from-amber-300/20' },
     { label: 'Base Notes', helper: 'Lasting trail', notes: layers.base, width: 'md:w-full', accent: 'from-stone-300/15' },
   ];
 

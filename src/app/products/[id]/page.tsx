@@ -102,7 +102,7 @@ export default function ProductDetailPage() {
     return (
       <>
         <Header />
-        <main className="min-h-screen bg-[#160508] px-6 py-36 text-white">
+        <main className="min-h-screen bg-[#11110F] px-6 py-36 text-white">
           <div className="mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-white/5 p-10 font-black">Loading perfume...</div>
         </main>
         <Footer />
@@ -114,7 +114,7 @@ export default function ProductDetailPage() {
     return (
       <>
         <Header />
-        <main className="min-h-screen bg-[#160508] px-6 py-36 text-center text-white">
+        <main className="min-h-screen bg-[#11110F] px-6 py-36 text-center text-white">
           <h1 className="text-5xl font-black">Perfume not found</h1>
           <p className="mt-4 text-white/60">This product may be hidden or deleted in admin.</p>
           <Link href="/products" className="mt-8 inline-flex rounded-full bg-amber-700 px-7 py-4 font-black text-white">Back to Products</Link>
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#160508] px-6 py-32 text-white">
+      <main className="min-h-screen bg-[#11110F] px-6 py-32 text-white">
         <div className="mx-auto max-w-7xl">
           <nav className="mb-10 flex items-center gap-2 text-xs font-bold text-white/40">
             <Link href="/products" className="hover:text-amber-300">Collections</Link>
