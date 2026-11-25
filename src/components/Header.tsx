@@ -62,7 +62,7 @@ function ThemeToggle() {
         aria-label={`Theme: ${currentOption.label}. Click to change theme`}
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-border hover:bg-border/40 transition-colors text-muted hover:text-foreground dark:border-white/10 dark:text-white/50 dark:hover:text-white dark:hover:bg-white/10"
+        className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-[#c5a46d]/30 text-[#f5f0e8] hover:text-[#c5a46d] hover:bg-[#c5a46d]/10 transition-colors"
       >
         {currentOption.icon}
       </button>
@@ -75,7 +75,7 @@ function ThemeToggle() {
               onClick={() => { setMode(opt.value); setOpen(false); }}
               className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors
                 ${mode === opt.value
-                  ? 'text-primary bg-primary/8 dark:bg-primary/15' :'text-muted hover:text-foreground hover:bg-border/30 dark:text-white/50 dark:hover:text-white dark:hover:bg-white/8'
+                  ? 'text-[#c5a46d] bg-[#c5a46d]/10' :'text-[#f5f0e8]/75 hover:text-[#c5a46d] hover:bg-[#c5a46d]/10'
                 }`}
             >
               {opt.icon}
@@ -117,8 +117,8 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-[100] px-4 md:px-6 py-4">
       <div
-        className={`max-w-7xl mx-auto flex items-center justify-between glass dark:glass-dark rounded-2xl px-5 md:px-8 py-3.5 transition-all duration-500 ${
-          scrolled ? 'shadow-xl shadow-foreground/5 dark:shadow-black/30' : ''
+        className={`max-w-7xl mx-auto flex items-center justify-between bg-[#11110f]/95 backdrop-blur-xl border border-[#c5a46d]/25 rounded-2xl px-5 md:px-8 py-3.5 transition-all duration-500 ${
+          scrolled ? 'shadow-xl shadow-black/40' : ''
         }`}
       >
         {/* Logo */}
@@ -128,23 +128,23 @@ export default function Header() {
             iconName="SparklesIcon"
             className="group-hover:rotate-12 transition-transform duration-500"
           />
-          <span className="font-sans font-700 text-lg tracking-tight text-foreground dark:text-white">
-            Exousia and Co. <span className="font-display italic text-primary font-normal">Marketing</span>
+          <span className="font-sans font-700 text-lg tracking-tight text-[#f5f0e8]">
+            Exousia and Co. <span className="font-display italic text-[#c5a46d] font-normal">Marketing</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted dark:text-white/50">
-          <Link href="/perfumes" className="hover:text-foreground dark:hover:text-white transition-colors">Perfumes</Link>
-          <Link href="/cosmetics" className="hover:text-foreground dark:hover:text-white transition-colors">Cosmetics</Link>
-          <Link href="/wellness" className="hover:text-foreground dark:hover:text-white transition-colors">Wellness</Link>
-          <Link href="/quiz" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Quiz</Link>
-          <Link href="/#scents" className="hover:text-foreground dark:hover:text-white transition-colors">Scent Families</Link>
-          <Link href="/wishlist" className="hover:text-foreground dark:hover:text-white transition-colors">Wishlist</Link>
-          <Link href="/rewards" className="hover:text-foreground dark:hover:text-white transition-colors">Rewards</Link>
-          <Link href="/reviews" className="hover:text-foreground dark:hover:text-white transition-colors">Reviews</Link>
-          <Link href="/track" className="hover:text-foreground dark:hover:text-white transition-colors">Track Order</Link>
-          <Link href="/account" className="hover:text-foreground dark:hover:text-white transition-colors">Account</Link>
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#f5f0e8]/75">
+          <Link href="/perfumes" className="hover:text-[#c5a46d] transition-colors">Perfumes</Link>
+          <Link href="/cosmetics" className="hover:text-[#c5a46d] transition-colors">Cosmetics</Link>
+          <Link href="/wellness" className="hover:text-[#c5a46d] transition-colors">Wellness</Link>
+          <Link href="/quiz" className="hover:text-[#c5a46d] transition-colors">Scent Quiz</Link>
+          <Link href="/#scents" className="hover:text-[#c5a46d] transition-colors">Scent Families</Link>
+          <Link href="/wishlist" className="hover:text-[#c5a46d] transition-colors">Wishlist</Link>
+          <Link href="/rewards" className="hover:text-[#c5a46d] transition-colors">Rewards</Link>
+          <Link href="/reviews" className="hover:text-[#c5a46d] transition-colors">Reviews</Link>
+          <Link href="/track" className="hover:text-[#c5a46d] transition-colors">Track Order</Link>
+          <Link href="/account" className="hover:text-[#c5a46d] transition-colors">Account</Link>
         </nav>
 
         {/* Actions */}
@@ -154,7 +154,7 @@ export default function Header() {
             aria-label="Search fragrances"
             aria-expanded={searchOpen}
             onClick={() => setSearchOpen(true)}
-            className="flex w-9 h-9 items-center justify-center rounded-full border border-border dark:border-white/10 hover:bg-border/40 dark:hover:bg-white/10 transition-colors text-muted dark:text-white/50 hover:text-foreground dark:hover:text-white"
+            className="flex w-9 h-9 items-center justify-center rounded-full border border-[#c5a46d]/30 hover:bg-[#c5a46d]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#c5a46d]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -173,13 +173,13 @@ export default function Header() {
           <button
             aria-label={`Shopping cart with ${cartCount} items`}
             onClick={() => setCartOpen(true)}
-            className="relative flex w-9 h-9 items-center justify-center rounded-full border border-border dark:border-white/10 hover:bg-border/40 dark:hover:bg-white/10 transition-colors text-muted dark:text-white/50 hover:text-foreground dark:hover:text-white"
+            className="relative flex w-9 h-9 items-center justify-center rounded-full border border-[#c5a46d]/30 hover:bg-[#c5a46d]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#c5a46d]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#c5a46d] text-[#171411] text-[9px] font-bold rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -188,7 +188,7 @@ export default function Header() {
           {/* CTA */}
           <Link
             href="/perfumes"
-            className="hidden sm:inline-flex btn-amber items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold"
+            className="hidden sm:inline-flex bg-[#c5a46d] text-[#171411] hover:bg-[#d6b783] items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
           >
             Shop Now
           </Link>
@@ -197,7 +197,7 @@ export default function Header() {
           <button
             aria-label="Toggle menu"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-border dark:border-white/10 text-foreground dark:text-white hover:bg-border/40 dark:hover:bg-white/10 transition-colors"
+            className="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-[#c5a46d]/30 text-[#f5f0e8] hover:bg-[#c5a46d]/10 transition-colors"
           >
             {menuOpen ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -213,7 +213,7 @@ export default function Header() {
       </div>
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden mt-2 max-w-7xl mx-auto glass dark:glass-dark rounded-2xl px-6 py-6 shadow-2xl">
+        <div className="md:hidden mt-2 max-w-7xl mx-auto bg-[#11110f]/98 backdrop-blur-xl border border-[#c5a46d]/25 rounded-2xl px-6 py-6 shadow-2xl shadow-black/40">
           <nav className="flex flex-col gap-4">
             {[
               ['Perfumes','/perfumes'],
@@ -231,12 +231,12 @@ export default function Header() {
                 key={item}
                 href={href}
                 onClick={() => setMenuOpen(false)}
-                className="text-lg font-medium text-foreground dark:text-white hover:text-primary transition-colors py-1"
+                className="text-lg font-medium text-[#f5f0e8] hover:text-primary transition-colors py-1"
               >
                 {item}
               </Link>
             ))}
-            <hr className="border-border dark:border-white/10 my-2" />
+            <hr className="border-[#c5a46d]/25 my-2" />
             <CurrencySelector compact />
             {/* Mobile theme options */}
             <div className="flex items-center gap-2">
@@ -246,7 +246,7 @@ export default function Header() {
             <Link
               href="/perfumes"
               onClick={() => setMenuOpen(false)}
-              className="btn-amber w-full text-center py-3 rounded-full font-semibold"
+              className="bg-[#c5a46d] text-[#171411] hover:bg-[#d6b783] w-full text-center py-3 rounded-full font-semibold transition-colors"
             >
               Shop Now
             </Link>
@@ -255,28 +255,28 @@ export default function Header() {
       )}
 
       {searchOpen && (
-        <div className="fixed inset-0 z-[120] bg-black/45 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
-          <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-card p-5 shadow-2xl dark:border-white/10 dark:bg-[#24080D]" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-[120] bg-black/70 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
+          <div className="mx-auto max-w-2xl rounded-3xl border border-[#c5a46d]/30 bg-[#11110f] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-center gap-3">
               <input
                 autoFocus
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Search products, notes, or categories"
-                className="min-w-0 flex-1 rounded-full border border-border bg-background px-5 py-3 text-foreground outline-none focus:border-primary dark:border-white/10 dark:bg-black/20 dark:text-white"
+                className="min-w-0 flex-1 rounded-full border border-[#c5a46d]/25 bg-[#171411] px-5 py-3 text-[#f5f0e8] outline-none focus:border-[#c5a46d]"
               />
               <button
                 type="button"
                 aria-label="Close search"
                 onClick={() => setSearchOpen(false)}
-                className="h-11 w-11 rounded-full border border-border text-xl font-black transition hover:bg-border/40 dark:border-white/10 dark:hover:bg-white/10"
+                className="h-11 w-11 rounded-full border border-[#c5a46d]/25 text-[#f5f0e8] text-xl font-black transition hover:bg-[#c5a46d]/10"
               >
                 x
               </button>
             </div>
             <div className="mt-5 grid gap-2">
-              {!searchQuery.trim() && <p className="rounded-2xl bg-border/30 p-4 text-sm font-bold text-muted dark:bg-white/5 dark:text-white/60">Type a product name, note, or category.</p>}
-              {searchQuery.trim() && searchResults.length === 0 && <p className="rounded-2xl bg-border/30 p-4 text-sm font-bold text-muted dark:bg-white/5 dark:text-white/60">No matching products found.</p>}
+              {!searchQuery.trim() && <p className="rounded-2xl bg-[#c5a46d]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">Type a product name, note, or category.</p>}
+              {searchQuery.trim() && searchResults.length === 0 && <p className="rounded-2xl bg-[#c5a46d]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">No matching products found.</p>}
               {searchResults.map((product) => (
                 <Link
                   key={product.id}
@@ -285,10 +285,10 @@ export default function Header() {
                     setSearchOpen(false);
                     setSearchQuery('');
                   }}
-                  className="rounded-2xl border border-border p-4 transition hover:border-primary dark:border-white/10"
+                  className="rounded-2xl border border-[#c5a46d]/20 p-4 transition hover:border-[#c5a46d]"
                 >
-                  <p className="font-black">{product.name}</p>
-                  <p className="mt-1 text-sm text-muted dark:text-white/60">{product.category || 'perfumes'} - {product.family}</p>
+                  <p className="font-black text-[#f5f0e8]">{product.name}</p>
+                  <p className="mt-1 text-sm text-[#f5f0e8]/60">{product.category || 'perfumes'} - {product.family}</p>
                 </Link>
               ))}
             </div>
@@ -315,7 +315,7 @@ function MobileThemeButtons() {
           aria-label={`Set ${opt.value} theme`}
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center border transition-all
             ${mode === opt.value
-              ? 'border-primary bg-primary/10' :'border-border dark:border-white/10 hover:bg-border/30 dark:hover:bg-white/10'
+              ? 'border-[#c5a46d] bg-[#c5a46d]/10' :'border-[#c5a46d]/25 hover:bg-[#c5a46d]/10'
             }`}
         >
           {opt.label}
