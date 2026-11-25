@@ -73,7 +73,7 @@ export default function CollectionPage() {
 
           <div className="luxury-reveal relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-8 md:p-14">
             <div className="luxury-glow absolute -right-20 -top-20 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl" />
-            <p className="text-xs font-black uppercase tracking-[.28em] text-amber-300">SEO Collection Page</p>
+            
             <h1 className="mt-4 max-w-4xl text-5xl font-black tracking-tight md:text-7xl">{copy.title}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-white/60">{copy.description}</p>
             <p className="mt-5 max-w-4xl text-sm leading-7 text-white/40">{copy.seo}</p>
