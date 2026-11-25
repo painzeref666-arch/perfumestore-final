@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import AppImage from '@/components/ui/AppImage';
 import { useProducts } from '@/context/ProductContext';
@@ -15,6 +15,7 @@ export default function ReviewsPage() {
   const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   async function load() {
     if (!supabase) {
@@ -28,6 +29,10 @@ export default function ReviewsPage() {
   }
 
   useEffect(() => { load(); }, []);
+
+  useEffect(() => {
+    if (showForm) formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [showForm]);
 
   const productName = (id: string) => activeProducts.find((product) => product.id === id)?.name || 'Exousia product';
 
@@ -118,7 +123,7 @@ export default function ReviewsPage() {
         {msg && !showForm && <p role="status" className="mt-4 rounded-2xl bg-white p-4 font-semibold text-stone-800 dark:bg-white/10 dark:text-white">{msg}</p>}
 
         {showForm && (
-          <form onSubmit={submit} noValidate className="mt-6 grid gap-4 rounded-[2rem] border border-[#C5A46D]/30 bg-white p-6 shadow-sm dark:bg-white/5 sm:p-8">
+          <form ref={formRef} onSubmit={submit} noValidate className="mt-6 grid gap-4 rounded-[2rem] border border-[#C5A46D]/30 bg-white p-6 shadow-sm dark:bg-white/5 sm:p-8">
             <h2 className="text-2xl font-black">Share your experience</h2>
             <select name="product_id" required className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white">
               {activeProducts.map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
@@ -150,7 +155,7 @@ export default function ReviewsPage() {
               </div>
             </article>
           ))}
-          {!reviews.length && <div className="rounded-[2rem] border border-[#C5A46D]/30 bg-white p-8 dark:bg-white/5 sm:col-span-2"><h2 className="text-2xl font-black">Be the first to share your fragrance experience.</h2><p className="mt-2 text-stone-600 dark:text-white/60">Your review helps others find their signature scent.</p><button type="button" onClick={() => setShowForm(true)} className="mt-5 rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Write the first review</button></div>}
+          {!reviews.length && !showForm && <div className="rounded-[2rem] border border-[#C5A46D]/30 bg-white p-8 dark:bg-white/5 sm:col-span-2"><h2 className="text-2xl font-black">Be the first to share your fragrance experience.</h2><p className="mt-2 text-stone-600 dark:text-white/60">Your review helps others find their signature scent.</p><button type="button" onClick={() => setShowForm(true)} className="mt-5 rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Write the first review</button></div>}
         </section>
       </div>
     </main>
