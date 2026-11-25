@@ -96,6 +96,7 @@ function ThemeToggle() {
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { itemCount: cartCount, setCartOpen } = useCart();
@@ -133,18 +134,27 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#f5f0e8]/75">
+        {/* Desktop Nav: primary shopping links, secondary customer links grouped under More */}
+        <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[#f5f0e8]/75">
           <Link href="/perfumes" className="hover:text-[#c5a46d] transition-colors">Perfumes</Link>
           <Link href="/cosmetics" className="hover:text-[#c5a46d] transition-colors">Cosmetics</Link>
           <Link href="/wellness" className="hover:text-[#c5a46d] transition-colors">Wellness</Link>
           <Link href="/quiz" className="hover:text-[#c5a46d] transition-colors">Scent Quiz</Link>
           <Link href="/#scents" className="hover:text-[#c5a46d] transition-colors">Scent Families</Link>
-          <Link href="/wishlist" className="hover:text-[#c5a46d] transition-colors">Wishlist</Link>
-          <Link href="/rewards" className="hover:text-[#c5a46d] transition-colors">Rewards</Link>
-          <Link href="/reviews" className="hover:text-[#c5a46d] transition-colors">Reviews</Link>
-          <Link href="/track" className="hover:text-[#c5a46d] transition-colors">Track Order</Link>
-          <Link href="/account" className="hover:text-[#c5a46d] transition-colors">Account</Link>
+          <div className="relative">
+            <button type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen(!moreOpen)} className="inline-flex items-center gap-1 hover:text-[#c5a46d] transition-colors">
+              More <span className="text-xs">{moreOpen ? '▴' : '▾'}</span>
+            </button>
+            {moreOpen && (
+              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#c5a46d]/25 bg-[#11110f]/98 p-2 shadow-2xl shadow-black/40">
+                {[
+                  ['Wishlist', '/wishlist'], ['Rewards', '/rewards'], ['Reviews', '/reviews'], ['Track Order', '/track'], ['Account', '/account'],
+                ].map(([label, href]) => (
+                  <Link key={label} href={href} onClick={() => setMoreOpen(false)} className="block rounded-xl px-4 py-2.5 text-[#f5f0e8]/80 transition hover:bg-[#c5a46d]/10 hover:text-[#c5a46d]">{label}</Link>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
 
         {/* Actions */}
