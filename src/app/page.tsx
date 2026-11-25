@@ -39,12 +39,12 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
   );
   const active = slides[index % slides.length];
   return (
-    <section className="relative isolate min-h-[590px] overflow-hidden bg-[#11110f] text-[#f5f0e8] md:min-h-[680px]">
+    <section className="relative isolate min-h-[420px] overflow-hidden bg-[#11110f] text-[#f5f0e8] md:min-h-[500px]">
       <div className="absolute inset-0">
         {slides.map((p, i) => <div key={p.id} className={`absolute inset-0 transition-opacity duration-1000 ${i === index ? 'opacity-100' : 'opacity-0'}`} aria-hidden={i !== index}><AppImage src={p.image} alt={p.name} fill priority={i === 0} sizes="100vw" className="object-cover object-center" /></div>)}
         <div className="absolute inset-0 bg-gradient-to-r from-[#090908]/95 via-[#090908]/75 to-[#090908]/20"/><div className="absolute inset-0 bg-gradient-to-t from-[#11110f]/75 via-transparent to-[#11110f]/20"/>
       </div>
-      <div className="relative mx-auto flex min-h-[590px] max-w-7xl items-center px-6 py-20 md:min-h-[680px] md:px-10">
+      <div className="relative mx-auto flex min-h-[420px] max-w-7xl items-center px-6 py-12 md:min-h-[500px] md:px-10">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[.4em] text-[#d6b477]">Exousia &amp; Co.</p>
           <h1 className="mt-5 font-serif text-5xl leading-[1.05] tracking-wide md:text-7xl">{active.hero_title || active.name}</h1>
