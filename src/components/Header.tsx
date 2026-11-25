@@ -146,7 +146,7 @@ export default function Header() {
               More <span className="text-xs">{moreOpen ? '▴' : '▾'}</span>
             </button>
             {moreOpen && (
-              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#c5a46d]/35 bg-[#f5f0e8]/98 p-2 shadow-2xl shadow-black/20 dark:bg-[#11110f]/98 dark:shadow-black/40">
+              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#c5a46d]/35 bg-[#f5f0e8] p-2 shadow-2xl shadow-black/20 dark:bg-[#11110f] dark:shadow-black/40">
                 {[
                   ['Wishlist', '/wishlist'], ['Rewards', '/rewards'], ['Reviews', '/reviews'], ['Track Order', '/track'], ['Account', '/account'],
                 ].map(([label, href]) => (
@@ -221,46 +221,49 @@ export default function Header() {
           </button>
         </div>
       </div>
-      {/* Mobile Menu */}
+      {/* Mobile Menu: isolated full-screen overlay and scrollable panel */}
       {menuOpen && (
-        <div className="md:hidden mt-2 max-w-7xl mx-auto bg-[#11110f]/98 backdrop-blur-xl border border-[#c5a46d]/25 rounded-2xl px-6 py-6 shadow-2xl shadow-black/40">
-          <nav className="flex flex-col gap-4">
-            {[
-              ['Perfumes','/perfumes'],
-              ['Cosmetics','/cosmetics'],
-              ['Wellness','/wellness'],
-              ['Scent Quiz','/quiz'],
-              ['Scent Families','/#scents'],
-              ['Wishlist','/wishlist'],
-              ['Rewards','/rewards'],
-              ['Reviews','/reviews'],
-              ['Track Order','/track'],
-              ['Account','/account'],
-            ].map(([item, href]) => (
-              <Link
-                key={item}
-                href={href}
-                onClick={() => setMenuOpen(false)}
-                className="text-lg font-medium text-[#f5f0e8] hover:text-primary transition-colors py-1"
-              >
-                {item}
-              </Link>
-            ))}
-            <hr className="border-[#c5a46d]/25 my-2" />
-            <CurrencySelector compact />
-            {/* Mobile theme options */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-widest text-muted dark:text-white/40">Theme</span>
-              <MobileThemeButtons />
+        <div className="md:hidden fixed inset-0 z-[110] bg-black/65 backdrop-blur-sm" onClick={() => setMenuOpen(false)}>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+            className="fixed right-4 left-4 top-[92px] max-h-[calc(100dvh-112px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#c5a46d]/35 bg-[#11110f] p-5 shadow-2xl shadow-black/60"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-4 flex items-center justify-between border-b border-[#c5a46d]/20 pb-3">
+              <span className="text-sm font-semibold tracking-wide text-[#c5a46d]">MENU</span>
+              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#c5a46d]/30 text-[#f5f0e8]">×</button>
             </div>
-            <Link
-              href="/perfumes"
-              onClick={() => setMenuOpen(false)}
-              className="bg-[#c5a46d] text-[#171411] hover:bg-[#d6b783] w-full text-center py-3 rounded-full font-semibold transition-colors"
-            >
-              Shop Now
-            </Link>
-          </nav>
+            <nav className="flex flex-col gap-1">
+              {[
+                ['Perfumes','/perfumes'],
+                ['Cosmetics','/cosmetics'],
+                ['Wellness','/wellness'],
+                ['Scent Quiz','/quiz'],
+                ['Scent Families','/#scents'],
+                ['Wishlist','/wishlist'],
+                ['Rewards','/rewards'],
+                ['Reviews','/reviews'],
+                ['Track Order','/track'],
+                ['Account','/account'],
+              ].map(([item, href]) => (
+                <Link key={item} href={href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-base font-medium text-[#f5f0e8] transition hover:bg-[#c5a46d]/15 hover:text-[#c5a46d]">
+                  {item}
+                </Link>
+              ))}
+            </nav>
+            <div className="mt-4 border-t border-[#c5a46d]/20 pt-4">
+              <CurrencySelector compact />
+              <div className="mt-4 flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-widest text-[#c5a46d]">Theme</span>
+                <MobileThemeButtons />
+              </div>
+              <Link href="/perfumes" onClick={() => setMenuOpen(false)} className="mt-5 block w-full rounded-full bg-[#c5a46d] py-3 text-center font-semibold text-[#171411] transition hover:bg-[#d6b783]">
+                Shop Now
+              </Link>
+            </div>
+          </div>
         </div>
       )}
 
