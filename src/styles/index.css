@@ -29,3 +29,72 @@
 .admin-product-row-scroll::-webkit-scrollbar-thumb:hover {
   background: #A98750;
 }
+
+/* ================================================================
+   GLOBAL THEME / CONTRAST PATCH — Exousia & Co.
+   Conservative overrides: improve muted text and form controls without
+   forcing colors on deliberately styled primary/brand buttons.
+   ================================================================ */
+:root:not(.dark) {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+/* Muted Tailwind text utilities that were too dim in dark theme. */
+.dark .text-stone-400, .dark .text-stone-500, .dark .text-stone-600,
+.dark .text-gray-400, .dark .text-gray-500, .dark .text-gray-600,
+.dark .text-zinc-400, .dark .text-zinc-500, .dark .text-zinc-600,
+.dark .text-neutral-400, .dark .text-neutral-500, .dark .text-neutral-600 {
+  color: #C8C1B7 !important;
+}
+.dark .text-stone-700, .dark .text-gray-700, .dark .text-zinc-700,
+.dark .text-neutral-700 { color: #E5DED4 !important; }
+
+/* Muted text in light theme: maintain readable contrast. */
+html:not(.dark) .text-stone-400, html:not(.dark) .text-stone-500,
+html:not(.dark) .text-gray-400, html:not(.dark) .text-gray-500,
+html:not(.dark) .text-zinc-400, html:not(.dark) .text-zinc-500,
+html:not(.dark) .text-neutral-400, html:not(.dark) .text-neutral-500 {
+  color: #62594F !important;
+}
+html:not(.dark) .text-stone-600, html:not(.dark) .text-gray-600,
+html:not(.dark) .text-zinc-600, html:not(.dark) .text-neutral-600 {
+  color: #51483F !important;
+}
+
+/* Form controls consistently use readable theme surfaces and text. */
+html:not(.dark) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html:not(.dark) textarea, html:not(.dark) select {
+  color: #201B16;
+}
+html:not(.dark) input::placeholder, html:not(.dark) textarea::placeholder {
+  color: #71665B !important; opacity: 1;
+}
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.dark textarea, .dark select {
+  color: #F5F0E8;
+}
+.dark input::placeholder, .dark textarea::placeholder {
+  color: #B9AEA0 !important; opacity: 1;
+}
+html:not(.dark) select option { color: #201B16; background: #F5F0E8; }
+.dark select option { color: #F5F0E8; background: #201B16; }
+
+/* Keyboard focus visibility, across public and admin UI. */
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid #C5A46D !important;
+  outline-offset: 2px;
+}
+
+/* Prevent gold primary buttons from inheriting low-contrast white text. */
+:where(.bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-yellow-500, .bg-yellow-600, .bg-\[\#C5A46D\], .btn-amber) {
+  color: #171512 !important;
+}
+
+/* Standard disabled state */
+button:disabled, [role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: .58;
+}
