@@ -146,11 +146,11 @@ export default function Header() {
               More <span className="text-xs">{moreOpen ? '▴' : '▾'}</span>
             </button>
             {moreOpen && (
-              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#c5a46d]/25 bg-[#11110f]/98 p-2 shadow-2xl shadow-black/40">
+              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#c5a46d]/35 bg-[#f5f0e8]/98 p-2 shadow-2xl shadow-black/20 dark:bg-[#11110f]/98 dark:shadow-black/40">
                 {[
                   ['Wishlist', '/wishlist'], ['Rewards', '/rewards'], ['Reviews', '/reviews'], ['Track Order', '/track'], ['Account', '/account'],
                 ].map(([label, href]) => (
-                  <Link key={label} href={href} onClick={() => setMoreOpen(false)} className="block rounded-xl px-4 py-2.5 text-[#f5f0e8]/80 transition hover:bg-[#c5a46d]/10 hover:text-[#c5a46d]">{label}</Link>
+                  <Link key={label} href={href} onClick={() => setMoreOpen(false)} className="block rounded-xl px-4 py-2.5 text-[#201b16]/90 transition hover:bg-[#c5a46d]/20 hover:text-[#201b16] dark:text-[#f5f0e8]/80 dark:hover:bg-[#c5a46d]/10 dark:hover:text-[#c5a46d]">{label}</Link>
                 ))}
               </div>
             )}
