@@ -890,11 +890,11 @@ export default function AdminDashboard() {
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Analytics</Link>
             <Link href="/admin/event-scents" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Event Scents Bookings</Link>
-            <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Marketing</Link>
-            <Link href="/admin/homepage-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Homepage Media</Link>
+            <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#FFFFFF", color: "#171512" }}>Marketing</Link>
+            <Link href="/admin/homepage-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#F3E6CC", color: "#171512", borderColor: "#C5A46D" }}>Homepage Media</Link>
             <Link href="/admin/activity-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Activity Logs</Link>
             <Link href="/admin/inventory-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Inventory Logs</Link>
-            <Link href="/products" className="rounded-full bg-stone-950 px-4 py-3 text-sm font-black text-white hover:bg-amber-800 dark:bg-amber-700 sm:px-5">View Shop</Link>
+            <Link href="/products" className="rounded-full bg-stone-950 px-4 py-3 text-sm font-black hover:bg-amber-800 dark:bg-amber-700 sm:px-5" style={{ backgroundColor: "#201B16", color: "#FFFFFF" }}>View Shop</Link>
             <Link href="/admin/logout" className="rounded-full border border-stone-300 px-4 py-3 text-sm font-black dark:border-white/10 sm:px-5">Logout</Link>
           </div>
         </div>
@@ -1112,7 +1112,7 @@ export default function AdminDashboard() {
               <input type="checkbox" checked={editing.active !== false} onChange={(e) => setEditing({ ...editing, active: e.target.checked })} /> Show product in shop
             </label>
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button disabled={saving} className="rounded-full bg-amber-800 px-5 py-3 font-black text-white disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
+              <button disabled={saving} style={{ backgroundColor: "#8C6428", color: "#FFFFFF" }} className="rounded-full bg-amber-800 px-5 py-3 font-black text-white disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
               <button type="button" onClick={() => { setEditing(blank); setImageStatus(''); setPreviewImage(''); setNotes(''); }} className="rounded-full border border-stone-300 px-5 py-3 font-black dark:border-white/10">Clear</button>
             </div>
           </form>
