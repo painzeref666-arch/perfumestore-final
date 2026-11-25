@@ -889,6 +889,7 @@ export default function AdminDashboard() {
           <div className="flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 sm:px-5">Analytics</Link>
+            <Link href="/admin/event-scents" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-200 sm:px-5">Event Scents Bookings</Link>
             <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Marketing</Link>
             <Link href="/admin/homepage-media" className="rounded-full bg-amber-100 px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-200 sm:px-5">Homepage Media</Link>
             <Link href="/admin/activity-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-stone-950 hover:bg-amber-100 sm:px-5">Activity Logs</Link>
