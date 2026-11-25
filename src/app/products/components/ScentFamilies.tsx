@@ -17,7 +17,7 @@ const families: ScentFamily[] = [
   name: 'Floral',
   descriptor: 'Romantic & Feminine',
   count: 62,
-  image: "https://images.unsplash.com/photo-1599342166997-58552e91d9f5?auto=format&fit=crop&w=900&q=85",
+  image: "/assets/images/scent-family-floral.jpg",
   imageAlt: 'Floral perfume bottle surrounded by fresh champagne gold roses and peonies',
   accent: '#C5A46D',
   examples: ['Jasmine', 'Peony', 'Lily', 'Rose']
@@ -26,7 +26,7 @@ const families: ScentFamily[] = [
   name: 'Woody',
   descriptor: 'Warm & Grounded',
   count: 48,
-  image: "https://images.unsplash.com/photo-1720423738890-37689a6f6b95?auto=format&fit=crop&w=900&q=85",
+  image: "/assets/images/scent-family-woody.jpg",
   imageAlt: 'Woody fragrance bottle on weathered oak wood with cedar bark',
   accent: '#C5A46D',
   examples: ['Sandalwood', 'Cedarwood', 'Vetiver', 'Oud']
@@ -35,7 +35,7 @@ const families: ScentFamily[] = [
   name: 'Oriental',
   descriptor: 'Exotic & Mysterious',
   count: 41,
-  image: "https://images.unsplash.com/photo-1642698215110-87817f1fbe0e?auto=format&fit=crop&w=900&q=85",
+  image: "/assets/images/scent-family-oriental.jpg",
   imageAlt: 'Oriental perfume bottle with spices and incense on dark velvet',
   accent: '#C5A46D',
   examples: ['Amber', 'Musk', 'Vanilla', 'Saffron']
@@ -44,7 +44,7 @@ const families: ScentFamily[] = [
   name: 'Fresh',
   descriptor: 'Light & Energising',
   count: 55,
-  image: "https://images.unsplash.com/photo-1684953461064-b2591660c574?auto=format&fit=crop&w=900&q=85",
+  image: "/assets/images/scent-family-fresh.jpg",
   imageAlt: 'Fresh citrus perfume bottle with sliced lemons and mint leaves',
   accent: '#C5A46D',
   examples: ['Bergamot', 'Neroli', 'Sea Salt', 'Yuzu']
