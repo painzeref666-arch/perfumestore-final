@@ -1,0 +1,9 @@
+EVENT SCENTS HERO MEDIA PRESENTATION UPDATE
+
+Updated the homepage Event Scents media panel:
+- Enlarged the presentation area while keeping responsive sizing.
+- Image/video content uses contain sizing so the full subject/frame is preserved (no intentional crop).
+- Video retains native controls for playback, pause, volume, and fullscreen where supported by the browser.
+- Preserves the existing admin upload/publish media system and Supabase behavior.
+
+Please test on desktop and mobile after deploying. Build verification was not performed in this environment.
