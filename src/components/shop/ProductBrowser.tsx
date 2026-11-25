@@ -114,16 +114,16 @@ function ProductCard({ product }: { product: Product }) {
                 </select>
               </label>
             ) : (
-              <div className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-white/10 dark:bg-black/20">
-                <p className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white/40">Available option</p>
-                <p className="mt-1 text-sm font-black">{selectedVariant?.label || 'Unavailable'}</p>
+              <div className="rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white">
+                <p className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-white/75">Available option</p>
+                <p className="mt-1 text-sm font-black text-stone-950 dark:text-white">{selectedVariant?.label || 'Unavailable'}</p>
               </div>
             )}
           </div>
         ) : (
-          <div className="mt-5 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-white/10 dark:bg-black/20">
-            <p className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white/40">{detailLabel}</p>
-            <p className="mt-1 text-sm font-bold">{detailValue}</p>
+          <div className="mt-5 rounded-2xl border border-stone-200 bg-stone-100 px-4 py-3 text-stone-950 dark:border-white/10 dark:bg-black/20 dark:text-white">
+            <p className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-white/75">{detailLabel}</p>
+            <p className="mt-1 text-sm font-bold text-stone-950 dark:text-white">{detailValue}</p>
           </div>
         )}
 
