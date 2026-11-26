@@ -889,6 +889,7 @@ export default function AdminDashboard() {
           <div className="flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Analytics</Link>
+            <Link href="/admin/reviews" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Reviews</Link>
             <Link href="/admin/event-scents" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Event Scents Bookings</Link>
             <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#FFFFFF", color: "#171512" }}>Marketing</Link>
             <Link href="/admin/homepage-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#F3E6CC", color: "#171512", borderColor: "#C5A46D" }}>Homepage Media</Link>
