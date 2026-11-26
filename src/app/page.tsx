@@ -69,7 +69,8 @@ export default function HomePage() {
   const [eventMedia, setEventMedia] = useState<{media_type:'image'|'video';file_url:string;title:string}|null>(null);
   useEffect(() => { if (!supabase) return; let alive=true; supabase.from('event_scents_hero_media').select('media_type,file_url,title').eq('is_active',true).maybeSingle().then(({data,error})=>{if(alive&&!error&&data)setEventMedia(data as any)}); return ()=>{alive=false}; }, []);
   const { products, activeProducts } = useProducts();
-  const featured = activeProducts.slice(0, 5);
+  // Exclude products marked Coming Soon from the normal Featured Collection.
+  const featured = activeProducts.filter((p) => p.upcoming_enabled !== true).slice(0, 5);
   // Coming Soon cards intentionally use the full product list so their visibility
   // is independent from the normal "Show product in shop" (active) setting.
   const upcoming = useMemo(() => products.filter((p) => p.upcoming_enabled === true).sort((a, b) => Number(a.upcoming_order || 999) - Number(b.upcoming_order || 999)), [products]);
