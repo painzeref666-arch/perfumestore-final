@@ -167,7 +167,7 @@ export default function ReviewsPage() {
               </div>
             </article>
           ))}
-          {!reviews.length && !showForm && <div className="rounded-[2rem] border border-[#C5A46D]/30 bg-white p-8 dark:bg-white/5 sm:col-span-2"><h2 className="text-2xl font-black">Be the first to share your fragrance experience.</h2><p className="mt-2 text-stone-600 dark:text-white/60">Your review helps others find their signature scent.</p>{user ? <button type="button" onClick={() => setShowForm(true)} className="mt-5 rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Write the first review</button> : <Link href="/account" className="mt-5 inline-block rounded-full bg-[#C5A46D] px-6 py-3 font-black text-[#201B16]">Sign in to review</Link>}</div>}
+
         </section>
       </div>
     </main>
