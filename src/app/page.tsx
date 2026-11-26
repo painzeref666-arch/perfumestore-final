@@ -35,7 +35,7 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
 
   if (!slides.length) return (
     <section className="relative overflow-hidden bg-[#11110f] px-6 py-24 text-[#f5f0e8] md:py-36">
-      <div className="mx-auto max-w-7xl"><p className="text-xs uppercase tracking-[.35em] text-[#c5a46d]">Exousia &amp; Co.</p><h1 className="mt-5 max-w-4xl font-serif text-5xl leading-tight md:text-7xl">The art of personal luxury.</h1><p className="mt-6 max-w-xl text-[#f5f0e8]/70">Fragrance. Beauty. Wellness.</p><Link href="/products" className="mt-8 inline-flex rounded-full bg-[#c5a46d] px-7 py-3.5 font-semibold text-[#171411]">Explore the collection</Link></div>
+      <div className="mx-auto max-w-7xl"><p className="text-xs uppercase tracking-[.35em] text-[#A32638]">Exousia &amp; Co.</p><h1 className="mt-5 max-w-4xl font-serif text-5xl leading-tight md:text-7xl">The art of personal luxury.</h1><p className="mt-6 max-w-xl text-[#f5f0e8]/70">Fragrance. Beauty. Wellness.</p><Link href="/products" className="mt-8 inline-flex rounded-full bg-[#A32638] px-7 py-3.5 font-semibold text-[#171411]">Explore the collection</Link></div>
     </section>
   );
   const active = slides[index % slides.length];
@@ -51,10 +51,10 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
           <h1 className="mt-3 font-serif text-3xl leading-[1.05] tracking-wide sm:text-4xl md:text-5xl lg:text-5xl">{active.hero_title || active.name}</h1>
           <p className="mt-3 max-w-xl text-sm leading-6 text-white/75 md:text-base md:leading-6">{active.hero_description || active.description || 'Curated fragrances, beauty essentials, and self-care for your everyday elegance.'}</p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href={heroHref(active)} className="rounded-full bg-[#c5a46d] px-7 py-3.5 text-sm font-semibold text-[#171411] transition hover:bg-[#e0c18b]">{active.hero_button_text || 'Discover the scent'} <span aria-hidden="true">→</span></Link>
+            <Link href={heroHref(active)} className="rounded-full bg-[#A32638] px-7 py-3.5 text-sm font-semibold text-[#171411] transition hover:bg-[#e0c18b]">{active.hero_button_text || 'Discover the scent'} <span aria-hidden="true">→</span></Link>
             <Link href="/products" className="rounded-full border border-[#d6b477]/70 px-7 py-3.5 text-sm font-semibold text-[#f5f0e8] transition hover:bg-white/10">Shop all</Link>
           </div>
-          {slides.length > 1 && <div className="mt-6 flex gap-2">{slides.map((p, i) => <button key={p.id} aria-label={`Show ${p.name}`} onClick={() => setIndex(i)} className={`h-2 rounded-full transition-all ${i === index ? 'w-8 bg-[#c5a46d]' : 'w-2 bg-white/40 hover:bg-white/80'}`}/>)}</div>}
+          {slides.length > 1 && <div className="mt-6 flex gap-2">{slides.map((p, i) => <button key={p.id} aria-label={`Show ${p.name}`} onClick={() => setIndex(i)} className={`h-2 rounded-full transition-all ${i === index ? 'w-8 bg-[#A32638]' : 'w-2 bg-white/40 hover:bg-white/80'}`}/>)}</div>}
         </div>
       </div>
     </section>
@@ -62,7 +62,7 @@ function HomepageHeroCarousel({ products }: { products: HomeProduct[] }) {
 }
 
 function SectionHeading({ eyebrow, title, light = false }: {eyebrow: string; title: string; light?: boolean}) {
-  return <div className="mb-6 text-center"><p className={`text-[11px] font-semibold uppercase tracking-[.35em] ${light ? 'text-[#c5a46d]' : 'text-[#9a7543] dark:text-[#d6b477]'}`}>{eyebrow}</p><h2 className={`mt-2 font-serif text-2xl tracking-wide md:text-4xl ${light ? 'text-[#f5f0e8]' : 'text-[#211c17] dark:text-[#f5f0e8]'}`}>{title}</h2><div className="mx-auto mt-4 h-px w-16 bg-[#c5a46d]"/></div>;
+  return <div className="mb-6 text-center"><p className={`text-[11px] font-semibold uppercase tracking-[.35em] ${light ? 'text-[#A32638]' : 'text-[#9a7543] dark:text-[#d6b477]'}`}>{eyebrow}</p><h2 className={`mt-2 font-serif text-2xl tracking-wide md:text-4xl ${light ? 'text-[#f5f0e8]' : 'text-[#211c17] dark:text-[#f5f0e8]'}`}>{title}</h2><div className="mx-auto mt-4 h-px w-16 bg-[#A32638]"/></div>;
 }
 
 export default function HomePage() {
@@ -82,7 +82,7 @@ export default function HomePage() {
       {/* Curated shopping paths */}
       <section className="bg-[#171411] px-5 py-8 md:px-8 md:py-10">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {categories.map((cat) => <Link key={cat.title} href={cat.href} className="group relative isolate min-h-[250px] overflow-hidden rounded-2xl border border-[#c5a46d]/20 bg-[#24211e] md:min-h-[280px]">
+          {categories.map((cat) => <Link key={cat.title} href={cat.href} className="group relative isolate min-h-[250px] overflow-hidden rounded-2xl border border-[#A32638]/20 bg-[#24211e] md:min-h-[280px]">
             <div className="absolute inset-0 -z-10"><img src={cat.image} alt={cat.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10"/></div>
             <div className="flex h-full min-h-[250px] flex-col justify-end p-5 md:min-h-[280px]"><p className="text-[10px] font-semibold uppercase tracking-[.3em] text-[#d6b477]">{cat.eyebrow}</p><h2 className="mt-2 font-serif text-3xl text-white">{cat.title}</h2><p className="mt-2 max-w-xs text-sm leading-6 text-white/75">{cat.description}</p><span className="mt-5 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[.18em] text-[#d6b477]">Explore <span className="transition group-hover:translate-x-1">→</span></span></div>
           </Link>)}
@@ -90,19 +90,19 @@ export default function HomePage() {
       </section>
 
       {/* Brand promise */}
-      <section className="border-y border-[#c5a46d]/25 bg-[#eee5d7] px-5 py-6 text-[#211c17] dark:bg-[#201b16] dark:text-[#f5f0e8]">
+      <section className="border-y border-[#A32638]/25 bg-[#eee5d7] px-5 py-6 text-[#211c17] dark:bg-[#201b16] dark:text-[#f5f0e8]">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 md:grid-cols-4 md:gap-4">
           {[['◇','Curated Quality','Thoughtfully selected essentials'],['✧','Beauty & Care','Fragrance, beauty and wellness'],['♧','Delivery Options','Shipping and local delivery'],['☆','Customer Experience','Support throughout your journey']].map(([icon,title,desc])=><div key={title} className="text-center"><span className="text-2xl text-[#b18a50]">{icon}</span><h3 className="mt-2 text-sm font-semibold">{title}</h3><p className="mt-1 text-xs text-current/65">{desc}</p></div>)}
         </div>
       </section>
 
       <section className="px-5 py-12 md:px-8 md:py-16">
-        <div className="mx-auto max-w-7xl"><SectionHeading eyebrow="The Exousia Edit" title="Featured Collection"/><div className="mb-7 flex flex-wrap justify-center gap-3"><Link href="/products" className="rounded-full bg-[#211c17] px-5 py-2 text-xs font-semibold text-[#f5f0e8] dark:bg-[#c5a46d] dark:text-[#171411]">Shop all</Link><Link href="/perfumes" className="rounded-full border border-[#c5a46d]/60 px-5 py-2 text-xs font-semibold">Perfumes</Link><Link href="/reviews" className="rounded-full border border-[#c5a46d]/60 px-5 py-2 text-xs font-semibold">Customer reviews</Link></div>
+        <div className="mx-auto max-w-7xl"><SectionHeading eyebrow="The Exousia Edit" title="Featured Collection"/><div className="mb-7 flex flex-wrap justify-center gap-3"><Link href="/products" className="rounded-full bg-[#211c17] px-5 py-2 text-xs font-semibold text-[#f5f0e8] dark:bg-[#A32638] dark:text-[#171411]">Shop all</Link><Link href="/perfumes" className="rounded-full border border-[#A32638]/60 px-5 py-2 text-xs font-semibold">Perfumes</Link><Link href="/reviews" className="rounded-full border border-[#A32638]/60 px-5 py-2 text-xs font-semibold">Customer reviews</Link></div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{featured.map((p) => <Link key={p.id} href={`/products/${p.id}`} className="group overflow-hidden rounded-2xl border border-[#d6c9b6] bg-white/80 transition hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-[#1c1916]"><div className="relative aspect-[4/5] overflow-hidden bg-[#e8dfd2] dark:bg-[#28221d]"><AppImage src={p.image} alt={p.name} fill smartFill sizes="(max-width:768px) 100vw,20vw" className="object-cover transition duration-700 group-hover:scale-105"/></div><div className="p-4 text-[#211c17] dark:text-[#f5f0e8]"><p className="text-[10px] uppercase tracking-[.25em] text-[#9a7543] dark:text-[#d6b477]">{p.category || 'Collection'}</p><h3 className="mt-2 line-clamp-1 font-serif text-lg text-[#211c17] dark:text-[#f5f0e8]">{p.name}</h3><p className="mt-2 line-clamp-2 text-xs leading-5 text-[#62594f] dark:text-[#c8c0b5]">{p.description}</p><Price amount={p.price} className="mt-3 block text-sm font-semibold text-[#211c17] dark:text-[#f5f0e8]"/></div></Link>)}</div>
         </div>
       </section>
 
-      {upcoming.length > 0 && <section className="border-y border-[#c5a46d]/20 bg-[#201b16] px-5 py-12 text-[#f5f0e8] md:py-14"><div className="mx-auto max-w-7xl"><SectionHeading eyebrow="A new chapter" title="Coming Soon" light/><p className="mx-auto mb-8 max-w-2xl text-center text-sm leading-6 text-white/65">Preview the next creations from Exousia &amp; Co.</p><div className="-mx-5 flex snap-x gap-5 overflow-x-auto px-5 pb-5">{upcoming.map((p,i)=><Link key={p.id} href={`/products/${p.id}`} className="group flex-none snap-start overflow-hidden rounded-2xl border border-[#c5a46d]/20 bg-black/20 sm:w-[300px]"><div className="relative aspect-[4/5]"><AppImage src={p.image} alt={p.name} fill smartFill sizes="300px" className="object-cover transition group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"/><div className="absolute bottom-4 left-4 text-white"><p className="text-xs uppercase tracking-widest text-[#d6b477]">{p.upcoming_badge || 'Coming soon'}</p><h3 className="mt-2 font-serif text-2xl">{p.name}</h3></div></div><div className="p-4"><p className="line-clamp-2 text-sm text-white/65">{p.upcoming_description || p.description}</p><span className="mt-4 block text-xs uppercase tracking-widest text-[#d6b477]">Preview #{i+1} →</span></div></Link>)}</div></div></section>}
+      {upcoming.length > 0 && <section className="border-y border-[#A32638]/20 bg-[#201b16] px-5 py-12 text-[#f5f0e8] md:py-14"><div className="mx-auto max-w-7xl"><SectionHeading eyebrow="A new chapter" title="Coming Soon" light/><p className="mx-auto mb-8 max-w-2xl text-center text-sm leading-6 text-white/65">Preview the next creations from Exousia &amp; Co.</p><div className="-mx-5 flex snap-x gap-5 overflow-x-auto px-5 pb-5">{upcoming.map((p,i)=><Link key={p.id} href={`/products/${p.id}`} className="group flex-none snap-start overflow-hidden rounded-2xl border border-[#A32638]/20 bg-black/20 sm:w-[300px]"><div className="relative aspect-[4/5]"><AppImage src={p.image} alt={p.name} fill smartFill sizes="300px" className="object-cover transition group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"/><div className="absolute bottom-4 left-4 text-white"><p className="text-xs uppercase tracking-widest text-[#d6b477]">{p.upcoming_badge || 'Coming soon'}</p><h3 className="mt-2 font-serif text-2xl">{p.name}</h3></div></div><div className="p-4"><p className="line-clamp-2 text-sm text-white/65">{p.upcoming_description || p.description}</p><span className="mt-4 block text-xs uppercase tracking-widest text-[#d6b477]">Preview #{i+1} →</span></div></Link>)}</div></div></section>}
 
       <div className="mx-auto max-w-7xl px-5 py-8 md:px-8"><HomepageVideoBanner/></div>
 
@@ -111,16 +111,16 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-[#11110f] px-5 py-12 text-[#f5f0e8] md:py-16">
         <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-2">
           <div>
-            <p className="text-xs uppercase tracking-[.35em] text-[#c5a46d]">Discover your scent</p>
+            <p className="text-xs uppercase tracking-[.35em] text-[#A32638]">Discover your scent</p>
             <h2 className="mt-4 font-serif text-4xl leading-tight md:text-6xl">Find your signature.</h2>
             <p className="mt-5 max-w-lg text-sm leading-7 text-white/70">
               Not sure where to begin? Explore fragrance families or take the scent quiz to discover fragrances that match your preferences.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/quiz" className="rounded-full bg-[#c5a46d] px-6 py-3 text-sm font-semibold text-[#171411]">
+              <Link href="/quiz" className="rounded-full bg-[#A32638] px-6 py-3 text-sm font-semibold text-[#171411]">
                 Take the Scent Quiz →
               </Link>
-              <Link href="/collections/floral" className="rounded-full border border-[#c5a46d]/60 px-6 py-3 text-sm">
+              <Link href="/collections/floral" className="rounded-full border border-[#A32638]/60 px-6 py-3 text-sm">
                 Explore scent families
               </Link>
             </div>
@@ -155,19 +155,19 @@ export default function HomePage() {
 
 
       {/* Event Scents feature */}
-      <section id="event-scents" className="scroll-mt-28 bg-[#eee5d7] px-5 py-12 text-[#211c17] dark:bg-[#201b16] dark:text-[#f5f0e8] md:py-16"><div className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl border border-[#c5a46d]/30 md:grid-cols-2"><div className="flex flex-col justify-center p-6 sm:p-8 md:p-10"><p className="text-xs uppercase tracking-[.35em] text-[#9a7543]">By Exousia &amp; Co.</p><h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">Event Scents</h2><p className="mt-5 text-sm leading-7 text-current/70">A portable Perfume Bar experience for weddings, birthdays, corporate gatherings, and celebrations. Let your guests discover a scent and take home a memorable moment.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/event-scents/book" className="inline-flex w-fit rounded-full bg-[#c5a46d] px-6 py-3 text-sm font-semibold text-[#171411]">Book Us Now →</Link><Link href="/reviews" className="inline-flex w-fit rounded-full border border-[#c5a46d]/60 px-6 py-3 text-sm font-semibold">See guest experiences →</Link></div></div><div className="group relative isolate flex min-h-[280px] items-center justify-center overflow-hidden bg-[#090908] p-3 sm:p-4 md:min-h-[360px]">
+      <section id="event-scents" className="scroll-mt-28 bg-[#eee5d7] px-5 py-12 text-[#211c17] dark:bg-[#201b16] dark:text-[#f5f0e8] md:py-16"><div className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl border border-[#A32638]/30 md:grid-cols-2"><div className="flex flex-col justify-center p-6 sm:p-8 md:p-10"><p className="text-xs uppercase tracking-[.35em] text-[#9a7543]">By Exousia &amp; Co.</p><h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">Event Scents</h2><p className="mt-5 text-sm leading-7 text-current/70">A portable Perfume Bar experience for weddings, birthdays, corporate gatherings, and celebrations. Let your guests discover a scent and take home a memorable moment.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/event-scents/book" className="inline-flex w-fit rounded-full bg-[#A32638] px-6 py-3 text-sm font-semibold text-[#171411]">Book Us Now →</Link><Link href="/reviews" className="inline-flex w-fit rounded-full border border-[#A32638]/60 px-6 py-3 text-sm font-semibold">See guest experiences →</Link></div></div><div className="group relative isolate flex min-h-[280px] items-center justify-center overflow-hidden bg-[#090908] p-3 sm:p-4 md:min-h-[360px]">
           {eventMedia?.file_url && <>
             {eventMedia.media_type === 'video' ? <video src={eventMedia.file_url} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-25 blur-2xl"/> : <img src={eventMedia.file_url} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-25 blur-2xl"/>}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#090908]/70 via-[#090908]/35 to-[#c5a46d]/10"/>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#090908]/70 via-[#090908]/35 to-[#A32638]/10"/>
           </>}
-          <div className="relative flex min-h-[260px] w-full items-center justify-center overflow-hidden rounded-2xl border border-[#c5a46d]/25 bg-black/35 shadow-[0_20px_60px_rgba(0,0,0,.35)] md:min-h-[340px]">
+          <div className="relative flex min-h-[260px] w-full items-center justify-center overflow-hidden rounded-2xl border border-[#A32638]/25 bg-black/35 shadow-[0_20px_60px_rgba(0,0,0,.35)] md:min-h-[340px]">
             {eventMedia ? (eventMedia.media_type === 'video' ? <video key={eventMedia.file_url} src={eventMedia.file_url} autoPlay muted loop playsInline controls preload="metadata" className="relative z-10 h-full w-full max-h-[400px] rounded-xl object-contain" aria-label={eventMedia.title || "Event Scents promotional video"}/> : <img src={eventMedia.file_url} alt={eventMedia.title || "Event Scents promotional image"} className="relative z-10 max-h-[340px] max-w-full rounded-xl object-contain"/>) : <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1400&auto=format&fit=crop" alt="Elegant event setting" className="relative z-10 h-full w-full max-h-[400px] rounded-xl object-contain"/>}
           </div>
-          <div className="pointer-events-none absolute inset-3 rounded-2xl border border-[#c5a46d]/10 sm:inset-5"/>
+          <div className="pointer-events-none absolute inset-3 rounded-2xl border border-[#A32638]/10 sm:inset-5"/>
         </div></div></section>
 
       {/* Reviews and social navigation without invented testimonials */}
-      <section className="bg-[#f5f0e8] px-5 py-10 text-[#211c17] dark:bg-[#11110f] dark:text-[#f5f0e8] md:py-14"><div className="mx-auto max-w-7xl text-center"><SectionHeading eyebrow="Community" title="Your experience matters"/><p className="mx-auto max-w-xl text-sm leading-7 text-current/65">Discover feedback from our customers and share your own Exousia &amp; Co. experience.</p><div className="mt-7 flex flex-wrap justify-center gap-3"><Link href="/reviews" className="rounded-full bg-[#c5a46d] px-6 py-3 text-sm font-semibold text-[#171411]">Read customer reviews →</Link><Link href="/account" className="rounded-full border border-[#c5a46d]/60 px-6 py-3 text-sm font-semibold">Your account</Link></div></div></section>
+      <section className="bg-[#f5f0e8] px-5 py-10 text-[#211c17] dark:bg-[#11110f] dark:text-[#f5f0e8] md:py-14"><div className="mx-auto max-w-7xl text-center"><SectionHeading eyebrow="Community" title="Your experience matters"/><p className="mx-auto max-w-xl text-sm leading-7 text-current/65">Discover feedback from our customers and share your own Exousia &amp; Co. experience.</p><div className="mt-7 flex flex-wrap justify-center gap-3"><Link href="/reviews" className="rounded-full bg-[#A32638] px-6 py-3 text-sm font-semibold text-[#171411]">Read customer reviews →</Link><Link href="/account" className="rounded-full border border-[#A32638]/60 px-6 py-3 text-sm font-semibold">Your account</Link></div></div></section>
     </main><Footer/>
   </>;
 }

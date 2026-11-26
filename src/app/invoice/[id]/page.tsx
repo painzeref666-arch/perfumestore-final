@@ -66,7 +66,7 @@ export default function InvoicePage() {
         {loading ? (
           <p className="font-black">Loading invoice...</p>
         ) : error || !order ? (
-          <div className="rounded-2xl bg-[#E8D6BA] p-6 text-[#201B16]"><h1 className="text-2xl font-black">Invoice unavailable</h1><p className="mt-2 font-bold">{error || 'Order not found.'}</p></div>
+          <div className="rounded-2xl bg-[#F3D6DB] p-6 text-[#201B16]"><h1 className="text-2xl font-black">Invoice unavailable</h1><p className="mt-2 font-bold">{error || 'Order not found.'}</p></div>
         ) : (
           <>
             <header className="flex flex-col justify-between gap-6 border-b border-stone-200 pb-8 md:flex-row">

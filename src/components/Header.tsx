@@ -62,7 +62,7 @@ function ThemeToggle() {
         aria-label={`Theme: ${currentOption.label}. Click to change theme`}
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-[#c5a46d]/30 text-[#f5f0e8] hover:text-[#c5a46d] hover:bg-[#c5a46d]/10 transition-colors"
+        className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-[#A32638]/30 text-[#f5f0e8] hover:text-[#A32638] hover:bg-[#A32638]/10 transition-colors"
       >
         {currentOption.icon}
       </button>
@@ -75,7 +75,7 @@ function ThemeToggle() {
               onClick={() => { setMode(opt.value); setOpen(false); }}
               className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors
                 ${mode === opt.value
-                  ? 'text-[#c5a46d] bg-[#c5a46d]/10' :'text-[#f5f0e8]/75 hover:text-[#c5a46d] hover:bg-[#c5a46d]/10'
+                  ? 'text-[#A32638] bg-[#A32638]/10' :'text-[#f5f0e8]/75 hover:text-[#A32638] hover:bg-[#A32638]/10'
                 }`}
             >
               {opt.icon}
@@ -118,7 +118,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-[100] px-4 md:px-6 py-4">
       <div
-        className={`max-w-7xl mx-auto flex items-center justify-between bg-[#11110f]/95 backdrop-blur-xl border border-[#c5a46d]/25 rounded-2xl px-5 md:px-8 py-3.5 transition-all duration-500 ${
+        className={`max-w-7xl mx-auto flex items-center justify-between bg-[#11110f]/95 backdrop-blur-xl border border-[#A32638]/25 rounded-2xl px-5 md:px-8 py-3.5 transition-all duration-500 ${
           scrolled ? 'shadow-xl shadow-black/40' : ''
         }`}
       >
@@ -130,27 +130,27 @@ export default function Header() {
             className="group-hover:rotate-12 transition-transform duration-500"
           />
           <span className="font-sans font-700 text-lg tracking-tight text-[#f5f0e8]">
-            Exousia and Co. <span className="font-display italic text-[#c5a46d] font-normal">Marketing</span>
+            Exousia and Co. <span className="font-display italic text-[#A32638] font-normal">Marketing</span>
           </span>
         </Link>
 
         {/* Desktop Nav: primary shopping links, secondary customer links grouped under More */}
         <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[#f5f0e8]/75">
-          <Link href="/perfumes" className="hover:text-[#c5a46d] transition-colors">Perfumes</Link>
-          <Link href="/cosmetics" className="hover:text-[#c5a46d] transition-colors">Cosmetics</Link>
-          <Link href="/wellness" className="hover:text-[#c5a46d] transition-colors">Wellness</Link>
-          <Link href="/quiz" className="hover:text-[#c5a46d] transition-colors">Scent Quiz</Link>
-          <Link href="/#scents" className="hover:text-[#c5a46d] transition-colors">Scent Families</Link>
+          <Link href="/perfumes" className="hover:text-[#A32638] transition-colors">Perfumes</Link>
+          <Link href="/cosmetics" className="hover:text-[#A32638] transition-colors">Cosmetics</Link>
+          <Link href="/wellness" className="hover:text-[#A32638] transition-colors">Wellness</Link>
+          <Link href="/quiz" className="hover:text-[#A32638] transition-colors">Scent Quiz</Link>
+          <Link href="/#scents" className="hover:text-[#A32638] transition-colors">Scent Families</Link>
           <div className="relative">
-            <button type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen(!moreOpen)} className="inline-flex items-center gap-1 hover:text-[#c5a46d] transition-colors">
+            <button type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen(!moreOpen)} className="inline-flex items-center gap-1 hover:text-[#A32638] transition-colors">
               More <span className="text-xs">{moreOpen ? '▴' : '▾'}</span>
             </button>
             {moreOpen && (
-              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#c5a46d]/35 bg-[#f5f0e8] p-2 shadow-2xl shadow-black/20 dark:bg-[#11110f] dark:shadow-black/40">
+              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#A32638]/35 bg-[#f5f0e8] p-2 shadow-2xl shadow-black/20 dark:bg-[#11110f] dark:shadow-black/40">
                 {[
                   ['Wishlist', '/wishlist'], ['Rewards', '/rewards'], ['Reviews', '/reviews'], ['Track Order', '/track'], ['Account', '/account'],
                 ].map(([label, href]) => (
-                  <Link key={label} href={href} onClick={() => setMoreOpen(false)} className="block rounded-xl px-4 py-2.5 text-[#201b16]/90 transition hover:bg-[#c5a46d]/20 hover:text-[#201b16] dark:text-[#f5f0e8]/80 dark:hover:bg-[#c5a46d]/10 dark:hover:text-[#c5a46d]">{label}</Link>
+                  <Link key={label} href={href} onClick={() => setMoreOpen(false)} className="block rounded-xl px-4 py-2.5 text-[#201b16]/90 transition hover:bg-[#A32638]/20 hover:text-[#201b16] dark:text-[#f5f0e8]/80 dark:hover:bg-[#A32638]/10 dark:hover:text-[#A32638]">{label}</Link>
                 ))}
               </div>
             )}
@@ -164,7 +164,7 @@ export default function Header() {
             aria-label="Search fragrances"
             aria-expanded={searchOpen}
             onClick={() => setSearchOpen(true)}
-            className="flex w-9 h-9 items-center justify-center rounded-full border border-[#c5a46d]/30 hover:bg-[#c5a46d]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#c5a46d]"
+            className="flex w-9 h-9 items-center justify-center rounded-full border border-[#A32638]/30 hover:bg-[#A32638]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#A32638]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -183,13 +183,13 @@ export default function Header() {
           <button
             aria-label={`Shopping cart with ${cartCount} items`}
             onClick={() => setCartOpen(true)}
-            className="relative flex w-9 h-9 items-center justify-center rounded-full border border-[#c5a46d]/30 hover:bg-[#c5a46d]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#c5a46d]"
+            className="relative flex w-9 h-9 items-center justify-center rounded-full border border-[#A32638]/30 hover:bg-[#A32638]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#A32638]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#c5a46d] text-[#171411] text-[9px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#A32638] text-[#171411] text-[9px] font-bold rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -198,7 +198,7 @@ export default function Header() {
           {/* CTA */}
           <Link
             href="/perfumes"
-            className="hidden sm:inline-flex bg-[#c5a46d] text-[#171411] hover:bg-[#d6b783] items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
+            className="hidden sm:inline-flex bg-[#A32638] text-[#171411] hover:bg-[#d6b783] items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
           >
             Shop Now
           </Link>
@@ -207,7 +207,7 @@ export default function Header() {
           <button
             aria-label="Toggle menu"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-[#c5a46d]/30 text-[#f5f0e8] hover:bg-[#c5a46d]/10 transition-colors"
+            className="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-[#A32638]/30 text-[#f5f0e8] hover:bg-[#A32638]/10 transition-colors"
           >
             {menuOpen ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -228,12 +228,12 @@ export default function Header() {
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
-            className="fixed right-4 left-4 top-[92px] max-h-[calc(100dvh-112px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#c5a46d]/35 bg-[#11110f] p-5 shadow-2xl shadow-black/60"
+            className="fixed right-4 left-4 top-[92px] max-h-[calc(100dvh-112px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#A32638]/35 bg-[#11110f] p-5 shadow-2xl shadow-black/60"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mb-4 flex items-center justify-between border-b border-[#c5a46d]/20 pb-3">
-              <span className="text-sm font-semibold tracking-wide text-[#c5a46d]">MENU</span>
-              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#c5a46d]/30 text-[#f5f0e8]">×</button>
+            <div className="mb-4 flex items-center justify-between border-b border-[#A32638]/20 pb-3">
+              <span className="text-sm font-semibold tracking-wide text-[#A32638]">MENU</span>
+              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#A32638]/30 text-[#f5f0e8]">×</button>
             </div>
             <nav className="flex flex-col gap-1">
               {[
@@ -248,18 +248,18 @@ export default function Header() {
                 ['Track Order','/track'],
                 ['Account','/account'],
               ].map(([item, href]) => (
-                <Link key={item} href={href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-base font-medium text-[#f5f0e8] transition hover:bg-[#c5a46d]/15 hover:text-[#c5a46d]">
+                <Link key={item} href={href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-base font-medium text-[#f5f0e8] transition hover:bg-[#A32638]/15 hover:text-[#A32638]">
                   {item}
                 </Link>
               ))}
             </nav>
-            <div className="mt-4 border-t border-[#c5a46d]/20 pt-4">
+            <div className="mt-4 border-t border-[#A32638]/20 pt-4">
               <CurrencySelector compact />
               <div className="mt-4 flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-widest text-[#c5a46d]">Theme</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-[#A32638]">Theme</span>
                 <MobileThemeButtons />
               </div>
-              <Link href="/perfumes" onClick={() => setMenuOpen(false)} className="mt-5 block w-full rounded-full bg-[#c5a46d] py-3 text-center font-semibold text-[#171411] transition hover:bg-[#d6b783]">
+              <Link href="/perfumes" onClick={() => setMenuOpen(false)} className="mt-5 block w-full rounded-full bg-[#A32638] py-3 text-center font-semibold text-[#171411] transition hover:bg-[#d6b783]">
                 Shop Now
               </Link>
             </div>
@@ -269,27 +269,27 @@ export default function Header() {
 
       {searchOpen && (
         <div className="fixed inset-0 z-[120] bg-black/70 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
-          <div className="mx-auto max-w-2xl rounded-3xl border border-[#c5a46d]/30 bg-[#11110f] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+          <div className="mx-auto max-w-2xl rounded-3xl border border-[#A32638]/30 bg-[#11110f] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-center gap-3">
               <input
                 autoFocus
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Search products, notes, or categories"
-                className="min-w-0 flex-1 rounded-full border border-[#c5a46d]/25 bg-[#171411] px-5 py-3 text-[#f5f0e8] outline-none focus:border-[#c5a46d]"
+                className="min-w-0 flex-1 rounded-full border border-[#A32638]/25 bg-[#171411] px-5 py-3 text-[#f5f0e8] outline-none focus:border-[#A32638]"
               />
               <button
                 type="button"
                 aria-label="Close search"
                 onClick={() => setSearchOpen(false)}
-                className="h-11 w-11 rounded-full border border-[#c5a46d]/25 text-[#f5f0e8] text-xl font-black transition hover:bg-[#c5a46d]/10"
+                className="h-11 w-11 rounded-full border border-[#A32638]/25 text-[#f5f0e8] text-xl font-black transition hover:bg-[#A32638]/10"
               >
                 x
               </button>
             </div>
             <div className="mt-5 grid gap-2">
-              {!searchQuery.trim() && <p className="rounded-2xl bg-[#c5a46d]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">Type a product name, note, or category.</p>}
-              {searchQuery.trim() && searchResults.length === 0 && <p className="rounded-2xl bg-[#c5a46d]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">No matching products found.</p>}
+              {!searchQuery.trim() && <p className="rounded-2xl bg-[#A32638]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">Type a product name, note, or category.</p>}
+              {searchQuery.trim() && searchResults.length === 0 && <p className="rounded-2xl bg-[#A32638]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">No matching products found.</p>}
               {searchResults.map((product) => (
                 <Link
                   key={product.id}
@@ -298,7 +298,7 @@ export default function Header() {
                     setSearchOpen(false);
                     setSearchQuery('');
                   }}
-                  className="rounded-2xl border border-[#c5a46d]/20 p-4 transition hover:border-[#c5a46d]"
+                  className="rounded-2xl border border-[#A32638]/20 p-4 transition hover:border-[#A32638]"
                 >
                   <p className="font-black text-[#f5f0e8]">{product.name}</p>
                   <p className="mt-1 text-sm text-[#f5f0e8]/60">{product.category || 'perfumes'} - {product.family}</p>
@@ -328,7 +328,7 @@ function MobileThemeButtons() {
           aria-label={`Set ${opt.value} theme`}
           className={`w-8 h-8 rounded-full text-sm flex items-center justify-center border transition-all
             ${mode === opt.value
-              ? 'border-[#c5a46d] bg-[#c5a46d]/10' :'border-[#c5a46d]/25 hover:bg-[#c5a46d]/10'
+              ? 'border-[#A32638] bg-[#A32638]/10' :'border-[#A32638]/25 hover:bg-[#A32638]/10'
             }`}
         >
           {opt.label}

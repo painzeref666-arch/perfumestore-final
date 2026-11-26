@@ -13,21 +13,21 @@
 /* Admin product catalog: each product gets its own horizontal scrollbar. */
 .admin-product-row-scroll {
   scrollbar-width: auto;
-  scrollbar-color: #C5A46D rgba(197, 164, 109, 0.10);
+  scrollbar-color: #A32638 rgba(163, 38, 56, 0.10);
 }
 .admin-product-row-scroll::-webkit-scrollbar {
   height: 10px;
 }
 .admin-product-row-scroll::-webkit-scrollbar-track {
-  background: rgba(197, 164, 109, 0.08);
+  background: rgba(163, 38, 56, 0.08);
   border-radius: 999px;
 }
 .admin-product-row-scroll::-webkit-scrollbar-thumb {
-  background: #C5A46D;
+  background: #A32638;
   border-radius: 999px;
 }
 .admin-product-row-scroll::-webkit-scrollbar-thumb:hover {
-  background: #A98750;
+  background: #750018;
 }
 
 /* ================================================================
@@ -84,12 +84,12 @@ html:not(.dark) select option { color: #201B16; background: #F5F0E8; }
 
 /* Keyboard focus visibility, across public and admin UI. */
 :where(button, a, input, textarea, select):focus-visible {
-  outline: 2px solid #C5A46D !important;
+  outline: 2px solid #A32638 !important;
   outline-offset: 2px;
 }
 
 /* Prevent gold primary buttons from inheriting low-contrast white text. */
-:where(.bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-yellow-500, .bg-yellow-600, .bg-\[\#C5A46D\], .btn-amber) {
+:where(.bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-yellow-500, .bg-yellow-600, .bg-\[\#A32638\], .btn-amber) {
   color: #171512 !important;
 }
 
@@ -119,7 +119,7 @@ html:not(.dark) body button.dark\:bg-amber-700,
 html:not(.dark) body button.bg-amber-700 {
   color: #FFFFFF !important;
 }
-html:not(.dark) body button.bg-\[\#C5A46D\] {
+html:not(.dark) body button.bg-\[\#A32638\] {
   color: #201B16 !important;
 }
 html:not(.dark) body input,

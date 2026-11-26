@@ -1,0 +1,19 @@
+EXOUSIA & CO. RED-DOMINANT LUXURY THEME
+
+Updated source files in this package with a coordinated deep crimson/ruby accent palette.
+Primary accent: #A32638
+Primary hover/deep crimson: #750018
+Primary light: #F3D6DB
+Dark background: #16090B
+Dark card: #241014
+Light background: #FAF0F1
+Light card: #FFF9FA
+Gold remains a secondary luxury highlight in selected elements.
+
+The update changes styling/color values only. No product data, pricing, inventory,
+checkout, discounts, visibility logic, or database schema was intentionally changed.
+
+To use: replace the project files from the extracted perfumestore-final folder with
+those in this ZIP (keep your own backup first), then deploy.
+
+Build verification was not performed in this package.

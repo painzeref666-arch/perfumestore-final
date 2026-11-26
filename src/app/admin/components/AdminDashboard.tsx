@@ -868,7 +868,7 @@ export default function AdminDashboard() {
             <input value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="admin@exousia.com" />
             <label className="mt-5 block text-sm font-bold text-white/60">Password</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 outline-none focus:border-amber-500" placeholder="••••••••" />
-            {error && <p className="mt-4 rounded-2xl bg-[#C5A46D]/10 p-4 text-sm font-bold text-[#E8D6BA]">{error}</p>}
+            {error && <p className="mt-4 rounded-2xl bg-[#A32638]/10 p-4 text-sm font-bold text-[#F3D6DB]">{error}</p>}
             <button className="mt-6 w-full rounded-full bg-amber-700 px-6 py-4 font-black text-white transition hover:bg-amber-600">Login as Admin</button>
           </form>
         </div>
@@ -889,11 +889,11 @@ export default function AdminDashboard() {
           <div className="flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Analytics</Link>
-            <Link href="/admin/reviews" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Reviews</Link>
-            <Link href="/admin/event-scents" className="rounded-full bg-[#c5a46d] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Event Scents Bookings</Link>
+            <Link href="/admin/reviews" className="rounded-full bg-[#A32638] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Reviews</Link>
+            <Link href="/admin/event-scents" className="rounded-full bg-[#A32638] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Event Scents Bookings</Link>
             <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#FFFFFF", color: "#171512" }}>Marketing</Link>
-            <Link href="/admin/homepage-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#F3E6CC", color: "#171512", borderColor: "#C5A46D" }}>Homepage Media</Link>
-            <Link href="/admin/event-scents-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#F3E6CC", color: "#171512", borderColor: "#C5A46D" }}>Event Scents Media</Link>
+            <Link href="/admin/homepage-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#F3E6CC", color: "#171512", borderColor: "#A32638" }}>Homepage Media</Link>
+            <Link href="/admin/event-scents-media" className="rounded-full border border-amber-200 bg-amber-100 px-4 py-3 text-sm font-black hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#F3E6CC", color: "#171512", borderColor: "#A32638" }}>Event Scents Media</Link>
             <Link href="/admin/activity-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Activity Logs</Link>
             <Link href="/admin/inventory-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Inventory Logs</Link>
             <Link href="/products" className="rounded-full bg-stone-950 px-4 py-3 text-sm font-black hover:bg-amber-800 dark:bg-amber-700 sm:px-5" style={{ backgroundColor: "#201B16", color: "#FFFFFF" }}>View Shop</Link>
@@ -901,7 +901,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {(error || productError) && <p className="mt-6 rounded-2xl bg-[#E8D6BA] p-4 font-bold text-[#201B16] dark:bg-[#C5A46D]/10 dark:text-[#E8D6BA]">{error || productError}</p>}
+        {(error || productError) && <p className="mt-6 rounded-2xl bg-[#F3D6DB] p-4 font-bold text-[#201B16] dark:bg-[#A32638]/10 dark:text-[#F3D6DB]">{error || productError}</p>}
 
         <section className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Stat label="Active Products" value={activeCount} />
@@ -963,7 +963,7 @@ export default function AdminDashboard() {
                         type="button"
                         onClick={() => removeProductImageSlot(index)}
                         disabled={!slot}
-                        className="rounded-full border border-[#C5A46D]/40 px-3 py-1 text-xs font-black text-[#A98750] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#C5A46D]/30 dark:text-[#E8D6BA]"
+                        className="rounded-full border border-[#A32638]/40 px-3 py-1 text-xs font-black text-[#750018] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#A32638]/30 dark:text-[#F3D6DB]"
                       >
                         Remove
                       </button>
@@ -990,7 +990,7 @@ export default function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => removeProductImageSlot(index)}
-                        className="absolute right-2 top-2 rounded-full bg-[#A98750] px-2 py-1 text-[10px] font-black text-white shadow"
+                        className="absolute right-2 top-2 rounded-full bg-[#750018] px-2 py-1 text-[10px] font-black text-white shadow"
                       >
                         Delete
                       </button>
@@ -1220,7 +1220,7 @@ function OrdersPanel({
         <div className="flex flex-wrap gap-2">
           <Link href="/admin/notifications" className="rounded-full bg-amber-700 px-4 py-2 text-sm font-black text-white">Notifications</Link>
           <button onClick={exportOrders} style={{ backgroundColor: "#201B16", color: "#FFFFFF" }} className="rounded-full bg-stone-950 px-4 py-2 text-sm font-black text-white dark:bg-amber-700">Export CSV</button>
-          <button onClick={deleteTestOrders} disabled={loading || savingId === 'bulk-test-delete' || testOrderCount === 0} className="rounded-full border border-[#C5A46D]/50 px-4 py-2 text-sm font-black text-[#A98750] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#C5A46D]/40 dark:text-[#E8D6BA]">{savingId === 'bulk-test-delete' ? 'Deleting...' : `Delete Test Orders${testOrderCount ? ` (${testOrderCount})` : ''}`}</button>
+          <button onClick={deleteTestOrders} disabled={loading || savingId === 'bulk-test-delete' || testOrderCount === 0} className="rounded-full border border-[#A32638]/50 px-4 py-2 text-sm font-black text-[#750018] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#A32638]/40 dark:text-[#F3D6DB]">{savingId === 'bulk-test-delete' ? 'Deleting...' : `Delete Test Orders${testOrderCount ? ` (${testOrderCount})` : ''}`}</button>
           <button onClick={refresh} className="rounded-full border border-stone-300 px-4 py-2 text-sm font-black dark:border-white/10">Refresh Orders</button>
         </div>
       </div>
@@ -1318,8 +1318,8 @@ function OrdersPanel({
                 <button onClick={() => updateOrder(o.id, { status: 'processing', order_status: 'processing' } as Partial<OrderRow>)} className="rounded-full bg-stone-100 px-4 py-2 text-xs font-black dark:bg-white/10">Mark Processing</button>
                 <button onClick={() => updateOrder(o.id, { status: 'shipped', order_status: 'shipped' } as Partial<OrderRow>)} className="rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white">Mark Shipped</button>
                 <button onClick={() => updateOrder(o.id, { status: 'delivered', order_status: 'delivered' } as Partial<OrderRow>)} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Mark Delivered</button>
-                <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-[#C5A46D] px-4 py-2 text-xs font-black text-white">Cancel Order</button>
-                <button onClick={() => deleteOrder(o.id)} disabled={savingId === o.id} className="rounded-full border border-[#C5A46D]/50 px-4 py-2 text-xs font-black text-[#A98750] disabled:cursor-wait disabled:opacity-60 dark:border-[#C5A46D]/40 dark:text-[#E8D6BA]">Delete Test Order</button>
+                <button onClick={() => updateOrder(o.id, { status: 'cancelled', order_status: 'cancelled' } as Partial<OrderRow>)} className="rounded-full bg-[#A32638] px-4 py-2 text-xs font-black text-white">Cancel Order</button>
+                <button onClick={() => deleteOrder(o.id)} disabled={savingId === o.id} className="rounded-full border border-[#A32638]/50 px-4 py-2 text-xs font-black text-[#750018] disabled:cursor-wait disabled:opacity-60 dark:border-[#A32638]/40 dark:text-[#F3D6DB]">Delete Test Order</button>
                 <Link href={`/invoice/${o.id}`} className="rounded-full border border-stone-300 px-4 py-2 text-xs font-black dark:border-white/10">Invoice / PDF</Link>
                 <Link href={`/track?code=${o.tracking_code || o.tracking_number || o.id}`} className="rounded-full border border-blue-300 px-4 py-2 text-xs font-black text-blue-800 dark:border-blue-500/30 dark:text-blue-200">Customer tracking page</Link>
                 <Link href="/admin/notifications" className="rounded-full border border-amber-300 px-4 py-2 text-xs font-black text-amber-800 dark:border-amber-500/30 dark:text-amber-200">Notify Customer</Link>
@@ -1377,8 +1377,8 @@ function ProductTable({ products, editing, deleteProduct }: { products: ManagedP
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDP')?.prices?.['85ml'] || 0)} className="font-black" /></div>
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'Extrait')?.prices?.['50ml'] || 0)} className="font-black" /></div>
                 <div><Price amount={Number(p.variants?.find((v) => v.concentration === 'EDT')?.prices?.['50ml'] || 0)} className="font-black" /></div>
-                <div><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-[#E8D6BA] text-[#A98750]' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></div>
-                <div><div className="flex gap-2"><button onClick={() => editing(p)} style={{ backgroundColor: "#201B16", color: "#FFFFFF" }} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} style={{ backgroundColor: "#C5A46D", color: "#201B16" }} className="rounded-full bg-[#C5A46D] px-4 py-2 text-xs font-black text-white">Delete</button></div></div>
+                <div><span className={`rounded-full px-3 py-1 text-xs font-black ${p.active === false ? 'bg-stone-100 text-stone-500' : p.stock <= 10 ? 'bg-[#F3D6DB] text-[#750018]' : 'bg-emerald-100 text-emerald-700'}`}>{p.active === false ? 'Hidden' : p.stock <= 10 ? 'Low stock' : 'Active'}</span></div>
+                <div><div className="flex gap-2"><button onClick={() => editing(p)} style={{ backgroundColor: "#201B16", color: "#FFFFFF" }} className="rounded-full bg-stone-950 px-4 py-2 text-xs font-black text-white">Edit</button><button onClick={() => deleteProduct(p.id)} style={{ backgroundColor: "#A32638", color: "#201B16" }} className="rounded-full bg-[#A32638] px-4 py-2 text-xs font-black text-white">Delete</button></div></div>
               </div>
             </div>
           </div>

@@ -5,29 +5,29 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,600&display=swap');
 
 :root {
-  --background: #F5F0E8;
-  --foreground: #201B16;
-  --primary: #C5A46D;
-  --primary-dark: #A98750;
-  --primary-light: #E8D6BA;
-  --accent: #201B16;
-  --muted: #9A7543;
-  --border: #D6C9B6;
-  --card: #FFFFFF;
+  --background: #FAF0F1;
+  --foreground: #2B171B;
+  --primary: #A32638;
+  --primary-dark: #750018;
+  --primary-light: #F3D6DB;
+  --accent: #2B171B;
+  --muted: #9B4656;
+  --border: #E3C5CB;
+  --card: #FFF9FA;
   --radius: 1rem;
 }
 
 /* Dark mode CSS variables */
 .dark {
-  --background: #11110F;
-  --foreground: #F5F0E8;
-  --primary: #C5A46D;
-  --primary-dark: #A98750;
-  --primary-light: #E8D6BA;
-  --accent: #F5F0E8;
-  --muted: #C5A46D;
-  --border: #3B342C;
-  --card: #201B16;
+  --background: #16090B;
+  --foreground: #F8EDEF;
+  --primary: #A32638;
+  --primary-dark: #750018;
+  --primary-light: #F3D6DB;
+  --accent: #F8EDEF;
+  --muted: #D58B99;
+  --border: #4B202A;
+  --card: #241014;
   --radius: 1rem;
 }
 
@@ -65,23 +65,23 @@ body {
 
 /* Glassmorphism */
 .glass {
-  background: rgba(255, 247, 247, 0.84);
+  background: rgba(255, 246, 248, 0.86);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(197, 164, 109, 0.20);
+  border: 1px solid rgba(163, 38, 56, 0.24);
 }
 
 .glass-dark {
-  background: rgba(17, 17, 15, 0.82);
+  background: rgba(22, 9, 11, 0.86);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(197, 164, 109, 0.18);
+  border: 1px solid rgba(163, 38, 56, 0.22);
 }
 
 /* Dark mode glass override */
 .dark .glass {
-  background: rgba(17, 17, 15, 0.84);
-  border: 1px solid rgba(197, 164, 109, 0.18);
+  background: rgba(22, 9, 11, 0.86);
+  border: 1px solid rgba(163, 38, 56, 0.22);
 }
 
 /* Reveal animation */
@@ -104,7 +104,7 @@ body {
 .arch-image:hover {
   transform: scale(1.12) !important;
   z-index: 50;
-  box-shadow: 0 24px 60px rgba(197, 164, 109, 0.26);
+  box-shadow: 0 24px 60px rgba(163, 38, 56, 0.30);
 }
 
 /* Product card hover */
@@ -149,7 +149,7 @@ body {
 .btn-amber:hover {
   background: var(--primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(177, 18, 38, 0.32);
+  box-shadow: 0 8px 24px rgba(117, 0, 24, 0.34);
 }
 .btn-amber:active {
   transform: translateY(0);
@@ -185,7 +185,7 @@ body {
 /* Admin product catalog: keep the long product list independently scrollable so the Edit form stays in view. */
 .admin-product-table-scroll {
   scrollbar-width: auto;
-  scrollbar-color:  #C5A46D rgba(197, 164, 109, 0.08);
+  scrollbar-color:  #A32638 rgba(197, 164, 109, 0.08);
 }
 .admin-product-table-scroll::-webkit-scrollbar {
   width: 10px;
@@ -196,13 +196,13 @@ body {
   border-radius: 999px;
 }
 .admin-product-table-scroll::-webkit-scrollbar-thumb {
-  background:  #C5A46D;
+  background:  #A32638;
   border: 2px solid transparent;
   background-clip: padding-box;
   border-radius: 999px;
 }
 .admin-product-table-scroll::-webkit-scrollbar-thumb:hover {
-  background: #A98750;
+  background: #750018;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
