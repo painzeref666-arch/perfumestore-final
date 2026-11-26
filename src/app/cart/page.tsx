@@ -39,7 +39,7 @@ export default function CartPage() {
                       <span className="px-3 text-sm font-bold">{item.quantity}</span>
                       <button className="px-3 py-1 font-bold" onClick={() => updateQuantity(item.key, item.quantity + 1)}>+</button>
                     </div>
-                    <button className="text-sm font-bold text-[#A32638]" onClick={() => removeFromCart(item.key)}>Remove</button>
+                    <button className="text-sm font-bold text-[#8A0303]" onClick={() => removeFromCart(item.key)}>Remove</button>
                   </div>
                 </div>
               ))}

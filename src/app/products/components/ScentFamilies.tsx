@@ -19,7 +19,7 @@ const families: ScentFamily[] = [
   count: 62,
   image: "/assets/images/scent-family-floral.jpg",
   imageAlt: 'Floral perfume bottle surrounded by fresh champagne gold roses and peonies',
-  accent: '#A32638',
+  accent: '#8A0303',
   examples: ['Jasmine', 'Peony', 'Lily', 'Rose']
 },
 {
@@ -28,7 +28,7 @@ const families: ScentFamily[] = [
   count: 48,
   image: "/assets/images/scent-family-woody.jpg",
   imageAlt: 'Woody fragrance bottle on weathered oak wood with cedar bark',
-  accent: '#A32638',
+  accent: '#8A0303',
   examples: ['Sandalwood', 'Cedarwood', 'Vetiver', 'Oud']
 },
 {
@@ -37,7 +37,7 @@ const families: ScentFamily[] = [
   count: 41,
   image: "/assets/images/scent-family-oriental.jpg",
   imageAlt: 'Oriental perfume bottle with spices and incense on dark velvet',
-  accent: '#A32638',
+  accent: '#8A0303',
   examples: ['Amber', 'Musk', 'Vanilla', 'Saffron']
 },
 {
@@ -46,7 +46,7 @@ const families: ScentFamily[] = [
   count: 55,
   image: "/assets/images/scent-family-fresh.jpg",
   imageAlt: 'Fresh citrus perfume bottle with sliced lemons and mint leaves',
-  accent: '#A32638',
+  accent: '#8A0303',
   examples: ['Bergamot', 'Neroli', 'Sea Salt', 'Yuzu']
 }];
 

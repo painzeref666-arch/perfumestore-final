@@ -121,21 +121,21 @@ export default function ReviewsPage() {
   return (
     <main className="min-h-screen bg-[#F5F0E8] px-5 py-12 text-stone-950 dark:bg-[#11110F] dark:text-white sm:px-6 sm:py-16">
       <div className="mx-auto max-w-6xl">
-        <Link href="/products" className="font-bold text-amber-800 dark:text-[#A32638]">← Back to products</Link>
-        <header className="mt-8 rounded-[2rem] border border-[#A32638]/30 bg-white p-7 shadow-sm dark:bg-white/5 sm:p-10">
-          <p className="text-xs font-black uppercase tracking-[.3em] text-amber-700 dark:text-[#A32638]">Customer experiences</p>
+        <Link href="/products" className="font-bold text-amber-800 dark:text-[#8A0303]">← Back to products</Link>
+        <header className="mt-8 rounded-[2rem] border border-[#8A0303]/30 bg-white p-7 shadow-sm dark:bg-white/5 sm:p-10">
+          <p className="text-xs font-black uppercase tracking-[.3em] text-amber-700 dark:text-[#8A0303]">Customer experiences</p>
           <h1 className="mt-3 text-4xl font-black sm:text-5xl">Customer Reviews</h1>
           <p className="mt-4 max-w-2xl text-stone-600 dark:text-white/60">Discover fragrance experiences shared by our customers. Reviews may include photos or videos.</p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <span className="rounded-full bg-[#F5F0E8] px-4 py-2 text-sm font-bold dark:bg-white/10">{reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</span>
-            {authChecked && (user ? <button type="button" onClick={() => { setShowForm((v) => !v); setMsg(''); }} className="rounded-full bg-[#A32638] px-6 py-3 font-black text-[#201B16] hover:bg-[#B8955D]">{showForm ? 'Close review form' : 'Write a Review'}</button> : <Link href="/account" className="rounded-full bg-[#A32638] px-6 py-3 font-black text-[#201B16]">Sign in to write a review</Link>)}
+            {authChecked && (user ? <button type="button" onClick={() => { setShowForm((v) => !v); setMsg(''); }} className="rounded-full bg-[#8A0303] px-6 py-3 font-black text-[#201B16] hover:bg-[#B8955D]">{showForm ? 'Close review form' : 'Write a Review'}</button> : <Link href="/account" className="rounded-full bg-[#8A0303] px-6 py-3 font-black text-[#201B16]">Sign in to write a review</Link>)}
           </div>
         </header>
 
         {msg && !showForm && <p role="status" className="mt-4 rounded-2xl bg-white p-4 font-semibold text-stone-800 dark:bg-white/10 dark:text-white">{msg}</p>}
 
         {showForm && user && (
-          <form ref={formRef} onSubmit={submit} noValidate className="mt-6 grid gap-4 rounded-[2rem] border border-[#A32638]/30 bg-white p-6 shadow-sm dark:bg-white/5 sm:p-8">
+          <form ref={formRef} onSubmit={submit} noValidate className="mt-6 grid gap-4 rounded-[2rem] border border-[#8A0303]/30 bg-white p-6 shadow-sm dark:bg-white/5 sm:p-8">
             <h2 className="text-2xl font-black">Share your experience</h2>
             <select name="product_id" required className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white">
               {activeProducts.map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
@@ -144,14 +144,14 @@ export default function ReviewsPage() {
             <select name="rating" className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select>
             <input name="title" required placeholder="Review title" className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white" />
             <textarea name="body" required placeholder="Your review" className="min-h-32 rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white" />
-            <div className="rounded-2xl border border-dashed border-[#A32638]/60 p-5">
+            <div className="rounded-2xl border border-dashed border-[#8A0303]/60 p-5">
               <label className="block font-bold">Attach photos or video <span className="text-sm font-normal text-stone-500">(up to 5 files)</span></label>
               <p className="mt-1 text-sm text-stone-500 dark:text-white/50">Images: up to 8 MB each. Videos: up to 30 MB each.</p>
               <input type="file" accept="image/*,video/*" multiple onChange={(e) => handleFiles(e.target.files)} className="mt-3 block w-full text-sm" />
-              {selectedFiles.length > 0 && <ul className="mt-3 space-y-2 text-sm">{selectedFiles.map((file, i) => <li key={`${file.name}-${i}`} className="flex items-center justify-between gap-2"><span className="truncate">{file.name}</span><button type="button" onClick={() => setSelectedFiles((files) => files.filter((_, index) => index !== i))} className="font-bold text-amber-800 dark:text-[#A32638]">Remove</button></li>)}</ul>}
+              {selectedFiles.length > 0 && <ul className="mt-3 space-y-2 text-sm">{selectedFiles.map((file, i) => <li key={`${file.name}-${i}`} className="flex items-center justify-between gap-2"><span className="truncate">{file.name}</span><button type="button" onClick={() => setSelectedFiles((files) => files.filter((_, index) => index !== i))} className="font-bold text-amber-800 dark:text-[#8A0303]">Remove</button></li>)}</ul>}
             </div>
-            <button disabled={uploading} type="submit" className="rounded-full bg-[#A32638] px-6 py-3 font-black text-[#201B16] disabled:opacity-50">{uploading ? 'Uploading & submitting…' : 'Submit review'}</button>
-            {msg && <p role="alert" className="font-bold text-amber-800 dark:text-[#A32638]">{msg}</p>}
+            <button disabled={uploading} type="submit" className="rounded-full bg-[#8A0303] px-6 py-3 font-black text-[#201B16] disabled:opacity-50">{uploading ? 'Uploading & submitting…' : 'Submit review'}</button>
+            {msg && <p role="alert" className="font-bold text-amber-800 dark:text-[#8A0303]">{msg}</p>}
           </form>
         )}
 
@@ -160,8 +160,8 @@ export default function ReviewsPage() {
             <article key={review.id} className="overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
               {mediaFor(review).length > 0 && <div className="grid gap-2 p-3 sm:grid-cols-2">{mediaFor(review).map((media, i) => media.type === 'video' || /\.(mp4|webm|mov)(\?|$)/i.test(media.url) ? <video key={i} controls preload="metadata" className="max-h-96 w-full rounded-2xl bg-black" src={media.url} /> : <div key={i} className="relative aspect-video overflow-hidden rounded-2xl bg-stone-100"><AppImage src={media.url} alt={`${review.title || 'Review'} media`} fill sizes="(max-width:768px) 100vw,50vw" className="object-cover" /></div>)}</div>}
               <div className="p-6">
-                <p className="text-xs font-black uppercase tracking-widest text-amber-700 dark:text-[#A32638]">{productName(review.product_id)}</p>
-                <p className="mt-2 text-lg font-black">{review.title} <span className="text-amber-700 dark:text-[#A32638]">{'★'.repeat(Math.max(1, Math.min(5, Number(review.rating || 5))) )}</span></p>
+                <p className="text-xs font-black uppercase tracking-widest text-amber-700 dark:text-[#8A0303]">{productName(review.product_id)}</p>
+                <p className="mt-2 text-lg font-black">{review.title} <span className="text-amber-700 dark:text-[#8A0303]">{'★'.repeat(Math.max(1, Math.min(5, Number(review.rating || 5))) )}</span></p>
                 <p className="mt-1 text-sm text-stone-500 dark:text-white/50">{review.customer_name}</p>
                 <p className="mt-3 whitespace-pre-wrap text-stone-700 dark:text-white/70">{review.body}</p>
               </div>

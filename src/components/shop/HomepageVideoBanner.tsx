@@ -35,23 +35,23 @@ export default function HomepageVideoBanner() {
   }, []);
 
   return (
-    <section className="relative isolate overflow-hidden rounded-[2rem] border border-[#A32638]/25 bg-gradient-to-br from-[#201B16] via-[#171411] to-[#11110F] px-5 py-5 text-[#F5F0E8] shadow-xl shadow-black/30 sm:px-7 sm:py-6 lg:px-9 lg:py-7">
+    <section className="relative isolate overflow-hidden rounded-[2rem] border border-[#8A0303]/25 bg-gradient-to-br from-[#201B16] via-[#171411] to-[#11110F] px-5 py-5 text-[#F5F0E8] shadow-xl shadow-black/30 sm:px-7 sm:py-6 lg:px-9 lg:py-7">
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-[#A32638]/[0.08] blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-[#8A0303]/[0.08] blur-3xl"
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-[#A32638]/[0.08] blur-3xl"
+        className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-[#8A0303]/[0.08] blur-3xl"
       />
 
       <div className="relative grid items-center gap-5 lg:grid-cols-[1fr_0.72fr] lg:gap-7">
 
         <div className="max-w-xl">
 
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#A32638] sm:text-xs">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#8A0303] sm:text-xs">
             Exousia &amp; Co. Originals
           </p>
 
@@ -68,13 +68,13 @@ export default function HomepageVideoBanner() {
             confidence, and elegance into every experience.
           </p>
 
-          <p className="mt-3 text-xs font-semibold tracking-wide text-[#A32638]">
+          <p className="mt-3 text-xs font-semibold tracking-wide text-[#8A0303]">
             YOUR SCENT, YOUR STORY
           </p>
 
           <Link
             href="/products"
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#A32638] px-5 py-2.5 text-sm font-bold text-[#11110F] shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-[#D8BC8B] focus:outline-none focus:ring-2 focus:ring-[#A32638] focus:ring-offset-2 focus:ring-offset-[#201B16]"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#8A0303] px-5 py-2.5 text-sm font-bold text-[#11110F] shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-[#D8BC8B] focus:outline-none focus:ring-2 focus:ring-[#8A0303] focus:ring-offset-2 focus:ring-offset-[#201B16]"
           >
             Explore Exousia
             <span aria-hidden="true">→</span>
@@ -82,7 +82,7 @@ export default function HomepageVideoBanner() {
 
         </div>
 
-        <div className="relative mx-auto flex min-h-[220px] w-full max-w-[420px] items-center justify-center overflow-hidden rounded-2xl border border-[#A32638]/20 bg-[#111110]/80 shadow-2xl shadow-black/40 sm:min-h-[280px] lg:min-h-[350px]">
+        <div className="relative mx-auto flex min-h-[220px] w-full max-w-[420px] items-center justify-center overflow-hidden rounded-2xl border border-[#8A0303]/20 bg-[#111110]/80 shadow-2xl shadow-black/40 sm:min-h-[280px] lg:min-h-[350px]">
 
           {media ? (
             media.media_type === 'video' ? (
