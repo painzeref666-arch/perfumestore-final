@@ -68,9 +68,11 @@ function SectionHeading({ eyebrow, title, light = false }: {eyebrow: string; tit
 export default function HomePage() {
   const [eventMedia, setEventMedia] = useState<{media_type:'image'|'video';file_url:string;title:string}|null>(null);
   useEffect(() => { if (!supabase) return; let alive=true; supabase.from('event_scents_hero_media').select('media_type,file_url,title').eq('is_active',true).maybeSingle().then(({data,error})=>{if(alive&&!error&&data)setEventMedia(data as any)}); return ()=>{alive=false}; }, []);
-  const { activeProducts } = useProducts();
+  const { products, activeProducts } = useProducts();
   const featured = activeProducts.slice(0, 5);
-  const upcoming = useMemo(() => activeProducts.filter((p) => p.upcoming_enabled === true).sort((a, b) => Number(a.upcoming_order || 999) - Number(b.upcoming_order || 999)), [activeProducts]);
+  // Coming Soon cards intentionally use the full product list so their visibility
+  // is independent from the normal "Show product in shop" (active) setting.
+  const upcoming = useMemo(() => products.filter((p) => p.upcoming_enabled === true).sort((a, b) => Number(a.upcoming_order || 999) - Number(b.upcoming_order || 999)), [products]);
   return <>
     <div className="grain" aria-hidden="true"/><Header/>
     <main className="min-h-screen bg-[#f5f0e8] pt-28 text-[#211c17] dark:bg-[#11110f] dark:text-[#f5f0e8]">
