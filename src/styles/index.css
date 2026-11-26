@@ -221,3 +221,89 @@ html.dark [class~="border-white/10"], html.dark [class~="border-white/8"] { bord
 html.dark [class~="border-stone-800"] { border-color: #642037 !important; }
 html.dark [class~="border-neutral-800"] { border-color: #642037 !important; }
 html.dark [class~="border-gray-800"] { border-color: #642037 !important; }
+
+/* ================================================================
+   EXOUSIA RED-DOMINANT THEME — final palette pass
+   Keeps product imagery and layout intact while carrying the ruby palette
+   through both theme modes, legacy utility classes, and focus states.
+   ================================================================ */
+:root:not(.dark) {
+  --background: #F5E3E7;
+  --foreground: #321018;
+  --primary: #A32638;
+  --primary-dark: #750018;
+  --primary-light: #F3D6DB;
+  --accent: #750018;
+  --muted: #793A49;
+  --border: #D6AAB3;
+  --card: #FFF8F9;
+  color-scheme: light;
+}
+.dark {
+  --background: #1B060B;
+  --foreground: #FFF3F5;
+  --primary: #C21F42;
+  --primary-dark: #8D0B29;
+  --primary-light: #F3D6DB;
+  --accent: #FFE6EB;
+  --muted: #E6A9B4;
+  --border: #672536;
+  --card: #390B1B;
+  color-scheme: dark;
+}
+body { background-color: var(--background) !important; color: var(--foreground); }
+
+/* Old black/brown surfaces become coordinated ruby and wine surfaces. */
+html.dark :where(.bg-black, .bg-stone-950, .bg-background,
+  [class~="bg-[#11110F]"], [class~="bg-[#11110f]"],
+  [class~="bg-[#191816]"], [class~="bg-[#171714]"], [class~="bg-[#171411]"],
+  [class~="bg-[#090908]"], [class~="bg-[#070604]"], [class~="bg-[#1c1916]"],
+  [class~="bg-[#1a1410]"], [class~="bg-[#1f070c]"], [class~="bg-[#16090b]"],
+  [class~="bg-[#24211e]"], [class~="bg-[#24211e]"], [class~="bg-[#28221d]"],
+  [class~="bg-[#211c17]"], [class~="bg-[#201b16]"], [class~="bg-[#201B16]"]) {
+  background-color: #390B1B !important;
+}
+html:not(.dark) :where([class~="bg-[#F5F0E8]"], [class~="bg-[#f5f0e8]"],
+  [class~="bg-[#eee5d7]"], [class~="bg-[#e8dfd2]"], [class~="bg-[#d6c9b6]"],
+  [class~="bg-[#FCEEEF]"], [class~="bg-stone-50"], [class~="bg-white/80"]) {
+  background-color: #FFF8F9 !important;
+}
+html:not(.dark) :where([class~="bg-[#11110F]"], [class~="bg-[#11110f]"],
+  [class~="bg-[#171411]"], [class~="bg-[#201b16]"], [class~="bg-[#201B16]"],
+  [class~="bg-[#211c17]"], [class~="bg-[#24211e]"], [class~="bg-[#28221d]"],
+  [class~="bg-[#211c17]"], [class~="bg-stone-950"], [class~="bg-black"]) {
+  background-color: #5A1024 !important;
+}
+html:not(.dark) :where(.text-stone-950, .text-gray-950, .text-zinc-950,
+  [class~="text-[#211c17]"], [class~="text-[#201b16]"]) { color: #321018 !important; }
+html.dark :where(.text-stone-950, .text-gray-950, .text-zinc-950,
+  [class~="text-[#211c17]"], [class~="text-[#201b16]"]) { color: #FFF3F5 !important; }
+.gift-bg {
+  background: linear-gradient(135deg, #250710 0%, #5A1024 46%, #8D0B29 74%, #250710 100%) !important;
+}
+
+/* Re-map legacy gold/amber utility colors to the red brand scale. */
+:where(.bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-yellow-500, .bg-yellow-600,
+  [class~="bg-[#A32638]"]) { background-color: #A32638 !important; color: #fff !important; }
+:where(.hover\:bg-amber-700:hover, .hover\:bg-amber-800:hover,
+  .hover\:bg-yellow-700:hover, [class~="hover:bg-[#d6b783]"]:hover,
+  [class~="hover:bg-[#e0c18b]"]:hover) { background-color: #750018 !important; color: #fff !important; }
+:where(.text-amber-700, .text-amber-800, .text-amber-900, .text-yellow-700,
+  .text-yellow-800, [class*="text-[#d6b477]"], [class*="text-[#d6b783]"],
+  [class*="text-[#b18a50]"], [class*="text-[#9a7543]"]) { color: #A32638 !important; }
+:where(.border-amber-300, .border-amber-400, .border-amber-500,
+  [class*="border-[#d6b477]"], [class*="border-[#b18a50]"]) { border-color: #A32638 !important; }
+html.dark :where(.text-amber-700, .text-amber-800, .text-amber-900,
+  [class*="text-[#d6b477]"], [class*="text-[#d6b783]"], [class*="text-[#b18a50]"],
+  [class*="text-[#9a7543]"]) { color: #F08A9F !important; }
+
+/* White foreground keeps primary red actions readable. */
+:where(.btn-amber, .badge-new, [class~="bg-[#A32638]"], .bg-amber-500,
+  .bg-amber-600, .bg-amber-700, .bg-yellow-500, .bg-yellow-600) { color: #fff !important; }
+html:not(.dark) body :where(button, a).bg-\[\#A32638\],
+html.dark body :where(button, a).bg-\[\#A32638\],
+html:not(.dark) body :where(button, a).btn-amber,
+html.dark body :where(button, a).btn-amber { color: #fff !important; }
+:where(button, a, input, textarea, select):focus-visible {
+  outline-color: #A32638 !important;
+}
