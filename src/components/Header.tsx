@@ -118,7 +118,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-[100] px-4 md:px-6 py-4">
       <div
-        className={`max-w-7xl mx-auto flex items-center justify-between bg-[#11110f]/95 backdrop-blur-xl border border-[#8A0303]/25 rounded-2xl px-5 md:px-8 py-3.5 transition-all duration-500 ${
+        className={`site-navbar max-w-7xl mx-auto flex items-center justify-between bg-[#11110f]/95 backdrop-blur-xl border border-[#C5A46D]/60 rounded-2xl px-5 md:px-8 py-3.5 transition-all duration-500 ${
           scrolled ? 'shadow-xl shadow-black/40' : ''
         }`}
       >
@@ -129,18 +129,18 @@ export default function Header() {
             iconName="SparklesIcon"
             className="group-hover:rotate-12 transition-transform duration-500"
           />
-          <span className="font-sans font-700 text-lg tracking-tight text-[#f5f0e8]">
-            Exousia and Co. <span className="font-display italic text-[#8A0303] font-normal">Marketing</span>
+          <span className="font-sans font-700 text-lg tracking-tight text-[#E0C27A]">
+            Exousia and Co. <span className="font-display italic text-[#FFF9F2] font-normal">Marketing</span>
           </span>
         </Link>
 
         {/* Desktop Nav: primary shopping links, secondary customer links grouped under More */}
-        <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[#f5f0e8]/75">
-          <Link href="/perfumes" className="hover:text-[#8A0303] transition-colors">Perfumes</Link>
-          <Link href="/cosmetics" className="hover:text-[#8A0303] transition-colors">Cosmetics</Link>
-          <Link href="/wellness" className="hover:text-[#8A0303] transition-colors">Wellness</Link>
-          <Link href="/quiz" className="hover:text-[#8A0303] transition-colors">Scent Quiz</Link>
-          <Link href="/#scents" className="hover:text-[#8A0303] transition-colors">Scent Families</Link>
+        <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[#E0C27A]/90">
+          <Link href="/perfumes" className="hover:text-[#FFF2C2] transition-colors">Perfumes</Link>
+          <Link href="/cosmetics" className="hover:text-[#FFF2C2] transition-colors">Cosmetics</Link>
+          <Link href="/wellness" className="hover:text-[#FFF2C2] transition-colors">Wellness</Link>
+          <Link href="/quiz" className="hover:text-[#FFF2C2] transition-colors">Scent Quiz</Link>
+          <Link href="/#scents" className="hover:text-[#FFF2C2] transition-colors">Scent Families</Link>
           <div className="relative">
             <button type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen(!moreOpen)} className="inline-flex items-center gap-1 hover:text-[#8A0303] transition-colors">
               More <span className="text-xs">{moreOpen ? '▴' : '▾'}</span>
@@ -198,7 +198,7 @@ export default function Header() {
           {/* CTA */}
           <Link
             href="/perfumes"
-            className="hidden sm:inline-flex bg-[#8A0303] text-[#171411] hover:bg-[#d6b783] items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
+            className="navbar-cta hidden sm:inline-flex bg-[#8A0303] text-white hover:bg-[#700404] items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
           >
             Shop Now
           </Link>

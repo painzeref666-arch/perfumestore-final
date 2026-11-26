@@ -194,6 +194,12 @@ html.dark .product-card {
 }
 html:not(.dark) .product-card { border-color: #C5A46D !important; }
 .product-card:hover { border-color: #E0C27A !important; }
+.product-card {
+  box-shadow: 0 0 0 1px rgba(197, 164, 109, .18), 0 0 16px rgba(197, 164, 109, .10);
+}
+.product-card:hover {
+  box-shadow: 0 0 0 1px rgba(224, 194, 122, .48), 0 0 22px rgba(197, 164, 109, .20), 0 24px 50px rgba(0, 0, 0, .25);
+}
 html.dark [class*="bg-white/5"],
 html.dark [class*="bg-white/[.04]"],
 html.dark [class*="bg-white/10"] {
@@ -258,4 +264,37 @@ html.dark .text-amber-800, html.dark .text-amber-900 { color: #FFF9F2 !important
     bottom: -18%;
     width: 90%;
   }
+}
+
+/* Gold outlines and a soft, low-glare halo unify homepage cards and navbar. */
+.home-card {
+  border-color: #C5A46D !important;
+  box-shadow: 0 0 0 1px rgba(197, 164, 109, .16), 0 0 14px rgba(197, 164, 109, .10);
+  transition: border-color .25s ease, box-shadow .25s ease, transform .3s ease;
+}
+.home-card:hover {
+  border-color: #E0C27A !important;
+  box-shadow: 0 0 0 1px rgba(224, 194, 122, .38), 0 0 20px rgba(197, 164, 109, .18), 0 18px 44px rgba(0, 0, 0, .24);
+}
+.site-navbar {
+  background: rgba(112, 4, 4, .96) !important;
+  border-color: #C5A46D !important;
+  box-shadow: 0 0 0 1px rgba(197, 164, 109, .20), 0 0 16px rgba(197, 164, 109, .12), 0 12px 34px rgba(0, 0, 0, .25);
+}
+.site-navbar:hover {
+  box-shadow: 0 0 0 1px rgba(197, 164, 109, .30), 0 0 20px rgba(197, 164, 109, .18), 0 14px 38px rgba(0, 0, 0, .28);
+}
+.site-navbar nav a, .site-navbar nav button,
+.site-navbar button:not(.navbar-cta) {
+  color: #E0C27A !important;
+}
+.site-navbar nav a:hover, .site-navbar nav button:hover,
+.site-navbar button:not(.navbar-cta):hover {
+  color: #FFF2C2 !important;
+}
+.site-navbar button:not(.navbar-cta) { border-color: rgba(197, 164, 109, .62) !important; }
+.site-navbar .navbar-cta { color: #FFF9F2 !important; }
+.event-scents-panel {
+  border-color: #C5A46D !important;
+  box-shadow: 0 0 0 1px rgba(197, 164, 109, .18), 0 24px 60px rgba(0, 0, 0, .30);
 }
