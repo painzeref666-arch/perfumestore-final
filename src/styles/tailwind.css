@@ -5,29 +5,29 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,600&display=swap');
 
 :root {
-  --background: #F7E8EA;
-  --foreground: #2B171B;
-  --primary: #B51235;
-  --primary-dark: #79001B;
-  --primary-light: #F3D6DB;
-  --accent: #5A1024;
-  --muted: #914052;
-  --border: #D7AAB4;
-  --card: #FDF4F5;
+  --background: #F4E4E8;
+  --foreground: #301019;
+  --primary: #A51F3B;
+  --primary-dark: #74142B;
+  --primary-light: #F2CCD5;
+  --accent: #74142B;
+  --muted: #71404D;
+  --border: #DDB9C2;
+  --card: #FFF8F9;
   --radius: 1rem;
 }
 
 /* Dark mode CSS variables */
 .dark {
-  --background: #250710;
-  --foreground: #F8EDEF;
-  --primary: #B51235;
-  --primary-dark: #79001B;
-  --primary-light: #F3D6DB;
-  --accent: #F8EDEF;
-  --muted: #D99AA8;
-  --border: #602033;
-  --card: #3A0D1C;
+  --background: #2B0711;
+  --foreground: #FFF4F5;
+  --primary: #D12D50;
+  --primary-dark: #A41738;
+  --primary-light: #F2CCD5;
+  --accent: #FFE6EB;
+  --muted: #E8A8B5;
+  --border: #793247;
+  --card: #4B1022;
   --radius: 1rem;
 }
 
@@ -65,14 +65,14 @@ body {
 
 /* Glassmorphism */
 .glass {
-  background: rgba(255, 246, 248, 0.86);
+  background: rgba(255, 248, 249, 0.90);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(163, 38, 56, 0.24);
 }
 
 .glass-dark {
-  background: rgba(22, 9, 11, 0.86);
+  background: rgba(74, 13, 32, 0.90);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(163, 38, 56, 0.22);
@@ -80,7 +80,7 @@ body {
 
 /* Dark mode glass override */
 .dark .glass {
-  background: rgba(22, 9, 11, 0.86);
+  background: rgba(74, 13, 32, 0.90);
   border: 1px solid rgba(163, 38, 56, 0.22);
 }
 

@@ -307,3 +307,94 @@ html.dark body :where(button, a).btn-amber { color: #fff !important; }
 :where(button, a, input, textarea, select):focus-visible {
   outline-color: #A32638 !important;
 }
+
+/* Stronger visible ruby surfaces for the luxury storefront. */
+:root:not(.dark) {
+  --background: #F4E4E8;
+  --foreground: #301019;
+  --primary: #A51F3B;
+  --primary-dark: #74142B;
+  --primary-light: #F2CCD5;
+  --accent: #74142B;
+  --muted: #71404D;
+  --border: #DDB9C2;
+  --card: #FFF8F9;
+}
+.dark {
+  --background: #2B0711;
+  --foreground: #FFF4F5;
+  --primary: #D12D50;
+  --primary-dark: #A41738;
+  --primary-light: #F2CCD5;
+  --accent: #FFE6EB;
+  --muted: #E8A8B5;
+  --border: #793247;
+  --card: #4B1022;
+}
+body { background: var(--background) !important; color: var(--foreground); }
+
+/* The current site uses hard-coded dark utilities, some with opacity suffixes.
+   Match the utility name inside the class so the ruby theme reaches headers,
+   page bands, and product cards too. */
+html.dark [class*="bg-[#11110f]"],
+html.dark [class*="bg-[#11110F]"],
+html.dark [class*="bg-[#090908]"],
+html.dark [class*="bg-[#070604]"],
+html.dark [class*="bg-[#171411]"],
+html.dark [class*="bg-[#191816]"],
+html.dark [class*="bg-[#1a1410]"],
+html.dark [class*="bg-[#1f070c]"],
+html.dark [class*="bg-[#16090b]"],
+html.dark [class*="bg-[#201b16]"],
+html.dark [class*="bg-[#201B16]"],
+html.dark [class*="bg-[#211c17]"],
+html.dark [class*="bg-[#24211e]"],
+html.dark [class*="bg-[#28221d]"],
+html.dark [class*="bg-[#1c1916]"],
+html.dark [class*="bg-stone-950"],
+html.dark [class~="bg-black"] {
+  background-color: #4A0D20 !important;
+}
+html.dark [class*="bg-[#1c1916]"],
+html.dark [class*="bg-[#24211e]"],
+html.dark [class*="bg-[#28221d]"],
+html.dark .product-card,
+html.dark .glass-dark {
+  background-color: #571329 !important;
+  border-color: #793247 !important;
+}
+html.dark [class*="bg-white/5"],
+html.dark [class*="bg-white/[.04]"],
+html.dark [class*="bg-white/10"] {
+  background-color: rgba(209, 45, 80, .17) !important;
+}
+html:not(.dark) [class*="bg-[#f5f0e8]"],
+html:not(.dark) [class*="bg-[#F5F0E8]"],
+html:not(.dark) [class*="bg-[#eee5d7]"],
+html:not(.dark) [class*="bg-[#e8dfd2]"],
+html:not(.dark) [class*="bg-[#d6c9b6]"] {
+  background-color: #F8E9EC !important;
+}
+html:not(.dark) .product-card, html:not(.dark) .glass {
+  background-color: #FFF8F9;
+  border-color: #DDB9C2;
+}
+html.dark :where(.btn-amber, .badge-new, [class*="bg-[#A32638]"],
+  [class*="bg-amber-500"], [class*="bg-amber-600"], [class*="bg-amber-700"]) {
+  background-color: #D12D50 !important;
+  color: #fff !important;
+}
+html.dark body [class*="bg-[#A32638]"],
+html.dark body [class*="bg-amber-500"],
+html.dark body [class*="bg-amber-600"],
+html.dark body [class*="bg-amber-700"],
+html:not(.dark) body [class*="bg-[#A32638]"],
+html:not(.dark) body [class*="bg-amber-500"],
+html:not(.dark) body [class*="bg-amber-600"],
+html:not(.dark) body [class*="bg-amber-700"] {
+  color: #fff !important;
+}
+html.dark [class*="text-[#A32638]"] { color: #F08A9F !important; }
+.gift-bg {
+  background: linear-gradient(135deg, #2B0711 0%, #4A0D20 45%, #76142D 75%, #2B0711 100%) !important;
+}
