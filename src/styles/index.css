@@ -184,11 +184,16 @@ html.dark [class~="bg-black"] {
 html.dark [class*="bg-[#1c1916]"],
 html.dark [class*="bg-[#24211e]"],
 html.dark [class*="bg-[#28221d]"],
-html.dark .product-card,
 html.dark .glass-dark {
   background-color: #700404 !important;
   border-color: #8A0303 !important;
 }
+html.dark .product-card {
+  background-color: #700404 !important;
+  border-color: #C5A46D !important;
+}
+html:not(.dark) .product-card { border-color: #C5A46D !important; }
+.product-card:hover { border-color: #E0C27A !important; }
 html.dark [class*="bg-white/5"],
 html.dark [class*="bg-white/[.04]"],
 html.dark [class*="bg-white/10"] {
