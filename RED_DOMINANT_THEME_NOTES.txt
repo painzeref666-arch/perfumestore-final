@@ -3,7 +3,9 @@ EXOUSIA & CO. RED LUXURY THEME
 This source uses the exact red pair from the supplied color reference and warm ivory contrast.
 Primary red: #8A0303
 Deep red: #700404
-Dark canvas and deeper panels: #700404
+Dark canvas: #1B080A
+Dark section surfaces: #241012
+Dark cards: #310E12
 Dominant red sections and actions: #8A0303
 Light ivory canvas: #F5F0E8
 Light card: #FFFCF8

@@ -19,15 +19,15 @@
 
 /* Dark mode CSS variables */
 .dark {
-  --background: #700404;
-  --foreground: #FFF9F2;
+  --background: #1B080A;
+  --foreground: #F4ECE4;
   --primary: #8A0303;
   --primary-dark: #700404;
   --primary-light: #F5E9E1;
   --accent: #FFF9F2;
-  --muted: #E7D5CB;
-  --border: #8A0303;
-  --card: #700404;
+  --muted: #D1BEB0;
+  --border: #76543B;
+  --card: #310E12;
   --radius: 1rem;
 }
 
@@ -72,16 +72,16 @@ body {
 }
 
 .glass-dark {
-  background: rgba(112, 4, 4, 0.92);
+  background: rgba(36, 16, 18, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(138, 3, 3, 0.34);
+  border: 1px solid rgba(197, 164, 109, 0.24);
 }
 
 /* Dark mode glass override */
 .dark .glass {
-  background: rgba(112, 4, 4, 0.92);
-  border: 1px solid rgba(138, 3, 3, 0.34);
+  background: rgba(36, 16, 18, 0.94);
+  border: 1px solid rgba(197, 164, 109, 0.24);
 }
 
 /* Reveal animation */

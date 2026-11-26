@@ -149,17 +149,19 @@ html:not(.dark) body textarea::placeholder {
   --card: #FFFCF8;
 }
 .dark {
-  --background: #700404;
-  --foreground: #FFF9F2;
+  --background: #1B080A;
+  --foreground: #F4ECE4;
   --primary: #8A0303;
   --primary-dark: #700404;
   --primary-light: #F5E9E1;
   --accent: #FFF9F2;
-  --muted: #E7D5CB;
-  --border: #8A0303;
-  --card: #700404;
+  --muted: #D1BEB0;
+  --border: #76543B;
+  --card: #310E12;
 }
 body { background: var(--background) !important; color: var(--foreground); }
+html.dark main { background-color: #1B080A !important; }
+html.dark #event-scents { background-color: #241012 !important; }
 
 /* Turn the existing near-black utilities into true red surfaces, including
    Tailwind dark: variants and background-opacity classes. */
@@ -179,17 +181,20 @@ html.dark [class*="bg-[#24211e]"],
 html.dark [class*="bg-[#28221d]"],
 html.dark [class*="bg-stone-950"],
 html.dark [class~="bg-black"] {
-  background-color: #8A0303 !important;
+  background-color: #241012 !important;
+}
+html.dark [class*="bg-[#700404]"] {
+  background-color: #2A0C0F !important;
 }
 html.dark [class*="bg-[#1c1916]"],
 html.dark [class*="bg-[#24211e]"],
 html.dark [class*="bg-[#28221d]"],
 html.dark .glass-dark {
-  background-color: #700404 !important;
-  border-color: #8A0303 !important;
+  background-color: #310E12 !important;
+  border-color: #76543B !important;
 }
 html.dark .product-card {
-  background-color: #700404 !important;
+  background-color: #310E12 !important;
   border-color: #C5A46D !important;
 }
 html:not(.dark) .product-card { border-color: #C5A46D !important; }
@@ -203,7 +208,7 @@ html:not(.dark) .product-card { border-color: #C5A46D !important; }
 html.dark [class*="bg-white/5"],
 html.dark [class*="bg-white/[.04]"],
 html.dark [class*="bg-white/10"] {
-  background-color: rgba(138, 3, 3, .20) !important;
+  background-color: rgba(138, 3, 3, .08) !important;
 }
 html:not(.dark) [class*="bg-[#f5f0e8]"],
 html:not(.dark) [class*="bg-[#F5F0E8]"],
@@ -218,7 +223,7 @@ html:not(.dark) .product-card, html:not(.dark) .glass {
 }
 .dark :where(.btn-amber, .badge-new, [class*="bg-[#8A0303]"],
   [class*="bg-amber-500"], [class*="bg-amber-600"], [class*="bg-amber-700"]) {
-  background-color: #8A0303 !important;
+  background-color: #241012 !important;
   color: #fff !important;
 }
 html.dark body [class*="bg-[#8A0303]"],
@@ -234,12 +239,12 @@ html.dark [class*="text-[#d6b783]"], html.dark [class*="text-[#b18a50]"],
 html.dark [class*="text-[#9a7543]"], html.dark .text-amber-700,
 html.dark .text-amber-800, html.dark .text-amber-900 { color: #FFF9F2 !important; }
 .gift-bg {
-  background: linear-gradient(135deg, #700404 0%, #8A0303 48%, #700404 78%, #700404 100%) !important;
+  background: linear-gradient(135deg, #1B080A 0%, #2B0B0D 48%, #3A1013 78%, #1B080A 100%) !important;
 }
 
 /* Event Scents banner: charcoal luxury card with a candy-red edge glow. */
 .event-scents-panel {
-  background: linear-gradient(112deg, #171212 0%, #220606 58%, #700404 100%);
+  background: linear-gradient(112deg, #171212 0%, #211012 58%, #2E0D10 100%);
 }
 .event-scents-panel::before {
   content: "";
@@ -250,11 +255,11 @@ html.dark .text-amber-800, html.dark .text-amber-900 { color: #FFF9F2 !important
   bottom: -35%;
   width: 60%;
   pointer-events: none;
-  background: radial-gradient(ellipse at 78% 48%, rgba(138, 3, 3, .95) 0%, rgba(112, 4, 4, .56) 38%, transparent 73%);
-  filter: blur(24px);
+  background: radial-gradient(ellipse at 78% 48%, rgba(138, 3, 3, .58) 0%, rgba(112, 4, 4, .32) 38%, transparent 73%);
+  filter: blur(32px);
 }
 .event-scents-visual {
-  background: linear-gradient(145deg, #110D0D 0%, #1A0808 58%, #700404 100%);
+  background: linear-gradient(145deg, #110D0D 0%, #1A1011 58%, #2B0B0D 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
 }
 @media (max-width: 767px) {
@@ -277,7 +282,7 @@ html.dark .text-amber-800, html.dark .text-amber-900 { color: #FFF9F2 !important
   box-shadow: 0 0 0 1px rgba(224, 194, 122, .38), 0 0 20px rgba(197, 164, 109, .18), 0 18px 44px rgba(0, 0, 0, .24);
 }
 .site-navbar {
-  background: rgba(112, 4, 4, .96) !important;
+  background: rgba(38, 11, 13, .96) !important;
   border-color: #C5A46D !important;
   box-shadow: 0 0 0 1px rgba(197, 164, 109, .20), 0 0 16px rgba(197, 164, 109, .12), 0 12px 34px rgba(0, 0, 0, .25);
 }
