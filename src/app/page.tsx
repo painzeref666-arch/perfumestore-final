@@ -155,16 +155,95 @@ export default function HomePage() {
 
 
       {/* Event Scents feature */}
-      <section id="event-scents" className="scroll-mt-28 bg-[#eee5d7] px-5 py-12 text-[#211c17] dark:bg-[#201b16] dark:text-[#f5f0e8] md:py-16"><div className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl border border-[#A32638]/30 md:grid-cols-2"><div className="flex flex-col justify-center p-6 sm:p-8 md:p-10"><p className="text-xs uppercase tracking-[.35em] text-[#9a7543]">By Exousia &amp; Co.</p><h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">Event Scents</h2><p className="mt-5 text-sm leading-7 text-current/70">A portable Perfume Bar experience for weddings, birthdays, corporate gatherings, and celebrations. Let your guests discover a scent and take home a memorable moment.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/event-scents/book" className="inline-flex w-fit rounded-full bg-[#A32638] px-6 py-3 text-sm font-semibold text-[#171411]">Book Us Now →</Link><Link href="/reviews" className="inline-flex w-fit rounded-full border border-[#A32638]/60 px-6 py-3 text-sm font-semibold">See guest experiences →</Link></div></div><div className="group relative isolate flex min-h-[280px] items-center justify-center overflow-hidden bg-[#090908] p-3 sm:p-4 md:min-h-[360px]">
-          {eventMedia?.file_url && <>
-            {eventMedia.media_type === 'video' ? <video src={eventMedia.file_url} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-25 blur-2xl"/> : <img src={eventMedia.file_url} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-25 blur-2xl"/>}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#090908]/70 via-[#090908]/35 to-[#A32638]/10"/>
-          </>}
-          <div className="relative flex min-h-[260px] w-full items-center justify-center overflow-hidden rounded-2xl border border-[#A32638]/25 bg-black/35 shadow-[0_20px_60px_rgba(0,0,0,.35)] md:min-h-[340px]">
-            {eventMedia ? (eventMedia.media_type === 'video' ? <video key={eventMedia.file_url} src={eventMedia.file_url} autoPlay muted loop playsInline controls preload="metadata" className="relative z-10 h-full w-full max-h-[400px] rounded-xl object-contain" aria-label={eventMedia.title || "Event Scents promotional video"}/> : <img src={eventMedia.file_url} alt={eventMedia.title || "Event Scents promotional image"} className="relative z-10 max-h-[340px] max-w-full rounded-xl object-contain"/>) : <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1400&auto=format&fit=crop" alt="Elegant event setting" className="relative z-10 h-full w-full max-h-[400px] rounded-xl object-contain"/>}
+      <section
+        id="event-scents"
+        className="scroll-mt-28 bg-[#D50025] px-5 py-14 text-white dark:bg-[#8C001B] md:py-20"
+      >
+        <div className="event-scents-panel relative isolate mx-auto grid max-w-7xl items-center gap-8 overflow-hidden rounded-[2rem] border border-white/15 p-6 shadow-2xl sm:p-9 md:grid-cols-[1.05fr_.95fr] md:gap-12 md:p-10 lg:p-12">
+          <div className="relative z-10 flex flex-col justify-center">
+            <p className="text-xs font-semibold uppercase tracking-[.35em] text-[#FF8A98]">
+              Exousia &amp; Co. Originals
+            </p>
+            <h2 className="mt-5 font-serif text-4xl leading-tight text-[#FFF9F4] md:text-5xl lg:text-6xl">
+              Event Scents
+            </h2>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-white/80 md:text-base">
+              A portable Perfume Bar experience for weddings, birthdays, corporate gatherings, and celebrations. Let your guests discover a scent and take home a memorable moment.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="/event-scents/book"
+                className="inline-flex w-fit items-center rounded-full bg-[#E0002B] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-950/30 transition hover:bg-[#B90024]"
+              >
+                Book Us Now →
+              </Link>
+              <Link
+                href="/reviews"
+                className="inline-flex w-fit items-center rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10"
+              >
+                See guest experiences →
+              </Link>
+            </div>
           </div>
-          <div className="pointer-events-none absolute inset-3 rounded-2xl border border-[#A32638]/10 sm:inset-5"/>
-        </div></div></section>
+
+          <div className="relative z-10 min-w-0">
+            {eventMedia?.file_url && (
+              <>
+                {eventMedia.media_type === 'video' ? (
+                  <video
+                    src={eventMedia.file_url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-35 blur-2xl"
+                  />
+                ) : (
+                  <img
+                    src={eventMedia.file_url}
+                    alt=""
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-35 blur-2xl"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-br from-black/35 via-black/20 to-[#E0002B]/20" />
+              </>
+            )}
+            <div className="event-scents-visual relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/15 p-2 shadow-[0_24px_70px_rgba(0,0,0,.4)] sm:p-3">
+              {eventMedia ? (
+                eventMedia.media_type === 'video' ? (
+                  <video
+                    key={eventMedia.file_url}
+                    src={eventMedia.file_url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    preload="metadata"
+                    className="relative z-10 h-full w-full rounded-[1rem] object-contain"
+                    aria-label={eventMedia.title || 'Event Scents promotional video'}
+                  />
+                ) : (
+                  <img
+                    src={eventMedia.file_url}
+                    alt={eventMedia.title || 'Event Scents promotional image'}
+                    className="relative z-10 h-full w-full rounded-[1rem] object-contain"
+                  />
+                )
+              ) : (
+                <img
+                  src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1400&auto=format&fit=crop"
+                  alt="Elegant event setting"
+                  className="relative z-10 h-full w-full rounded-[1rem] object-cover"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Reviews and social navigation without invented testimonials */}
       <section className="bg-[#f5f0e8] px-5 py-10 text-[#211c17] dark:bg-[#11110f] dark:text-[#f5f0e8] md:py-14"><div className="mx-auto max-w-7xl text-center"><SectionHeading eyebrow="Community" title="Your experience matters"/><p className="mx-auto max-w-xl text-sm leading-7 text-current/65">Discover feedback from our customers and share your own Exousia &amp; Co. experience.</p><div className="mt-7 flex flex-wrap justify-center gap-3"><Link href="/reviews" className="rounded-full bg-[#A32638] px-6 py-3 text-sm font-semibold text-[#171411]">Read customer reviews →</Link><Link href="/account" className="rounded-full border border-[#A32638]/60 px-6 py-3 text-sm font-semibold">Your account</Link></div></div></section>
