@@ -136,7 +136,7 @@ export default function HomePage() {
               <Link
                 href={`/collections/${String(name).toLowerCase()}`}
                 key={name}
-                className="group relative aspect-[3/4] overflow-hidden rounded-xl"
+                className="home-card group relative aspect-[3/4] overflow-hidden rounded-xl border border-[#C5A46D]/70"
               >
                 <img
                   src={img}
@@ -144,7 +144,7 @@ export default function HomePage() {
                   className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"/>
-                <span className="absolute bottom-3 left-3 font-serif text-lg text-white sm:text-xl">
+                <span className="absolute bottom-3 left-3 font-serif text-lg text-[#E0C27A] sm:text-xl">
                   {name}
                 </span>
               </Link>
