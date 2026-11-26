@@ -132,3 +132,45 @@ html:not(.dark) body textarea::placeholder {
   color: #766653;
   opacity: 1;
 }
+
+
+/* RED-DOMINANT SURFACE OVERRIDE — public theme overhaul */
+.dark body { background-color: #26050D !important; }
+.dark main { background-color: transparent; }
+.dark main [class~="bg-stone-950"], .dark main [class~="bg-black"],
+.dark main [class~="bg-[#11110F]"], .dark main [class~="bg-[#11110f]"],
+.dark main [class~="bg-[#171411]"], .dark main [class~="bg-[#171714]"],
+.dark main [class~="bg-[#201B16]"], .dark main [class~="bg-[#201b16]"],
+.dark main [class~="bg-[#211c17]"], .dark main [class~="bg-[#090908]"] {
+  background-color: #320A16 !important;
+}
+.dark main [class~="bg-white/5"], .dark main [class~="bg-white/[0.06]"],
+.dark main [class~="bg-white/[.06]"], .dark main [class~="bg-black/20"],
+.dark main [class~="bg-black/25"], .dark main [class~="bg-black/30"],
+.dark main [class~="bg-black/35"], .dark main [class~="bg-black/70"] {
+  background-color: rgba(92, 12, 34, .45) !important;
+}
+.dark main [class~="bg-card"], .dark main [class~="bg-background"] {
+  background-color: var(--card) !important;
+}
+.dark main [class~="border-white/10"], .dark main [class~="border-white/15"],
+.dark main [class~="border-white/20"] { border-color: rgba(192, 24, 61, .30) !important; }
+.dark main [class~="bg-amber-700"], .dark main [class~="bg-amber-800"],
+.dark main [class~="bg-amber-600"] { background-color: #B51235 !important; }
+.dark main [class~="hover:bg-amber-800"]:hover, .dark main [class~="hover:bg-amber-700"]:hover {
+  background-color: #79001D !important;
+}
+.dark main [class~="text-amber-500"], .dark main [class~="text-amber-600"],
+.dark main [class~="text-amber-700"] { color: #E5A3B4 !important; }
+.dark main [class~="border-amber-200"], .dark main [class~="border-amber-300"],
+.dark main [class~="border-amber-400"] { border-color: rgba(192, 24, 61, .42) !important; }
+
+/* Light mode red accents while preserving light surfaces and readability */
+html:not(.dark) main [class~="bg-amber-700"], html:not(.dark) main [class~="bg-amber-800"],
+html:not(.dark) main [class~="bg-amber-600"] { background-color: #B51235 !important; }
+html:not(.dark) main [class~="hover:bg-amber-800"]:hover,
+html:not(.dark) main [class~="hover:bg-amber-700"]:hover { background-color: #79001D !important; }
+html:not(.dark) main [class~="text-amber-500"], html:not(.dark) main [class~="text-amber-600"],
+html:not(.dark) main [class~="text-amber-700"] { color: #8A1733 !important; }
+html:not(.dark) main [class~="border-amber-200"], html:not(.dark) main [class~="border-amber-300"],
+html:not(.dark) main [class~="border-amber-400"] { border-color: #D9AAB7 !important; }
