@@ -70,7 +70,7 @@ function ProductCard({ product }: { product: Product }) {
       : concentration;
 
   return (
-    <article className="product-card group relative overflow-hidden rounded-[2rem] border border-[#C5A46D]/70 bg-[#700404] p-4 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-[#C5A46D]/70 dark:bg-[#700404]">
+    <article className="product-card group relative overflow-hidden rounded-[2rem] border border-[#C5A46D]/70 bg-[#FFFCF8] p-4 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-[#C5A46D]/70 dark:bg-[#700404]">
       <Link href={`/products/${product.id}`} className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-stone-100">
         <AppImage src={product.image} alt={product.name} fill smartFill sizes="(max-width:768px) 100vw,33vw" className="object-contain transition-transform duration-700 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full border border-[#C5A46D]/80 bg-[#700404]/95 px-3 py-1 text-xs font-black text-[#E0C27A]">{product.promo || product.tag}</span>
@@ -81,20 +81,20 @@ function ProductCard({ product }: { product: Product }) {
       <div className="p-2 pt-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <Link href={`/products/${product.id}`} className="text-[#E0C27A] transition-colors hover:text-[#F4DEA2]">
+            <Link href={`/products/${product.id}`} className="text-[#6B4B16] transition-colors hover:text-[#8A0303] dark:text-[#E0C27A] dark:hover:text-[#F4DEA2]">
               <h2 className="text-2xl font-black">{product.name}</h2>
             </Link>
-            <p className="mt-1 text-sm font-semibold text-[#D6B36A]">{product.family} - {productType}</p>
+            <p className="mt-1 text-sm font-semibold text-[#75551D] dark:text-[#D6B36A]">{product.family} - {productType}</p>
           </div>
-          <Price amount={price} className="text-xl font-black text-[#E0C27A]" />
+          <Price amount={price} className="text-xl font-black text-[#6B4B16] dark:text-[#E0C27A]" />
         </div>
 
-        <p className="mt-3 text-sm leading-6 text-[#F5F0E8]/85 dark:text-[#FFF9F2]/80">{product.description}</p>
+        <p className="mt-3 text-sm leading-6 text-[#392A24]/90 dark:text-[#FFF9F2]/80">{product.description}</p>
         {product.event && <p className="mt-3 rounded-2xl border border-[#C5A46D]/50 bg-[#700404] px-4 py-2 text-xs font-black text-[#E0C27A]">{product.event}</p>}
 
         <div className="mt-4 flex flex-wrap gap-2">
           {product.notes.map((note) => (
-            <span key={note} className="rounded-full border border-[#C5A46D]/40 bg-[#700404] px-3 py-1 text-xs font-bold text-[#D6B36A]">{note}</span>
+            <span key={note} className="rounded-full border border-[#C5A46D]/50 bg-[#F1E7D9] px-3 py-1 text-xs font-bold text-[#6B4B16] dark:bg-[#700404] dark:text-[#D6B36A]">{note}</span>
           ))}
         </div>
 
@@ -128,7 +128,7 @@ function ProductCard({ product }: { product: Product }) {
         )}
 
         <div className="mt-6 flex items-center justify-between gap-3">
-          <p className="text-xs font-bold text-[#D6B36A]/85">{product.stock} stocks - {product.reviews} reviews</p>
+          <p className="text-xs font-bold text-[#655238] dark:text-[#D6B36A]/85">{product.stock} stocks - {product.reviews} reviews</p>
           <AddToCartButton
             productId={product.id}
             size={isPerfume ? size : '10ml'}
@@ -176,9 +176,9 @@ export default function ProductBrowser({ category = 'perfumes', title, descripti
     <section id="featured" className="mx-auto max-w-7xl px-6 py-20">
       <div className="mb-8 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div>
-          <p className="font-bold uppercase tracking-[.25em] text-[#D6B36A]">{copy.eyebrow}</p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight text-[#E0C27A] md:text-6xl">{title || copy.title}</h1>
-          <p className="mt-4 max-w-2xl text-[#F5F0E8]/85">{description || copy.description}</p>
+          <p className="font-bold uppercase tracking-[.25em] text-[#75551D] dark:text-[#D6B36A]">{copy.eyebrow}</p>
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-[#6B4B16] dark:text-[#E0C27A] md:text-6xl">{title || copy.title}</h1>
+          <p className="mt-4 max-w-2xl text-[#392A24] dark:text-[#FFF9F2]/85">{description || copy.description}</p>
         </div>
         <CurrencySelector />
       </div>
