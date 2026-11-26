@@ -33,9 +33,10 @@ function StarRating({ rating }: { rating: number }) {
 export default function ProductDetailPage() {
   const params = useParams<{ id: string }>();
   const productId = String(params?.id || '');
-  const { activeProducts, loading } = useProducts();
+  const { products, activeProducts, loading } = useProducts();
   const { addToCart } = useCart();
-  const product = useMemo(() => activeProducts.find((p) => p.id === productId), [activeProducts, productId]);
+  const product = useMemo(() => products.find((p) => p.id === productId && (p.active !== false || p.upcoming_enabled === true)), [products, productId]);
+  const isComingSoonPreview = Boolean(product?.upcoming_enabled === true && product?.active === false);
   const [selectedVariantKey, setSelectedVariantKey] = useState('');
   const [added, setAdded] = useState(false);
   const availableVariants = useMemo(() => product ? getAvailableVariantOptions(product) : [], [product]);
@@ -118,8 +119,8 @@ export default function ProductDetailPage() {
       <>
         <Header />
         <main className="min-h-screen bg-[#11110F] px-6 py-36 text-center text-white">
-          <h1 className="text-5xl font-black">Perfume not found</h1>
-          <p className="mt-4 text-white/60">This product may be hidden or deleted in admin.</p>
+          <h1 className="text-5xl font-black">Product unavailable</h1>
+          <p className="mt-4 text-white/60">This product is currently unavailable.</p>
           <Link href="/products" className="mt-8 inline-flex rounded-full bg-amber-700 px-7 py-4 font-black text-white">Back to Products</Link>
         </main>
         <Footer />
@@ -171,6 +172,13 @@ export default function ProductDetailPage() {
               <p className="text-xs font-black uppercase tracking-[.28em] text-amber-400">{product.family}</p>
               <h1 className="mt-3 text-5xl font-black leading-none tracking-tight md:text-7xl">{product.name}</h1>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-white/65">{product.description || fallbackDescription}</p>
+
+              {isComingSoonPreview && (
+                <div className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-500/10 p-5">
+                  <p className="text-xs font-black uppercase tracking-[.25em] text-amber-300">Coming Soon</p>
+                  <p className="mt-2 font-semibold text-white/80">This product is a preview and is not available for purchase yet.</p>
+                </div>
+              )}
 
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <StarRating rating={product.rating} />
@@ -237,13 +245,18 @@ export default function ProductDetailPage() {
                 <span className="pb-2 text-sm font-bold text-white/45">{isPerfume ? `${selectedSize} · ${selectedConcentration}` : product.size || product.family || (isCosmetics ? 'Cosmetics' : 'Wellness')}</span>
               </div>
 
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <WishlistButton productId={product.id} className="h-14 w-full text-2xl sm:w-16" />
-                <button onClick={handleAdd} disabled={product.stock <= 0 || (isPerfume && availableVariants.length === 0)} className="flex-1 rounded-2xl bg-amber-600 px-7 py-4 font-black text-white transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50">
-                  {added ? 'Added to Cart ✓' : <>Add to Cart — <Price amount={price} /></>}
-                </button>
-                <Link href="/checkout" className="rounded-2xl border border-white/15 bg-white/5 px-7 py-4 text-center font-black transition hover:bg-white/10">Checkout</Link>
-              </div>
+              {!isComingSoonPreview && (
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <WishlistButton productId={product.id} className="h-14 w-full text-2xl sm:w-16" />
+                  <button onClick={handleAdd} disabled={product.stock <= 0 || (isPerfume && availableVariants.length === 0)} className="flex-1 rounded-2xl bg-amber-600 px-7 py-4 font-black text-white transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50">
+                    {added ? 'Added to Cart ✓' : <>Add to Cart — <Price amount={price} /></>}
+                  </button>
+                  <Link href="/checkout" className="rounded-2xl border border-white/15 bg-white/5 px-7 py-4 text-center font-black transition hover:bg-white/10">Checkout</Link>
+                </div>
+              )}
+              {isComingSoonPreview && (
+                <Link href="/products" className="mt-7 inline-flex rounded-full border border-amber-400/30 bg-amber-500/10 px-7 py-4 font-black text-amber-200 transition hover:bg-amber-500/20">Explore Available Products</Link>
+              )}
 
               <div className="mt-6 flex flex-wrap gap-4 text-xs font-bold text-white/45">
                 <span>🚚 Free shipping on premium orders</span>
@@ -313,7 +326,7 @@ export default function ProductDetailPage() {
           )}
         </div>
       </main>
-      <StickyMobileAddToCart price={price} disabled={product.stock <= 0 || (isPerfume && availableVariants.length === 0)} added={added} onAdd={handleAdd} />
+      {!isComingSoonPreview && <StickyMobileAddToCart price={price} disabled={product.stock <= 0 || (isPerfume && availableVariants.length === 0)} added={added} onAdd={handleAdd} />}
       <Footer />
     </>
   );
