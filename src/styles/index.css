@@ -135,207 +135,34 @@ html:not(.dark) body textarea::placeholder {
 
 
 /* ================================================================
-   EXOUSIA RED-DOMINANT VISUAL OVERHAUL
-   Intentionally targets the existing hard-coded dark utility surfaces
-   that previously kept large parts of the UI nearly black.
-   Functional styles and component behavior remain unchanged.
-   ================================================================ */
-:root {
-  --exousia-red: #B51235;
-  --exousia-crimson: #79001B;
-  --exousia-wine: #250710;
-  --exousia-surface: #3A0D1C;
-  --exousia-surface-raised: #481124;
-  --exousia-red-border: #642037;
-}
-.dark body { background-color: #250710 !important; }
-.dark :where(.bg-black, .bg-stone-950, [class~="bg-[#11110F]"], [class~="bg-[#11110f]"], [class~="bg-[#191816]"], [class~="bg-[#171714]"], [class~="bg-[#171411]"], [class~="bg-[#090908]"], [class~="bg-[#070604]"], [class~="bg-[#1c1916]"], [class~="bg-[#1a1410]"], [class~="bg-[#1f070c]"], [class~="bg-[#16090b]"], [class~="bg-[#24211e]"], [class~="bg-[#28221d]"], [class~="bg-[#211c17]"]) {
-  background-color: #3A0D1C !important;
-}
-.dark :where(.product-card, .glass-dark, .glass) {
-  background-color: #3A0D1C;
-  border-color: #642037;
-}
-.dark :where(section, article, aside, main) {
-  --tw-border-opacity: 1;
-}
-.dark :where([class*="border-[#111"], [class*="border-stone-800"], [class*="border-neutral-800"], [class*="border-gray-800"]) {
-  border-color: #642037 !important;
-}
-.dark :where([class~="bg-[#A32638]"], .bg-rose-700, .bg-red-700, .bg-red-800) {
-  background-color: #B51235 !important;
-}
-.dark :where([class~="hover:bg-[#750018]"]:hover, .hover\:bg-rose-800:hover, .hover\:bg-red-900:hover) {
-  background-color: #79001B !important;
-}
-.dark :where(.btn-amber, .badge-new) { background-color: #B51235 !important; }
-.dark :where(.btn-amber:hover) { background-color: #79001B !important; }
 
-/* Preserve a light-mode luxury ivory canvas while using red for key accents. */
-html:not(.dark) {
-  --background: #F7E8EA;
-  --primary: #B51235;
-  --primary-dark: #79001B;
-  --border: #D7AAB4;
-}
-html:not(.dark) :where(.btn-amber, .badge-new) { background-color: #B51235 !important; color: #fff !important; }
-html:not(.dark) :where(.btn-amber:hover) { background-color: #79001B !important; }
-
-/* FINAL RED SURFACE OVERRIDE: solid surface utilities, not overlay utilities. */
-html.dark [class~="bg-black"],
-html.dark [class~="bg-stone-950"],
-html.dark [class~="bg-[#11110F]"],
-html.dark [class~="bg-[#11110f]"],
-html.dark [class~="bg-[#201b16]"],
-html.dark [class~="bg-[#201B16]"],
-html.dark [class~="bg-[#191816]"],
-html.dark [class~="bg-[#171714]"],
-html.dark [class~="bg-[#171411]"],
-html.dark [class~="bg-[#090908]"],
-html.dark [class~="bg-[#070604]"],
-html.dark [class~="bg-[#1c1916]"],
-html.dark [class~="bg-[#1a1410]"],
-html.dark [class~="bg-[#1f070c]"],
-html.dark [class~="bg-[#16090b]"],
-html.dark [class~="bg-[#24211e]"],
-html.dark [class~="bg-[#28221d]"],
-html.dark [class~="bg-[#211c17]"],
-html.dark [class~="bg-background"] {
-  background-color: #3A0D1C !important;
-}
-html.dark [class~="bg-[#201b16]"] { background-color: #3A0D1C !important; }
-html.dark [class~="bg-[#11110F]"] { background-color: #250710 !important; }
-html.dark [class~="bg-[#11110f]"] { background-color: #250710 !important; }
-html.dark [class~="bg-[#A32638]"] { background-color: #B51235 !important; }
-html.dark [class~="bg-stone-950"] { background-color: #481124 !important; }
-html.dark [class~="bg-black"] { background-color: #481124 !important; }
-html.dark [class~="bg-white/5"] { background-color: rgba(181,18,53,.12) !important; }
-html.dark [class~="bg-white/[.04]"] { background-color: rgba(181,18,53,.12) !important; }
-html.dark [class~="bg-white/10"] { background-color: rgba(181,18,53,.16) !important; }
-html.dark [class~="bg-amber-700"] { background-color: #B51235 !important; }
-html.dark [class~="bg-amber-600"] { background-color: #B51235 !important; }
-html.dark [class~="bg-amber-500"] { background-color: #B51235 !important; }
-html.dark [class~="hover:bg-amber-800"]:hover { background-color: #79001B !important; }
-html.dark [class~="hover:bg-amber-700"]:hover { background-color: #79001B !important; }
-html.dark [class~="border-white/10"], html.dark [class~="border-white/8"] { border-color: rgba(181,18,53,.24) !important; }
-html.dark [class~="border-stone-800"] { border-color: #642037 !important; }
-html.dark [class~="border-neutral-800"] { border-color: #642037 !important; }
-html.dark [class~="border-gray-800"] { border-color: #642037 !important; }
-
-/* ================================================================
-   EXOUSIA RED-DOMINANT THEME — final palette pass
-   Keeps product imagery and layout intact while carrying the ruby palette
-   through both theme modes, legacy utility classes, and focus states.
-   ================================================================ */
+/* CANDY RED LUXURY PALETTE — saturated red replaces the previous pink-wine cast. */
 :root:not(.dark) {
-  --background: #F5E3E7;
-  --foreground: #321018;
-  --primary: #A32638;
-  --primary-dark: #750018;
-  --primary-light: #F3D6DB;
-  --accent: #750018;
-  --muted: #793A49;
-  --border: #D6AAB3;
-  --card: #FFF8F9;
-  color-scheme: light;
+  --background: #F3EEE8;
+  --foreground: #261716;
+  --primary: #D50025;
+  --primary-dark: #A9001E;
+  --primary-light: #F4D9D9;
+  --accent: #8C0018;
+  --muted: #6F514B;
+  --border: #D8C7BD;
+  --card: #FFFCF7;
 }
 .dark {
-  --background: #1B060B;
-  --foreground: #FFF3F5;
-  --primary: #C21F42;
-  --primary-dark: #8D0B29;
-  --primary-light: #F3D6DB;
-  --accent: #FFE6EB;
-  --muted: #E6A9B4;
-  --border: #672536;
-  --card: #390B1B;
-  color-scheme: dark;
-}
-body { background-color: var(--background) !important; color: var(--foreground); }
-
-/* Old black/brown surfaces become coordinated ruby and wine surfaces. */
-html.dark :where(.bg-black, .bg-stone-950, .bg-background,
-  [class~="bg-[#11110F]"], [class~="bg-[#11110f]"],
-  [class~="bg-[#191816]"], [class~="bg-[#171714]"], [class~="bg-[#171411]"],
-  [class~="bg-[#090908]"], [class~="bg-[#070604]"], [class~="bg-[#1c1916]"],
-  [class~="bg-[#1a1410]"], [class~="bg-[#1f070c]"], [class~="bg-[#16090b]"],
-  [class~="bg-[#24211e]"], [class~="bg-[#24211e]"], [class~="bg-[#28221d]"],
-  [class~="bg-[#211c17]"], [class~="bg-[#201b16]"], [class~="bg-[#201B16]"]) {
-  background-color: #390B1B !important;
-}
-html:not(.dark) :where([class~="bg-[#F5F0E8]"], [class~="bg-[#f5f0e8]"],
-  [class~="bg-[#eee5d7]"], [class~="bg-[#e8dfd2]"], [class~="bg-[#d6c9b6]"],
-  [class~="bg-[#FCEEEF]"], [class~="bg-stone-50"], [class~="bg-white/80"]) {
-  background-color: #FFF8F9 !important;
-}
-html:not(.dark) :where([class~="bg-[#11110F]"], [class~="bg-[#11110f]"],
-  [class~="bg-[#171411]"], [class~="bg-[#201b16]"], [class~="bg-[#201B16]"],
-  [class~="bg-[#211c17]"], [class~="bg-[#24211e]"], [class~="bg-[#28221d]"],
-  [class~="bg-[#211c17]"], [class~="bg-stone-950"], [class~="bg-black"]) {
-  background-color: #5A1024 !important;
-}
-html:not(.dark) :where(.text-stone-950, .text-gray-950, .text-zinc-950,
-  [class~="text-[#211c17]"], [class~="text-[#201b16]"]) { color: #321018 !important; }
-html.dark :where(.text-stone-950, .text-gray-950, .text-zinc-950,
-  [class~="text-[#211c17]"], [class~="text-[#201b16]"]) { color: #FFF3F5 !important; }
-.gift-bg {
-  background: linear-gradient(135deg, #250710 0%, #5A1024 46%, #8D0B29 74%, #250710 100%) !important;
-}
-
-/* Re-map legacy gold/amber utility colors to the red brand scale. */
-:where(.bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-yellow-500, .bg-yellow-600,
-  [class~="bg-[#A32638]"]) { background-color: #A32638 !important; color: #fff !important; }
-:where(.hover\:bg-amber-700:hover, .hover\:bg-amber-800:hover,
-  .hover\:bg-yellow-700:hover, [class~="hover:bg-[#d6b783]"]:hover,
-  [class~="hover:bg-[#e0c18b]"]:hover) { background-color: #750018 !important; color: #fff !important; }
-:where(.text-amber-700, .text-amber-800, .text-amber-900, .text-yellow-700,
-  .text-yellow-800, [class*="text-[#d6b477]"], [class*="text-[#d6b783]"],
-  [class*="text-[#b18a50]"], [class*="text-[#9a7543]"]) { color: #A32638 !important; }
-:where(.border-amber-300, .border-amber-400, .border-amber-500,
-  [class*="border-[#d6b477]"], [class*="border-[#b18a50]"]) { border-color: #A32638 !important; }
-html.dark :where(.text-amber-700, .text-amber-800, .text-amber-900,
-  [class*="text-[#d6b477]"], [class*="text-[#d6b783]"], [class*="text-[#b18a50]"],
-  [class*="text-[#9a7543]"]) { color: #F08A9F !important; }
-
-/* White foreground keeps primary red actions readable. */
-:where(.btn-amber, .badge-new, [class~="bg-[#A32638]"], .bg-amber-500,
-  .bg-amber-600, .bg-amber-700, .bg-yellow-500, .bg-yellow-600) { color: #fff !important; }
-html:not(.dark) body :where(button, a).bg-\[\#A32638\],
-html.dark body :where(button, a).bg-\[\#A32638\],
-html:not(.dark) body :where(button, a).btn-amber,
-html.dark body :where(button, a).btn-amber { color: #fff !important; }
-:where(button, a, input, textarea, select):focus-visible {
-  outline-color: #A32638 !important;
-}
-
-/* Stronger visible ruby surfaces for the luxury storefront. */
-:root:not(.dark) {
-  --background: #F4E4E8;
-  --foreground: #301019;
-  --primary: #A51F3B;
-  --primary-dark: #74142B;
-  --primary-light: #F2CCD5;
-  --accent: #74142B;
-  --muted: #71404D;
-  --border: #DDB9C2;
-  --card: #FFF8F9;
-}
-.dark {
-  --background: #2B0711;
-  --foreground: #FFF4F5;
-  --primary: #D12D50;
-  --primary-dark: #A41738;
-  --primary-light: #F2CCD5;
-  --accent: #FFE6EB;
-  --muted: #E8A8B5;
-  --border: #793247;
-  --card: #4B1022;
+  --background: #690012;
+  --foreground: #FFF9F4;
+  --primary: #E0002B;
+  --primary-dark: #B90024;
+  --primary-light: #FFD9DE;
+  --accent: #FFF1E8;
+  --muted: #FFD7D9;
+  --border: #D3344C;
+  --card: #A5001F;
 }
 body { background: var(--background) !important; color: var(--foreground); }
 
-/* The current site uses hard-coded dark utilities, some with opacity suffixes.
-   Match the utility name inside the class so the ruby theme reaches headers,
-   page bands, and product cards too. */
+/* Turn the existing near-black utilities into true red surfaces, including
+   Tailwind dark: variants and background-opacity classes. */
 html.dark [class*="bg-[#11110f]"],
 html.dark [class*="bg-[#11110F]"],
 html.dark [class*="bg-[#090908]"],
@@ -350,38 +177,37 @@ html.dark [class*="bg-[#201B16]"],
 html.dark [class*="bg-[#211c17]"],
 html.dark [class*="bg-[#24211e]"],
 html.dark [class*="bg-[#28221d]"],
-html.dark [class*="bg-[#1c1916]"],
 html.dark [class*="bg-stone-950"],
 html.dark [class~="bg-black"] {
-  background-color: #4A0D20 !important;
+  background-color: #8C001B !important;
 }
 html.dark [class*="bg-[#1c1916]"],
 html.dark [class*="bg-[#24211e]"],
 html.dark [class*="bg-[#28221d]"],
 html.dark .product-card,
 html.dark .glass-dark {
-  background-color: #571329 !important;
-  border-color: #793247 !important;
+  background-color: #A50024 !important;
+  border-color: #D3344C !important;
 }
 html.dark [class*="bg-white/5"],
 html.dark [class*="bg-white/[.04]"],
 html.dark [class*="bg-white/10"] {
-  background-color: rgba(209, 45, 80, .17) !important;
+  background-color: rgba(224, 0, 43, .20) !important;
 }
 html:not(.dark) [class*="bg-[#f5f0e8]"],
 html:not(.dark) [class*="bg-[#F5F0E8]"],
 html:not(.dark) [class*="bg-[#eee5d7]"],
 html:not(.dark) [class*="bg-[#e8dfd2]"],
 html:not(.dark) [class*="bg-[#d6c9b6]"] {
-  background-color: #F8E9EC !important;
+  background-color: #F3EEE8 !important;
 }
 html:not(.dark) .product-card, html:not(.dark) .glass {
-  background-color: #FFF8F9;
-  border-color: #DDB9C2;
+  background-color: #FFFCF7;
+  border-color: #D8C7BD;
 }
-html.dark :where(.btn-amber, .badge-new, [class*="bg-[#A32638]"],
+.dark :where(.btn-amber, .badge-new, [class*="bg-[#A32638]"],
   [class*="bg-amber-500"], [class*="bg-amber-600"], [class*="bg-amber-700"]) {
-  background-color: #D12D50 !important;
+  background-color: #E0002B !important;
   color: #fff !important;
 }
 html.dark body [class*="bg-[#A32638]"],
@@ -391,10 +217,11 @@ html.dark body [class*="bg-amber-700"],
 html:not(.dark) body [class*="bg-[#A32638]"],
 html:not(.dark) body [class*="bg-amber-500"],
 html:not(.dark) body [class*="bg-amber-600"],
-html:not(.dark) body [class*="bg-amber-700"] {
-  color: #fff !important;
-}
-html.dark [class*="text-[#A32638]"] { color: #F08A9F !important; }
+html:not(.dark) body [class*="bg-amber-700"] { color: #fff !important; }
+html.dark [class*="text-[#A32638]"], html.dark [class*="text-[#d6b477]"],
+html.dark [class*="text-[#d6b783]"], html.dark [class*="text-[#b18a50]"],
+html.dark [class*="text-[#9a7543]"], html.dark .text-amber-700,
+html.dark .text-amber-800, html.dark .text-amber-900 { color: #FFCDD2 !important; }
 .gift-bg {
-  background: linear-gradient(135deg, #2B0711 0%, #4A0D20 45%, #76142D 75%, #2B0711 100%) !important;
+  background: linear-gradient(135deg, #690012 0%, #8C001B 48%, #B90024 78%, #690012 100%) !important;
 }

@@ -1,14 +1,14 @@
-EXOUSIA & CO. LUXURY RUBY THEME
+EXOUSIA & CO. CANDY RED LUXURY THEME
 
-This source uses a visibly red-led palette while retaining an upscale perfume-store feel.
-Primary ruby: #D12D50
-Deep crimson: #A41738
-Wine panels: #4A0D20
-Raised dark surfaces: #571329
-Dark canvas: #2B0711
-Light blush canvas: #F4E4E8
-Light card: #FFF8F9
-Ivory text: #FFF4F5
+This source uses a saturated candy-red palette and warm ivory contrast for a luxury storefront.
+Primary candy red: #E0002B
+Deep red: #B90024
+Main red surfaces: #8C001B
+Product-card red: #A50024
+Dark canvas: #690012
+Light ivory canvas: #F3EEE8
+Light card: #FFFCF7
+Warm ivory text: #FFF9F4
 
 The color update changes styling only. Product data, pricing, inventory, checkout,
 discounts, visibility logic, and database schema were not changed.
