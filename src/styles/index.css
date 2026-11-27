@@ -768,16 +768,20 @@ html.dark body .product-card .product-image-badge {
 
 /* Mobile layout: protect the compact header, forms, cards, and page gutters. */
 @media (max-width: 639px) {
-  html,
-  body {
-    max-width: 100%;
-    overflow-x: clip;
-  }
-
   .site-header {
     padding-inline: .5rem !important;
     padding-top: max(.35rem, env(safe-area-inset-top)) !important;
+    filter: none !important;
   }
+
+  /* Keep iOS Safari's scrolling page on a single, reliable paint layer. */
+  .grain { display: none !important; }
+  .site-navbar {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background-color: #FFF9F2 !important;
+  }
+  html.dark .site-navbar { background-color: #0A0A0A !important; }
 
   .site-announcement {
     padding: .35rem .5rem !important;
