@@ -850,7 +850,7 @@ export default function AdminDashboard() {
 
   if (!logged) {
     return (
-      <main className="min-h-screen bg-[#11110F] px-6 py-16 text-white">
+      <main className="admin-dashboard min-h-screen bg-[#11110F] px-6 py-16 text-white">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2 lg:items-center">
           <section>
             <Link href="/" className="font-bold text-amber-300">← Back to store</Link>
@@ -877,7 +877,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#F5F0E8] px-4 py-10 text-stone-950 dark:bg-[#11110F] dark:text-white sm:px-6 sm:py-12">
+    <main className="admin-dashboard min-h-screen overflow-x-hidden bg-[#F5F0E8] px-4 py-10 text-stone-950 dark:bg-[#11110F] dark:text-white sm:px-6 sm:py-12">
       <div className="mx-auto min-w-0 max-w-7xl">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
