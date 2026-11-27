@@ -50,7 +50,7 @@ export default function QuizPage() {
       <Header />
       <main className="min-h-screen bg-[#F5F0E8] px-6 py-32 text-stone-950 dark:bg-[#11110F] dark:text-white">
         <div className="mx-auto max-w-5xl">
-          <p className="text-xs font-black uppercase tracking-[.3em] text-amber-700">AI-style fragrance finder</p>
+
           <h1 className="mt-4 text-5xl font-black md:text-7xl">Find your signature scent</h1>
           <p className="mt-4 max-w-2xl text-lg text-stone-600 dark:text-white/60">Answer a few questions and the website will recommend perfumes based on notes, mood, use case, and performance.</p>
 
@@ -60,7 +60,7 @@ export default function QuizPage() {
               <p className="text-sm font-black text-amber-700">Question {step + 1} of {questions.length}</p>
               <h2 className="mt-3 text-3xl font-black">{q.title}</h2>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {q.options.map((option) => <button key={option} onClick={() => choose(option)} className="rounded-3xl border border-stone-200 p-5 text-left text-lg font-black transition hover:-translate-y-1 hover:border-amber-600 hover:bg-amber-50 dark:border-white/10 dark:bg-black/20 dark:hover:bg-amber-500/10">{option}</button>)}
+                {q.options.map((option) => <button key={option} onClick={() => choose(option)} className="rounded-3xl border border-[#B91C1C]/55 bg-white p-5 text-left text-lg font-black text-[#700404] shadow-sm transition hover:-translate-y-1 hover:border-[#8A0303] hover:bg-[#FFF7F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8A0303] dark:border-[#D4AF37]/55 dark:bg-[#111111] dark:text-[#D4AF37] dark:hover:border-[#D4AF37] dark:hover:bg-[#D4AF37]/10 dark:focus-visible:ring-[#D4AF37]">{option}</button>)}
               </div>
             </section>
           ) : (
