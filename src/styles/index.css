@@ -683,3 +683,36 @@ html.dark .admin-dashboard .low-stock-alert-card {
 html.dark .admin-dashboard .admin-product-row {
   border-color: rgba(212, 175, 55, .13) !important;
 }
+
+/* Readable light-mode navigation and brand promise text. These scoped rules
+   override the global theme color sweep without changing other page colors. */
+html:not(.dark) body header .site-menu-dropdown a.site-menu-link,
+html:not(.dark) body header .site-mobile-panel nav a.site-mobile-menu-link,
+html:not(.dark) body header .site-mobile-close,
+html:not(.dark) body header .site-theme-menu button.site-theme-option {
+  color: #700404 !important;
+}
+html:not(.dark) body header .site-menu-dropdown a.site-menu-link:hover,
+html:not(.dark) body header .site-mobile-panel nav a.site-mobile-menu-link:hover,
+html:not(.dark) body header .site-theme-menu button.site-theme-option:hover {
+  color: #520303 !important;
+  background-color: rgba(138, 3, 3, .10) !important;
+}
+html.dark body header .site-menu-dropdown a.site-menu-link,
+html.dark body header .site-mobile-panel nav a.site-mobile-menu-link,
+html.dark body header .site-mobile-close,
+html.dark body header .site-theme-menu button.site-theme-option {
+  color: #E0C27A !important;
+}
+html.dark body header .site-menu-dropdown a.site-menu-link:hover,
+html.dark body header .site-mobile-panel nav a.site-mobile-menu-link:hover,
+html.dark body header .site-theme-menu button.site-theme-option:hover {
+  color: #FFF2C2 !important;
+}
+html:not(.dark) body .home-brand-promise h3,
+html:not(.dark) body .home-brand-promise p {
+  color: #FFF9F2 !important;
+}
+html:not(.dark) body .home-brand-promise span:first-child {
+  color: #F6D98D !important;
+}

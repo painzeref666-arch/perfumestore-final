@@ -68,12 +68,12 @@ function ThemeToggle() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-11 w-36 bg-card dark:bg-[#201B16] border border-border dark:border-white/10 rounded-2xl shadow-xl shadow-foreground/10 dark:shadow-black/40 overflow-hidden z-50">
+        <div className="site-theme-menu absolute right-0 top-11 w-36 bg-card dark:bg-[#201B16] border border-border dark:border-white/10 rounded-2xl shadow-xl shadow-foreground/10 dark:shadow-black/40 overflow-hidden z-50">
           {options.map((opt) => (
             <button
               key={opt.value}
               onClick={() => { setMode(opt.value); setOpen(false); }}
-              className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors
+              className={`site-theme-option w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors
                 ${mode === opt.value
                   ? 'text-[#8A0303] bg-[#8A0303]/10' :'text-[#f5f0e8]/75 hover:text-[#8A0303] hover:bg-[#8A0303]/10'
                 }`}
@@ -153,7 +153,7 @@ export default function Header() {
                 {[
                   ['Wishlist', '/wishlist'], ['Rewards', '/rewards'], ['Reviews', '/reviews'], ['Track Order', '/track'], ['Account', '/account'],
                 ].map(([label, href]) => (
-                  <Link key={label} href={href} onClick={() => setMoreOpen(false)} className="block rounded-xl px-4 py-2.5 text-[#201b16]/90 transition hover:bg-[#8A0303]/20 hover:text-[#201b16] dark:text-[#f5f0e8]/80 dark:hover:bg-[#8A0303]/10 dark:hover:text-[#8A0303]">{label}</Link>
+                  <Link key={label} href={href} onClick={() => setMoreOpen(false)} className="site-menu-link block rounded-xl px-4 py-2.5 text-[#201b16]/90 transition hover:bg-[#8A0303]/20 hover:text-[#201b16] dark:text-[#f5f0e8]/80 dark:hover:bg-[#8A0303]/10 dark:hover:text-[#8A0303]">{label}</Link>
                 ))}
               </div>
             )}
@@ -236,7 +236,7 @@ export default function Header() {
           >
             <div className="mb-4 flex items-center justify-between border-b border-[#8A0303]/20 pb-3">
                 <span className="text-sm font-semibold tracking-wide text-[#8A0303]">MENU</span>
-              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#8A0303]/30 text-[#f5f0e8]">×</button>
+              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="site-mobile-close flex h-9 w-9 items-center justify-center rounded-full border border-[#8A0303]/30 text-[#f5f0e8]">×</button>
             </div>
             <nav className="flex flex-col gap-1">
               {[
@@ -251,7 +251,7 @@ export default function Header() {
                 ['Track Order','/track'],
                 ['Account','/account'],
               ].map(([item, href]) => (
-                <Link key={item} href={href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-base font-medium text-[#f5f0e8] transition hover:bg-[#8A0303]/15 hover:text-[#8A0303]">
+                <Link key={item} href={href} onClick={() => setMenuOpen(false)} className="site-mobile-menu-link block rounded-xl px-4 py-3 text-base font-medium text-[#f5f0e8] transition hover:bg-[#8A0303]/15 hover:text-[#8A0303]">
                   {item}
                 </Link>
               ))}

@@ -100,7 +100,7 @@ export default function HomePage() {
       </section>
 
       {/* Brand promise */}
-      <section className="border-y border-[#C5A46D]/40 bg-[#8A0303] px-5 py-7 text-white dark:bg-[#700404] dark:text-[#FFF8F0]">
+      <section className="home-brand-promise border-y border-[#C5A46D]/40 bg-[#8A0303] px-5 py-7 text-white dark:bg-[#700404] dark:text-[#FFF8F0]">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 md:grid-cols-4 md:gap-4">
           {[['◇','Curated Quality','Thoughtfully selected essentials'],['✧','Beauty & Care','Fragrance, beauty and wellness'],['♧','Delivery Options','Shipping and local delivery'],['☆','Customer Experience','Support throughout your journey']].map(([icon,title,desc])=><div key={title} className="text-center"><span className="text-2xl text-[#E0C27A]">{icon}</span><h3 className="mt-2 text-sm font-semibold">{title}</h3><p className="mt-1 text-xs text-white/75">{desc}</p></div>)}
         </div>
