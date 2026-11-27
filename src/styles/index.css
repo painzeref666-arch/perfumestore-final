@@ -465,3 +465,88 @@ html.dark body main > section { background-color: #000 !important; }
 html.dark .home-campaign, html.dark .category-page, html.dark .product-detail-page { background-color: #000 !important; }
 html.dark .home-card, html.dark .product-card { background-color: #0B0B0B !important; border-color: rgba(212, 175, 55, .82) !important; box-shadow: 0 0 0 1px rgba(212, 175, 55, .16), 0 0 14px rgba(212, 175, 55, .18) !important; }
 html.dark .lifestyle-banner { background-color: #090909 !important; }
+
+/* Dark mode must stay black and gold across every route, including legacy red utilities. */
+html.dark {
+  --background: #000000;
+  --foreground: #D4AF37;
+  --primary: #D4AF37;
+  --primary-dark: #171717;
+  --primary-light: #111111;
+  --accent: #E2C15A;
+  --muted: #C6A43A;
+  --border: #D4AF37;
+  --card: #0A0A0A;
+  color-scheme: dark;
+}
+html.dark body,
+html.dark body main,
+html.dark body footer,
+html.dark body aside,
+html.dark body section,
+html.dark body .site-navbar,
+html.dark body .site-menu-dropdown,
+html.dark body .site-mobile-panel,
+html.dark body .site-search-panel,
+html.dark body .site-announcement {
+  background-color: #000000 !important;
+}
+html.dark body #event-scents { background: #000000 !important; }
+/* Replace literal brand-red and burgundy surfaces with quiet black surfaces. */
+html.dark body [class*="bg-[#8A0303]"],
+html.dark body [class*="bg-[#700404]"],
+html.dark body [class*="bg-[#220A0D]"],
+html.dark body [class*="bg-[#2A0B10]"],
+html.dark body [class*="bg-[#351017]"],
+html.dark body [class*="bg-[#241012]"],
+html.dark body [class*="bg-[#"],
+html.dark body [class*="bg-red-"],
+html.dark body [class*="bg-rose-"],
+html.dark body [class*="bg-amber-"],
+html.dark body [class*="bg-yellow-"],
+html.dark body .site-announcement,
+html.dark body .site-navbar .navbar-cta {
+  background-color: #0A0A0A !important;
+  background-image: none !important;
+  color: #D4AF37 !important;
+}
+html.dark body [class*="from-[#"],
+html.dark body [class*="via-[#"],
+html.dark body [class*="to-[#"] {
+  background: #000000 !important;
+}
+html.dark body [class*="border-[#8A0303]"],
+html.dark body [class*="border-[#700404]"],
+html.dark body [class*="border-red-"],
+html.dark body [class*="border-rose-"] {
+  border-color: rgba(212, 175, 55, .82) !important;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, .14), 0 0 12px rgba(212, 175, 55, .16) !important;
+}
+html.dark body [class*="text-[#8A0303]"],
+html.dark body [class*="text-[#700404]"],
+html.dark body [class*="text-red-"],
+html.dark body [class*="text-rose-"] {
+  color: #D4AF37 !important;
+}
+html.dark body .event-scents-panel {
+  background: linear-gradient(112deg, #0A0A0A 0%, #111111 58%, #080808 100%) !important;
+  border-color: rgba(212, 175, 55, .82) !important;
+}
+html.dark body .event-scents-panel::before {
+  background: radial-gradient(ellipse at 78% 48%, rgba(212, 175, 55, .12) 0%, rgba(212, 175, 55, .05) 38%, transparent 73%) !important;
+}
+html.dark body .event-scents-visual {
+  background: #050505 !important;
+}
+html.dark body .gift-bg {
+  background: #0A0A0A !important;
+  animation: none !important;
+}
+html.dark body .site-footer::before {
+  background: linear-gradient(90deg, #D4AF37, #E2C15A 50%, #D4AF37) !important;
+}
+html.dark body .home-ribbon { box-shadow: 0 8px 22px rgba(212, 175, 55, .14) !important; }
+html.dark body [class*="shadow-red-"],
+html.dark body [class*="shadow-rose-"] {
+  --tw-shadow-color: rgba(212, 175, 55, .2) !important;
+}
