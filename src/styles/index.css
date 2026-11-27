@@ -765,3 +765,90 @@ html.dark body .product-card .product-image-badge {
   color: #D4AF37 !important;
   box-shadow: 0 0 12px rgba(212, 175, 55, .22) !important;
 }
+
+/* Mobile layout: protect the compact header, forms, cards, and page gutters. */
+@media (max-width: 639px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .site-header {
+    padding-inline: .5rem !important;
+    padding-top: max(.35rem, env(safe-area-inset-top)) !important;
+  }
+
+  .site-announcement {
+    padding: .35rem .5rem !important;
+    font-size: 8px !important;
+    line-height: 1.25 !important;
+    letter-spacing: .13em !important;
+  }
+
+  .site-navbar {
+    min-height: 3.35rem;
+    gap: .4rem !important;
+    padding: .55rem .65rem !important;
+  }
+
+  .site-navbar > a:first-child { gap: .4rem !important; min-width: 0; }
+  .site-navbar > a:first-child img { width: 30px !important; height: 30px !important; }
+  .site-navbar > a:first-child > span { font-size: 12px !important; }
+  .site-navbar > div:last-child { gap: .35rem !important; }
+  .site-navbar .navbar-icon { width: 2.1rem; height: 2.1rem; }
+
+  .site-mobile-panel {
+    top: calc(env(safe-area-inset-top) + 5.5rem) !important;
+    max-height: calc(100dvh - env(safe-area-inset-top) - 6.25rem) !important;
+    padding: .875rem !important;
+    border-radius: 1.25rem !important;
+  }
+
+  .site-mobile-menu-link { min-height: 44px; padding-block: .65rem !important; }
+  .site-search-overlay { padding-top: calc(env(safe-area-inset-top) + 6rem) !important; }
+  .site-search-panel { padding: .875rem !important; border-radius: 1.25rem !important; }
+
+  main h1 {
+    font-size: clamp(2rem, 10vw, 3rem) !important;
+    line-height: 1.08 !important;
+    overflow-wrap: break-word;
+  }
+
+  main input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  main select,
+  main textarea {
+    min-width: 0;
+    min-height: 44px;
+    font-size: 16px !important;
+  }
+
+  .home-campaign > div:first-of-type { gap: 1.25rem !important; padding-block: 1.25rem !important; }
+  .home-campaign h1 { font-size: clamp(2.3rem, 11.5vw, 3rem) !important; }
+  .home-campaign .aspect-square { max-width: min(100%, 18rem); }
+
+  .home-category-card,
+  .home-category-card > div:last-child { min-height: 14.5rem !important; }
+  .home-category-card > div:last-child { padding: 1.1rem !important; }
+  .home-category-card h2 { font-size: 1.7rem !important; }
+
+  .home-featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem !important; padding: .65rem !important; }
+  .product-filters > input { grid-column: 1 / -1; }
+  .product-filters > select { min-width: 0; padding-inline: .7rem !important; font-size: 12px !important; }
+
+  .product-card { padding: .65rem !important; border-radius: 1.35rem !important; }
+  .product-card > a:first-child { border-radius: 1rem !important; }
+  .product-card > div:last-child { padding: .5rem .2rem .25rem !important; }
+
+  .site-footer { padding-inline: 1rem !important; }
+  .site-footer-panel { padding: 1.25rem !important; border-radius: 1.35rem !important; }
+  .site-footer-panel > div:first-child { gap: 1.5rem !important; padding-bottom: 1.5rem !important; }
+}
+
+@media (max-width: 359px) {
+  .home-featured-grid { grid-template-columns: minmax(0, 1fr); }
+  .site-navbar > a:first-child > span { font-size: 11px !important; }
+  .site-navbar > div:last-child { gap: .25rem !important; }
+  .site-navbar .navbar-icon { width: 1.9rem; height: 1.9rem; }
+}

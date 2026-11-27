@@ -183,8 +183,8 @@ export default function ProductBrowser({ category = 'perfumes', title, descripti
         <CurrencySelector />
       </div>
 
-      <div className="mb-8 grid gap-3 rounded-[1.4rem] border border-[#D7C7B7] bg-[#EFE7DC] p-3 shadow-sm dark:border-[#69434A] dark:bg-[#2A1117] md:grid-cols-[1fr_160px_160px_160px]">
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by name, category, or notes..." className="rounded-full border border-[#D3C2B1] bg-[#FFFCF8] px-5 py-3 text-[#362322] outline-none placeholder:text-[#8A7A70] focus:border-[#8A0303] dark:border-[#65414A] dark:bg-[#1D0B10] dark:text-[#FFF9F2] dark:placeholder:text-[#B9A6A2]" />
+      <div className="product-filters mb-8 grid grid-cols-2 gap-3 rounded-[1.4rem] border border-[#D7C7B7] bg-[#EFE7DC] p-3 shadow-sm dark:border-[#69434A] dark:bg-[#2A1117] md:grid-cols-[1fr_160px_160px_160px]">
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by name, category, or notes..." className="col-span-2 min-w-0 rounded-full border border-[#D3C2B1] bg-[#FFFCF8] px-5 py-3 text-[#362322] outline-none placeholder:text-[#8A7A70] focus:border-[#8A0303] dark:border-[#65414A] dark:bg-[#1D0B10] dark:text-[#FFF9F2] dark:placeholder:text-[#B9A6A2] md:col-span-1" />
         <select value={family} onChange={(event) => setFamily(event.target.value)} className="rounded-full border border-[#D3C2B1] bg-[#FFFCF8] px-5 py-3 text-[#362322] outline-none focus:border-[#8A0303] dark:border-[#65414A] dark:bg-[#1D0B10] dark:text-[#FFF9F2]">
           {families.map((option) => <option key={option}>{option}</option>)}
         </select>
