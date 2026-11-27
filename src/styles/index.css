@@ -769,9 +769,18 @@ html.dark body .product-card .product-image-badge {
 /* Mobile layout: protect the compact header, forms, cards, and page gutters. */
 @media (max-width: 639px) {
   .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    left: auto !important;
+    width: 100% !important;
     padding-inline: .5rem !important;
     padding-top: max(.35rem, env(safe-area-inset-top)) !important;
     filter: none !important;
+  }
+
+  /* The sticky header occupies normal flow; remove the fixed-header spacer. */
+  .site-header ~ main {
+    padding-top: 1rem !important;
   }
 
   /* Keep iOS Safari's scrolling page on a single, reliable paint layer. */
