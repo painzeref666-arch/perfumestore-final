@@ -235,8 +235,8 @@ export default function Header() {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between border-b border-[#8A0303]/20 pb-3">
-                <span className="text-sm font-semibold tracking-wide text-[#8A0303]">MENU</span>
-              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="site-mobile-close flex h-9 w-9 items-center justify-center rounded-full border border-[#8A0303]/30 text-[#f5f0e8]">×</button>
+                <span className="text-sm font-semibold tracking-wide text-[#700404] dark:text-[#D4AF37]">MENU</span>
+              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="site-mobile-close flex h-9 w-9 items-center justify-center rounded-full border border-[#8A0303]/30 text-[#700404] dark:border-[#D4AF37]/40 dark:text-[#D4AF37]">×</button>
             </div>
             <nav className="flex flex-col gap-1">
               {[
@@ -251,7 +251,7 @@ export default function Header() {
                 ['Track Order','/track'],
                 ['Account','/account'],
               ].map(([item, href]) => (
-                <Link key={item} href={href} onClick={() => setMenuOpen(false)} className="site-mobile-menu-link block rounded-xl px-4 py-3 text-base font-medium text-[#f5f0e8] transition hover:bg-[#8A0303]/15 hover:text-[#8A0303]">
+                <Link key={item} href={href} onClick={() => setMenuOpen(false)} className="site-mobile-menu-link block rounded-xl px-4 py-3 text-base font-medium text-[#700404] transition hover:bg-[#8A0303]/10 hover:text-[#520303] dark:text-[#D4AF37] dark:hover:bg-[#D4AF37]/10 dark:hover:text-[#FFF2C2]">
                   {item}
                 </Link>
               ))}
