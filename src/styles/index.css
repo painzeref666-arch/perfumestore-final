@@ -149,7 +149,7 @@ html:not(.dark) body textarea::placeholder {
   --card: #FFFCF8;
 }
 .dark {
-  --background: #1B080A;
+  --background: #220A0D;
   --foreground: #F4ECE4;
   --primary: #8A0303;
   --primary-dark: #700404;
@@ -157,11 +157,11 @@ html:not(.dark) body textarea::placeholder {
   --accent: #FFF9F2;
   --muted: #D1BEB0;
   --border: #76543B;
-  --card: #310E12;
+  --card: #341117;
 }
 body { background: var(--background) !important; color: var(--foreground); }
-html.dark main { background-color: #1B080A !important; }
-html.dark #event-scents { background-color: #241012 !important; }
+html.dark main { background-color: #220A0D !important; }
+html.dark #event-scents { background-color: #2A0B10 !important; }
 
 /* Turn the existing near-black utilities into true red surfaces, including
    Tailwind dark: variants and background-opacity classes. */
@@ -181,20 +181,20 @@ html.dark [class*="bg-[#24211e]"],
 html.dark [class*="bg-[#28221d]"],
 html.dark [class*="bg-stone-950"],
 html.dark [class~="bg-black"] {
-  background-color: #241012 !important;
+  background-color: #2A0B10 !important;
 }
 html.dark [class*="bg-[#700404]"] {
-  background-color: #2A0C0F !important;
+  background-color: #351017 !important;
 }
 html.dark [class*="bg-[#1c1916]"],
 html.dark [class*="bg-[#24211e]"],
 html.dark [class*="bg-[#28221d]"],
 html.dark .glass-dark {
-  background-color: #310E12 !important;
+  background-color: #341117 !important;
   border-color: #76543B !important;
 }
 html.dark .product-card {
-  background-color: #310E12 !important;
+  background-color: #341117 !important;
   border-color: #C5A46D !important;
 }
 html:not(.dark) .product-card { border-color: #C5A46D !important; }
@@ -239,7 +239,7 @@ html.dark [class*="text-[#d6b783]"], html.dark [class*="text-[#b18a50]"],
 html.dark [class*="text-[#9a7543]"], html.dark .text-amber-700,
 html.dark .text-amber-800, html.dark .text-amber-900 { color: #FFF9F2 !important; }
 .gift-bg {
-  background: linear-gradient(135deg, #1B080A 0%, #2B0B0D 48%, #3A1013 78%, #1B080A 100%) !important;
+  background: linear-gradient(135deg, #220A0D 0%, #2B0B10 48%, #3A1018 78%, #220A0D 100%) !important;
 }
 
 /* Event Scents banner: charcoal luxury card with a candy-red edge glow. */
@@ -303,3 +303,165 @@ html.dark .text-amber-800, html.dark .text-amber-900 { color: #FFF9F2 !important
   border-color: #C5A46D !important;
   box-shadow: 0 0 0 1px rgba(197, 164, 109, .18), 0 24px 60px rgba(0, 0, 0, .30);
 }
+
+/* Exousia atelier system: warm paper, garnet, and quiet gold. */
+:root:not(.dark) {
+  --background: #F5F0E8;
+  --foreground: #271719;
+  --primary: #8A0303;
+  --primary-dark: #700404;
+  --primary-light: #F4E3DD;
+  --accent: #C5A46D;
+  --muted: #6B5750;
+  --border: #D8C7B4;
+  --card: #FFF9F2;
+}
+.dark {
+  --background: #1E090D;
+  --foreground: #F7F0E8;
+  --primary: #A10A16;
+  --primary-dark: #700404;
+  --primary-light: #3B1118;
+  --accent: #E0C27A;
+  --muted: #D0BFB2;
+  --border: #76543B;
+  --card: #301117;
+  color-scheme: dark;
+}
+body { background: var(--background) !important; color: var(--foreground); }
+
+.site-header { filter: drop-shadow(0 8px 20px rgba(38, 12, 16, .10)); }
+.site-announcement { box-shadow: inset 0 -1px rgba(224, 194, 122, .48); }
+.site-navbar {
+  background: rgba(255, 249, 242, .97) !important;
+  border-color: #C5A46D !important;
+  box-shadow: 0 5px 22px rgba(44, 15, 19, .09) !important;
+}
+.dark .site-navbar { background: rgba(39, 12, 18, .97) !important; }
+.site-navbar nav a, .site-navbar nav button,
+.site-navbar button:not(.navbar-cta) { color: #3C2726 !important; }
+.dark .site-navbar nav a, .dark .site-navbar nav button,
+.dark .site-navbar button:not(.navbar-cta) { color: #F2E7DA !important; }
+.site-navbar .navbar-icon { color: #3C2726 !important; }
+.dark .site-navbar .navbar-icon { color: #F2E7DA !important; }
+html:not(.dark) body .site-navbar .navbar-icon { color: #3C2726 !important; }
+.site-navbar nav a:hover, .site-navbar nav button:hover,
+.site-navbar button:not(.navbar-cta):hover { color: #8A0303 !important; }
+.dark .site-navbar nav a:hover, .dark .site-navbar nav button:hover,
+.dark .site-navbar button:not(.navbar-cta):hover { color: #E0C27A !important; }
+.site-navbar button:not(.navbar-cta) { border-color: rgba(138, 3, 3, .28) !important; }
+.dark .site-navbar button:not(.navbar-cta) { border-color: rgba(197, 164, 109, .55) !important; }
+.site-navbar .navbar-cta { color: #fff !important; }
+.site-menu-dropdown, .site-mobile-panel, .site-search-panel {
+  color: #2D1D1D;
+  box-shadow: 0 18px 50px rgba(32, 9, 12, .22);
+}
+.dark .site-menu-dropdown, .dark .site-mobile-panel, .dark .site-search-panel { color: #F5EDE4; }
+.site-mobile-panel nav a { color: #392625 !important; }
+.dark .site-mobile-panel nav a { color: #F3EADF !important; }
+.site-mobile-panel nav a:hover { color: #8A0303 !important; }
+.dark .site-mobile-panel nav a:hover { color: #E0C27A !important; }
+.site-footer { position: relative; }
+.site-footer::before { content: ""; display: block; height: 3px; background: linear-gradient(90deg, #700404, #C5A46D 48%, #8A0303); }
+.site-footer-link:hover { padding-left: 3px; }
+
+.home-campaign { isolation: isolate; }
+.home-campaign::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -18rem;
+  bottom: -26rem;
+  width: 42rem;
+  height: 42rem;
+  border-radius: 50%;
+  border: 1px solid rgba(138, 3, 3, .12);
+}
+.dark .home-campaign::before { border-color: rgba(224, 194, 122, .18); }
+.home-ribbon { box-shadow: 0 8px 22px rgba(112, 4, 4, .12); }
+.home-card {
+  border-color: rgba(197, 164, 109, .8) !important;
+  box-shadow: 0 3px 14px rgba(48, 25, 22, .06);
+}
+.home-card:hover {
+  border-color: #8A0303 !important;
+  box-shadow: 0 12px 34px rgba(48, 25, 22, .14);
+}
+.dark .home-card { box-shadow: 0 5px 18px rgba(0, 0, 0, .16); }
+.dark .home-card:hover { box-shadow: 0 12px 36px rgba(0, 0, 0, .3); }
+
+.product-card {
+  background: #FFF9F2 !important;
+  border-color: rgba(197, 164, 109, .8) !important;
+  box-shadow: 0 6px 24px rgba(54, 30, 27, .08) !important;
+}
+.product-card:hover { border-color: #8A0303 !important; }
+.dark .product-card { background: #301117 !important; border-color: #76543B !important; }
+.dark .product-card:hover { border-color: #E0C27A !important; }
+
+.lifestyle-banner { box-shadow: 0 18px 50px rgba(48, 20, 20, .10); }
+.dark .lifestyle-banner { border-color: rgba(197, 164, 109, .55); box-shadow: 0 20px 55px rgba(0, 0, 0, .25); }
+
+/* Product detail keeps its gallery and commerce controls while sharing the new paper/garnet palette. */
+html:not(.dark) .product-detail-page [class*="text-white"] { color: #3A2927 !important; }
+html:not(.dark) .product-detail-page [class*="text-amber-"] { color: #700404 !important; }
+html:not(.dark) .product-detail-page [class*="bg-white/5"],
+html:not(.dark) .product-detail-page [class*="bg-white/["],
+html:not(.dark) .product-detail-page [class*="bg-black/"] { background-color: #EFE7DC !important; }
+html:not(.dark) .product-detail-page [class*="border-white/"] { border-color: #D7C7B7 !important; }
+html:not(.dark) .product-detail-page [class*="border-amber-"] { border-color: rgba(138, 3, 3, .25) !important; }
+html:not(.dark) .product-detail-page button[class*="bg-amber-"],
+html:not(.dark) .product-detail-page a[class*="bg-amber-"] { background-color: #8A0303 !important; color: #fff !important; }
+html:not(.dark) .product-detail-page [class*="text-amber-200"],
+html:not(.dark) .product-detail-page [class*="text-amber-100"] { color: #700404 !important; }
+html:not(.dark) .product-detail-page input,
+html:not(.dark) .product-detail-page textarea,
+html:not(.dark) .product-detail-page select { color: #362322; }
+.dark .product-detail-page { background-color: #1E090D !important; }
+.dark .product-detail-page section [class*="bg-black/"] { background-color: #2A1117 !important; }
+.dark .product-detail-page section [class*="border-white/"] { border-color: rgba(197, 164, 109, .24) !important; }
+
+html:not(.dark) .site-navbar [class*="text-white/"] { color: #4B3834 !important; }
+.dark .site-navbar [class*="text-white/"] { color: #E6D9CE !important; }
+
+@media (max-width: 767px) {
+  .site-header { padding-top: 5px; }
+  .site-announcement { padding-top: 5px; padding-bottom: 5px; letter-spacing: .16em; }
+  .home-campaign > div:first-of-type { min-height: 0; }
+}
+@media (min-width: 768px) and (max-width: 1100px) {
+  .site-navbar nav { gap: .7rem !important; }
+  .site-navbar nav a, .site-navbar nav button { font-size: 11px !important; }
+  .site-navbar > a:first-child { gap: .4rem; }
+  .site-navbar > a:first-child img { width: 28px; height: 28px; }
+  .site-navbar .navbar-cta { padding-left: .8rem; padding-right: .8rem; font-size: 12px; }
+}
+
+/* Global stone / red light and black / gold dark theme requested for Exousia. */
+:root:not(.dark) { --background: #E7E5E4; --foreground: #8A0303; --accent: #B91C1C; --border: #DC2626; --card: #F5F5F4; }
+html.dark { --background: #000000; --foreground: #D4AF37; --accent: #E2C15A; --border: #D4AF37; --card: #111111; color-scheme: dark; }
+body { background: var(--background) !important; color: var(--foreground) !important; }
+:root:not(.dark) body main, :root:not(.dark) body footer, :root:not(.dark) body aside { background-color: #E7E5E4 !important; color: #8A0303 !important; }
+:root.dark body main, :root.dark body footer, :root.dark body aside { background-color: #000 !important; color: #D4AF37 !important; }
+:root:not(.dark) body :is(h1,h2,h3,h4,h5,h6,p,a,label,small,strong,em,li,dt,dd,th,td,legend,summary,span,button) { color: #8A0303 !important; }
+:root.dark body :is(h1,h2,h3,h4,h5,h6,p,a,label,small,strong,em,li,dt,dd,th,td,legend,summary,span,button) { color: #D4AF37 !important; }
+html:not(.dark) body [class*='border'] { border-color: rgba(185, 28, 28, .72) !important; box-shadow: 0 0 0 1px rgba(185, 28, 28, .16), 0 0 12px rgba(220, 38, 38, .24); }
+html.dark body [class*='border'] { border-color: rgba(212, 175, 55, .78) !important; box-shadow: 0 0 0 1px rgba(212, 175, 55, .16), 0 0 12px rgba(212, 175, 55, .22); }
+html:not(.dark) body input, html:not(.dark) body textarea, html:not(.dark) body select { background: #F5F5F4 !important; color: #8A0303 !important; border-color: rgba(185, 28, 28, .72) !important; }
+html.dark body input, html.dark body textarea, html.dark body select { background: #111 !important; color: #D4AF37 !important; border-color: rgba(212, 175, 55, .78) !important; }
+html:not(.dark) body input::placeholder, html:not(.dark) body textarea::placeholder { color: #9F1239 !important; opacity: 1; }
+html.dark body input::placeholder, html.dark body textarea::placeholder { color: #B99A34 !important; opacity: 1; }
+html:not(.dark) body :is(button,a)[class*='bg-[#8A0303]'], html:not(.dark) body :is(button,a)[class*='bg-amber-'] { color: #fff !important; }
+html.dark body :is(button,a)[class*='bg-[#8A0303]'], html.dark body :is(button,a)[class*='bg-amber-'] { color: #D4AF37 !important; }
+:root:not(.dark) body .site-announcement, :root:not(.dark) body .site-announcement *, :root:not(.dark) body .site-navbar .navbar-cta { color: #fff !important; }
+html.dark body .site-announcement, html.dark body .site-announcement *, html.dark body .site-navbar .navbar-cta { color: #D4AF37 !important; }
+html:not(.dark) body .site-footer .site-footer-link:hover { color: #8A0303 !important; }
+html.dark body .site-footer .site-footer-link:hover { color: #D4AF37 !important; }
+html:not(.dark) .site-navbar, html:not(.dark) .site-footer { background-color: #E7E5E4 !important; }
+html.dark .site-navbar, html.dark .site-footer { background-color: #000 !important; }
+
+/* Dark mode uses true black as the canvas; retain near-black card depth and gold illumination. */
+html.dark body main > section { background-color: #000 !important; }
+html.dark .home-campaign, html.dark .category-page, html.dark .product-detail-page { background-color: #000 !important; }
+html.dark .home-card, html.dark .product-card { background-color: #0B0B0B !important; border-color: rgba(212, 175, 55, .82) !important; box-shadow: 0 0 0 1px rgba(212, 175, 55, .16), 0 0 14px rgba(212, 175, 55, .18) !important; }
+html.dark .lifestyle-banner { background-color: #090909 !important; }

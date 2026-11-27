@@ -35,31 +35,31 @@ export default function HomepageVideoBanner() {
   }, []);
 
   return (
-    <section className="relative isolate overflow-hidden rounded-[2rem] border border-[#8A0303]/25 bg-gradient-to-br from-[#201B16] via-[#171411] to-[#11110F] px-5 py-5 text-[#F5F0E8] shadow-xl shadow-black/30 sm:px-7 sm:py-6 lg:px-9 lg:py-7">
+    <section className="lifestyle-banner relative isolate overflow-hidden rounded-[2rem] border border-[#C5A46D]/65 bg-[#EFE7DC] px-5 py-6 text-[#271719] shadow-xl shadow-[#3A1715]/10 dark:bg-[#2B1118] dark:text-[#F7F0E8] sm:px-7 sm:py-7 lg:px-10 lg:py-9">
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-[#8A0303]/[0.08] blur-3xl"
+          className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-[#8A0303]/[0.12] blur-3xl"
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-[#8A0303]/[0.08] blur-3xl"
+          className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-[#C5A46D]/[0.16] blur-3xl"
       />
 
       <div className="relative grid items-center gap-5 lg:grid-cols-[1fr_0.72fr] lg:gap-7">
 
         <div className="max-w-xl">
 
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#8A0303] sm:text-xs">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#8A0303] dark:text-[#E0C27A] sm:text-xs">
             Exousia &amp; Co. Originals
           </p>
 
-          <h2 className="mt-4 text-2xl font-black leading-[1.08] tracking-tight text-[#F5F0E8] sm:text-3xl lg:text-4xl">
+          <h2 className="mt-4 font-serif text-3xl font-medium leading-[1.08] tracking-tight text-[#2B191A] dark:text-[#FFF8F0] sm:text-4xl lg:text-5xl">
             More Than a Scent. A Lifestyle.
           </h2>
 
-          <p className="mt-3 max-w-md text-sm leading-5 text-[#F5F0E8]/75 sm:text-sm sm:leading-6">
+          <p className="mt-4 max-w-md text-sm leading-6 text-[#65514A] dark:text-[#D8C8BC] sm:text-base sm:leading-7">
             Discover the art of self-expression with Exousia &amp; Co.
             Explore captivating fragrances, beauty essentials, and
             wellness finds thoughtfully selected to elevate your
@@ -68,13 +68,13 @@ export default function HomepageVideoBanner() {
             confidence, and elegance into every experience.
           </p>
 
-          <p className="mt-3 text-xs font-semibold tracking-wide text-[#8A0303]">
+          <p className="mt-4 text-xs font-semibold tracking-[.16em] text-[#8A0303] dark:text-[#E0C27A]">
             YOUR SCENT, YOUR STORY
           </p>
 
           <Link
             href="/products"
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#8A0303] px-5 py-2.5 text-sm font-bold text-[#11110F] shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-[#D8BC8B] focus:outline-none focus:ring-2 focus:ring-[#8A0303] focus:ring-offset-2 focus:ring-offset-[#201B16]"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#8A0303] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#700404]/20 transition hover:-translate-y-0.5 hover:bg-[#700404] focus:outline-none focus:ring-2 focus:ring-[#C5A46D] focus:ring-offset-2 focus:ring-offset-[#EFE7DC] dark:focus:ring-offset-[#2B1118]"
           >
             Explore Exousia
             <span aria-hidden="true">→</span>
@@ -82,7 +82,7 @@ export default function HomepageVideoBanner() {
 
         </div>
 
-        <div className="relative mx-auto flex min-h-[220px] w-full max-w-[420px] items-center justify-center overflow-hidden rounded-2xl border border-[#8A0303]/20 bg-[#111110]/80 shadow-2xl shadow-black/40 sm:min-h-[280px] lg:min-h-[350px]">
+        <div className="relative mx-auto flex min-h-[220px] w-full max-w-[420px] items-center justify-center overflow-hidden rounded-[1.4rem] border border-[#C5A46D]/65 bg-[#1E090D] shadow-2xl shadow-[#3A1715]/20 sm:min-h-[280px] lg:min-h-[350px]">
 
           {media ? (
             media.media_type === 'video' ? (

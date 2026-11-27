@@ -155,7 +155,7 @@ export default function ProductDetailPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#11110F] px-6 py-32 text-white">
+      <main className="product-detail-page min-h-screen bg-[#F5F0E8] px-5 py-32 text-[#271719] dark:bg-[#1E090D] dark:text-[#F7F0E8] sm:px-6">
         <div className="mx-auto max-w-7xl">
           <nav className="mb-10 flex items-center gap-2 text-xs font-bold text-white/40">
             <Link href="/products" className="hover:text-amber-300">Collections</Link>

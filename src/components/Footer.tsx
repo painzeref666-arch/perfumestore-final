@@ -2,55 +2,55 @@ import React from 'react';
 import Link from 'next/link';
 import AppLogo from '@/components/ui/AppLogo';
 
+const shopLinks = [
+  { label: 'Perfumes', href: '/perfumes' },
+  { label: 'Cosmetics', href: '/cosmetics' },
+  { label: 'Wellness', href: '/wellness' },
+  { label: 'Gift collections', href: '/products' },
+];
+
+const helpLinks = [
+  { label: 'Track an order', href: '/track' },
+  { label: 'Shipping information', href: '/shipping' },
+  { label: 'Your account', href: '/account' },
+  { label: 'Customer reviews', href: '/reviews' },
+];
+
 export default function Footer() {
   return (
-    <footer className="border-t border-border dark:border-white/8 py-8 px-4 md:px-6 bg-background dark:bg-[#11110F]">
-      <div className="max-w-7xl mx-auto">
-        {/* Pattern 3: Vercel Horizontal Flow */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          {/* Logo + Links */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
-            <Link href="/products" className="flex items-center gap-2">
-              <AppLogo size={28} iconName="SparklesIcon" />
-              <span className="font-sans font-semibold text-sm text-foreground dark:text-white">
-                Perfume<span className="font-display italic text-primary font-normal">Store</span>
-              </span>
+    <footer className="site-footer border-t border-[#C5A46D]/30 bg-[#F1EAE0] text-[#27191A] dark:bg-[#19090D] dark:text-[#F5EDE4]">
+      <div className="mx-auto max-w-7xl px-5 pb-7 pt-14 md:px-8 md:pt-16">
+        <div className="grid gap-10 border-b border-[#8A0303]/15 pb-10 md:grid-cols-[1.3fr_.7fr_.7fr] md:gap-16">
+          <div className="max-w-sm">
+            <Link href="/" className="inline-flex items-center gap-3">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C5A46D]/75 bg-[#FFF9F2] dark:bg-[#2A1016]"><AppLogo size={31} iconName="SparklesIcon" /></span>
+              <span><span className="block font-serif text-xl text-[#700404] dark:text-[#F2D89D]">Exousia &amp; Co.</span><span className="mt-0.5 block text-[9px] font-semibold uppercase tracking-[.27em] text-[#755D50] dark:text-[#D2BFA8]">Fragrance · Beauty · Wellness</span></span>
             </Link>
-            <nav className="flex items-center gap-1 flex-wrap justify-center">
-              {[
-                { label: 'Collections', href: '/products' },
-                { label: 'Scent Families', href: '#scent-families' },
-                { label: 'Our Story', href: '#about' },
-                { label: 'Gift Sets', href: '#gift' },
-                { label: 'Privacy', href: '#' },
-                { label: 'Terms', href: '#' },
-              ]?.map((link, i) => (
-                <React.Fragment key={link?.label}>
-                  <a href={link?.href} className="footer-link px-2 py-1">
-                    {link?.label}
-                  </a>
-                  {i < 5 && <span className="text-border dark:text-white/20 text-xs">·</span>}
-                </React.Fragment>
-              ))}
+            <p className="mt-5 text-sm leading-7 text-[#64534A] dark:text-[#D1C5B8]">Find a scent that feels like you, and the little rituals that make every day more yours.</p>
+          </div>
+
+          <div>
+            <h2 className="text-[10px] font-bold uppercase tracking-[.28em] text-[#8A0303] dark:text-[#E0C27A]">Explore</h2>
+            <nav className="mt-4 grid gap-3">
+              {shopLinks.map((link) => <Link key={link.label} href={link.href} className="site-footer-link text-sm text-[#493735] transition hover:text-[#8A0303] dark:text-[#E6D9CE] dark:hover:text-[#E0C27A]">{link.label}</Link>)}
             </nav>
           </div>
 
-          {/* Social + Copyright */}
-          <div className="flex items-center gap-4">
-            {/* Instagram */}
-            <a href="#" aria-label="PerfumeStore on Instagram" className="w-8 h-8 flex items-center justify-center rounded-full border border-border dark:border-white/10 text-muted dark:text-white/40 hover:text-foreground dark:hover:text-white hover:border-foreground/30 dark:hover:border-white/30 transition-all">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-              </svg>
-            </a>
-            {/* Pinterest */}
-            <a href="#" aria-label="PerfumeStore on Pinterest" className="w-8 h-8 flex items-center justify-center rounded-full border border-border dark:border-white/10 text-muted dark:text-white/40 hover:text-foreground dark:hover:text-white hover:border-foreground/30 dark:hover:border-white/30 transition-all">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.19-.77 1.29-5.47 1.29-5.47s-.33-.66-.33-1.63c0-1.53.89-2.67 1.99-2.67.94 0 1.39.7 1.39 1.55 0 .94-.6 2.35-.91 3.66-.26 1.09.54 1.98 1.61 1.98 1.93 0 3.42-2.04 3.42-4.97 0-2.6-1.87-4.41-4.54-4.41-3.09 0-4.9 2.32-4.9 4.72 0 .93.36 1.93.81 2.48.09.11.1.2.07.31-.08.34-.27 1.09-.31 1.24-.05.2-.17.24-.38.15-1.43-.67-2.33-2.77-2.33-4.46 0-3.62 2.63-6.95 7.59-6.95 3.98 0 7.08 2.84 7.08 6.63 0 3.96-2.49 7.14-5.95 7.14-1.16 0-2.26-.6-2.63-1.31l-.72 2.67c-.26.99-.95 2.24-1.42 2.99.07.02.14.04.22.06A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10z"/>
-              </svg>
-            </a>
-            <span className="text-muted dark:text-white/30 text-xs font-medium">© 2026 PerfumeStore</span>
+          <div>
+            <h2 className="text-[10px] font-bold uppercase tracking-[.28em] text-[#8A0303] dark:text-[#E0C27A]">Customer care</h2>
+            <nav className="mt-4 grid gap-3">
+              {helpLinks.map((link) => <Link key={link.label} href={link.href} className="site-footer-link text-sm text-[#493735] transition hover:text-[#8A0303] dark:text-[#E6D9CE] dark:hover:text-[#E0C27A]">{link.label}</Link>)}
+            </nav>
           </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-between gap-4 pt-6 text-center sm:flex-row sm:text-left">
+          <p className="text-xs text-[#75635A] dark:text-[#B7A99A]">© {new Date().getFullYear()} Exousia &amp; Co. All rights reserved.</p>
+          <nav className="flex items-center gap-5 text-xs text-[#75635A] dark:text-[#B7A99A]">
+            <Link href="/" className="transition hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Privacy</Link>
+            <Link href="/" className="transition hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Terms</Link>
+            <Link href="/event-scents/book" className="transition hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Event Scents</Link>
+          </nav>
         </div>
       </div>
     </footer>

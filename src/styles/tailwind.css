@@ -5,29 +5,29 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,600&display=swap');
 
 :root {
-  --background: #F5F0E8;
-  --foreground: #241817;
+  --background: #E7E5E4;
+  --foreground: #8A0303;
   --primary: #8A0303;
   --primary-dark: #700404;
-  --primary-light: #F5E9E1;
-  --accent: #700404;
-  --muted: #6C5147;
-  --border: #D7C7BA;
-  --card: #FFFCF8;
+  --primary-light: #F5F5F4;
+  --accent: #B91C1C;
+  --muted: #991B1B;
+  --border: #DC2626;
+  --card: #F5F5F4;
   --radius: 1rem;
 }
 
 /* Dark mode CSS variables */
 .dark {
-  --background: #1B080A;
-  --foreground: #F4ECE4;
-  --primary: #8A0303;
+  --background: #000000;
+  --foreground: #D4AF37;
+  --primary: #D4AF37;
   --primary-dark: #700404;
-  --primary-light: #F5E9E1;
-  --accent: #FFF9F2;
-  --muted: #D1BEB0;
-  --border: #76543B;
-  --card: #310E12;
+  --primary-light: #171717;
+  --accent: #D4AF37;
+  --muted: #C6A43A;
+  --border: #D4AF37;
+  --card: #111111;
   --radius: 1rem;
 }
 

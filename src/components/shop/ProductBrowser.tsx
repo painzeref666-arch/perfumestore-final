@@ -70,8 +70,8 @@ function ProductCard({ product }: { product: Product }) {
       : concentration;
 
   return (
-    <article className="product-card group relative overflow-hidden rounded-[2rem] border border-[#C5A46D]/70 bg-[#FFFCF8] p-4 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-[#C5A46D]/70 dark:bg-[#700404]">
-      <Link href={`/products/${product.id}`} className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-stone-100">
+    <article className="product-card group relative overflow-hidden rounded-[1.65rem] border border-[#C5A46D]/70 bg-[#FFFCF8] p-3.5 shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-[#C5A46D]/70 dark:bg-[#700404]">
+      <Link href={`/products/${product.id}`} className="relative block aspect-[4/5] overflow-hidden rounded-[1.2rem] bg-[#EFE7DC] dark:bg-[#211015]">
         <AppImage src={product.image} alt={product.name} fill smartFill sizes="(max-width:768px) 100vw,33vw" className="object-contain transition-transform duration-700 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full border border-[#C5A46D]/80 bg-[#700404]/95 px-3 py-1 text-xs font-black text-[#E0C27A]">{product.promo || product.tag}</span>
         <span className="absolute bottom-4 right-4 rounded-full border border-[#C5A46D]/70 bg-[#700404]/95 px-3 py-1 text-xs font-black text-[#E0C27A]">Rating {product.rating}</span>
@@ -81,16 +81,16 @@ function ProductCard({ product }: { product: Product }) {
       <div className="p-2 pt-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <Link href={`/products/${product.id}`} className="text-[#6B4B16] transition-colors hover:text-[#8A0303] dark:text-[#E0C27A] dark:hover:text-[#F4DEA2]">
-              <h2 className="text-2xl font-black">{product.name}</h2>
+            <Link href={`/products/${product.id}`} className="text-[#362322] transition-colors hover:text-[#8A0303] dark:text-[#FFF4E8] dark:hover:text-[#E0C27A]">
+              <h2 className="font-serif text-xl font-semibold tracking-tight">{product.name}</h2>
             </Link>
             <p className="mt-1 text-sm font-semibold text-[#75551D] dark:text-[#D6B36A]">{product.family} - {productType}</p>
           </div>
           <Price amount={price} className="text-xl font-black text-[#6B4B16] dark:text-[#E0C27A]" />
         </div>
 
-        <p className="mt-3 text-sm leading-6 text-[#392A24]/90 dark:text-[#FFF9F2]/80">{product.description}</p>
-        {product.event && <p className="mt-3 rounded-2xl border border-[#C5A46D]/50 bg-[#700404] px-4 py-2 text-xs font-black text-[#E0C27A]">{product.event}</p>}
+        <p className="mt-3 text-sm leading-6 text-[#65534C] dark:text-[#D8C9BD]">{product.description}</p>
+        {product.event && <p className="mt-3 rounded-2xl border border-[#C5A46D]/50 bg-[#F1E7D9] px-4 py-2 text-xs font-black text-[#700404] dark:bg-[#3A1118] dark:text-[#E0C27A]">{product.event}</p>}
 
         <div className="mt-4 flex flex-wrap gap-2">
           {product.notes.map((note) => (
@@ -106,7 +106,7 @@ function ProductCard({ product }: { product: Product }) {
                 <select
                   value={selectedVariant?.key || ''}
                   onChange={(event) => setVariantKey(event.target.value)}
-                  className="mt-2 w-full rounded-2xl border border-[#C5A46D]/60 bg-[#700404] px-3 py-3 text-sm font-bold normal-case text-[#FFF9F2] outline-none"
+                  className="mt-2 w-full rounded-xl border border-[#C5A46D]/70 bg-white px-3 py-3 text-sm font-bold normal-case text-[#362322] outline-none focus:border-[#8A0303] dark:bg-[#241016] dark:text-[#FFF9F2]"
                 >
                   {availableVariants.map((option) => (
                     <option key={option.key} value={option.key}>{option.label} — ₱{option.price.toLocaleString()}</option>
@@ -114,14 +114,14 @@ function ProductCard({ product }: { product: Product }) {
                 </select>
               </label>
             ) : (
-              <div className="rounded-2xl border border-[#C5A46D]/60 bg-[#700404] px-4 py-3 text-[#FFF9F2]">
+              <div className="rounded-xl border border-[#C5A46D]/65 bg-[#F3EBE1] px-4 py-3 text-[#362322] dark:bg-[#3A1118] dark:text-[#FFF9F2]">
                 <p className="text-xs font-black uppercase tracking-widest text-[#D6B36A]">Available option</p>
                 <p className="mt-1 text-sm font-black text-[#E0C27A]">{selectedVariant?.label || 'Unavailable'}</p>
               </div>
             )}
           </div>
         ) : (
-          <div className="mt-5 rounded-2xl border border-[#C5A46D]/60 bg-[#700404] px-4 py-3 text-[#FFF9F2]">
+          <div className="mt-5 rounded-xl border border-[#C5A46D]/65 bg-[#F3EBE1] px-4 py-3 text-[#362322] dark:bg-[#3A1118] dark:text-[#FFF9F2]">
             <p className="text-xs font-black uppercase tracking-widest text-[#D6B36A]">{detailLabel}</p>
             <p className="mt-1 text-sm font-bold text-[#E0C27A]">{detailValue}</p>
           </div>
@@ -134,7 +134,7 @@ function ProductCard({ product }: { product: Product }) {
             size={isPerfume ? size : '10ml'}
             concentration={isPerfume ? concentration : 'EDP'}
             disabled={isPerfume && availableVariants.length === 0}
-            className="rounded-full border border-[#C5A46D]/70 bg-[#700404] px-5 py-3 text-sm font-black text-[#E0C27A] transition hover:bg-[#8A0303] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border border-[#8A0303] bg-[#8A0303] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#700404] hover:bg-[#700404] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Add to Cart
           </AddToCartButton>
@@ -173,27 +173,27 @@ export default function ProductBrowser({ category = 'perfumes', title, descripti
   }, [query, family, sort, stock, products, category]);
 
   return (
-    <section id="featured" className="mx-auto max-w-7xl px-6 py-20">
+    <section id="featured" className="mx-auto max-w-7xl px-5 py-16 sm:px-6 md:py-20">
       <div className="mb-8 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div>
-          <p className="font-bold uppercase tracking-[.25em] text-[#75551D] dark:text-[#D6B36A]">{copy.eyebrow}</p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight text-[#6B4B16] dark:text-[#E0C27A] md:text-6xl">{title || copy.title}</h1>
-          <p className="mt-4 max-w-2xl text-[#392A24] dark:text-[#FFF9F2]/85">{description || copy.description}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[.3em] text-[#8A0303] dark:text-[#E0C27A]">{copy.eyebrow}</p>
+          <h2 className="mt-3 font-serif text-4xl font-medium tracking-tight text-[#2B191A] dark:text-[#FFF8F0] md:text-5xl">{title || copy.title}</h2>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#65514A] dark:text-[#D8C8BC]">{description || copy.description}</p>
         </div>
         <CurrencySelector />
       </div>
 
-      <div className="mb-8 grid gap-3 rounded-[2rem] border border-[#C5A46D]/60 bg-[#700404] p-4 shadow-sm md:grid-cols-[1fr_160px_160px_160px]">
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by name, category, or notes..." className="rounded-full border border-[#C5A46D]/50 bg-[#700404] px-5 py-3 text-[#FFF9F2] outline-none placeholder:text-[#F5F0E8]/60 focus:border-[#E0C27A]" />
-        <select value={family} onChange={(event) => setFamily(event.target.value)} className="rounded-full border border-[#C5A46D]/50 bg-[#700404] px-5 py-3 text-[#FFF9F2] outline-none focus:border-[#E0C27A]">
+      <div className="mb-8 grid gap-3 rounded-[1.4rem] border border-[#D7C7B7] bg-[#EFE7DC] p-3 shadow-sm dark:border-[#69434A] dark:bg-[#2A1117] md:grid-cols-[1fr_160px_160px_160px]">
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by name, category, or notes..." className="rounded-full border border-[#D3C2B1] bg-[#FFFCF8] px-5 py-3 text-[#362322] outline-none placeholder:text-[#8A7A70] focus:border-[#8A0303] dark:border-[#65414A] dark:bg-[#1D0B10] dark:text-[#FFF9F2] dark:placeholder:text-[#B9A6A2]" />
+        <select value={family} onChange={(event) => setFamily(event.target.value)} className="rounded-full border border-[#D3C2B1] bg-[#FFFCF8] px-5 py-3 text-[#362322] outline-none focus:border-[#8A0303] dark:border-[#65414A] dark:bg-[#1D0B10] dark:text-[#FFF9F2]">
           {families.map((option) => <option key={option}>{option}</option>)}
         </select>
-        <select value={stock} onChange={(event) => setStock(event.target.value)} className="rounded-full border border-[#C5A46D]/50 bg-[#700404] px-5 py-3 text-[#FFF9F2] outline-none focus:border-[#E0C27A]">
+        <select value={stock} onChange={(event) => setStock(event.target.value)} className="rounded-full border border-[#D3C2B1] bg-[#FFFCF8] px-5 py-3 text-[#362322] outline-none focus:border-[#8A0303] dark:border-[#65414A] dark:bg-[#1D0B10] dark:text-[#FFF9F2]">
           <option value="all">All stock</option>
           <option value="in">In stock</option>
           <option value="out">Out of stock</option>
         </select>
-        <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-full border border-[#C5A46D]/50 bg-[#700404] px-5 py-3 text-[#FFF9F2] outline-none focus:border-[#E0C27A]">
+        <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-full border border-[#D3C2B1] bg-[#FFFCF8] px-5 py-3 text-[#362322] outline-none focus:border-[#8A0303] dark:border-[#65414A] dark:bg-[#1D0B10] dark:text-[#FFF9F2]">
           <option value="featured">Featured</option>
           <option value="price-low">Price: Low to High</option>
           <option value="price-high">Price: High to Low</option>
@@ -204,7 +204,7 @@ export default function ProductBrowser({ category = 'perfumes', title, descripti
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((product) => <ProductCard key={product.id} product={product} />)}
       </div>
-      {list.length === 0 && <p className="rounded-3xl bg-white p-10 text-center font-bold dark:bg-white/5">{copy.empty}</p>}
+      {list.length === 0 && <p className="rounded-3xl border border-[#D7C7B7] bg-[#FFFCF8] p-10 text-center font-semibold text-[#65514A] dark:border-[#69434A] dark:bg-[#2A1117] dark:text-[#D8C8BC]">{copy.empty}</p>}
     </section>
   );
 }

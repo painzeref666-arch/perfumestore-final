@@ -62,7 +62,7 @@ function ThemeToggle() {
         aria-label={`Theme: ${currentOption.label}. Click to change theme`}
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-[#8A0303]/30 text-[#f5f0e8] hover:text-[#8A0303] hover:bg-[#8A0303]/10 transition-colors"
+        className="navbar-icon hidden sm:flex w-9 h-9 shrink-0 items-center justify-center rounded-full border border-[#8A0303]/30 hover:text-[#8A0303] hover:bg-[#8A0303]/10 transition-colors"
       >
         {currentOption.icon}
       </button>
@@ -116,9 +116,12 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-[100] px-4 md:px-6 py-4">
+    <header className="site-header fixed top-0 left-0 w-full z-[100] px-3 md:px-6 pt-2">
+      <div className="site-announcement mx-auto max-w-7xl rounded-t-xl bg-[#8A0303] px-4 py-1.5 text-center text-[9px] font-semibold uppercase tracking-[.26em] text-white sm:text-[10px]">
+        Fragrance · Beauty · Wellness &nbsp; <span className="text-[#E8C982]">A scent for every story</span>
+      </div>
       <div
-        className={`site-navbar max-w-7xl mx-auto flex items-center justify-between bg-[#11110f]/95 backdrop-blur-xl border border-[#C5A46D]/60 rounded-2xl px-5 md:px-8 py-3.5 transition-all duration-500 ${
+        className={`site-navbar max-w-7xl mx-auto flex items-center justify-between bg-[#FFF9F2]/95 dark:bg-[#270C12]/96 backdrop-blur-xl border border-[#C5A46D]/65 border-t-0 rounded-b-2xl px-4 md:px-8 py-3 transition-all duration-500 ${
           scrolled ? 'shadow-xl shadow-black/40' : ''
         }`}
       >
@@ -129,24 +132,24 @@ export default function Header() {
             iconName="SparklesIcon"
             className="group-hover:rotate-12 transition-transform duration-500"
           />
-          <span className="font-sans font-700 text-lg tracking-tight text-[#E0C27A]">
-            Exousia and Co. <span className="font-display italic text-[#FFF9F2] font-normal">Marketing</span>
+          <span className="flex shrink-0 flex-col whitespace-nowrap font-sans font-700 text-sm leading-tight tracking-tight text-[#700404] dark:text-[#F2D89D] md:text-base lg:text-lg">
+            Exousia &amp; Co. <span className="font-display text-[10px] italic font-normal tracking-[.12em] text-[#70534A] dark:text-[#E8D7BE]">Marketing</span>
           </span>
         </Link>
 
         {/* Desktop Nav: primary shopping links, secondary customer links grouped under More */}
-        <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[#E0C27A]/90">
-          <Link href="/perfumes" className="hover:text-[#FFF2C2] transition-colors">Perfumes</Link>
-          <Link href="/cosmetics" className="hover:text-[#FFF2C2] transition-colors">Cosmetics</Link>
-          <Link href="/wellness" className="hover:text-[#FFF2C2] transition-colors">Wellness</Link>
-          <Link href="/quiz" className="hover:text-[#FFF2C2] transition-colors">Scent Quiz</Link>
-          <Link href="/#scents" className="hover:text-[#FFF2C2] transition-colors">Scent Families</Link>
+        <nav className="hidden md:flex items-center gap-3 lg:gap-5 text-[12px] font-medium text-[#382525] dark:text-[#F1E8DD]">
+          <Link href="/perfumes" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Perfumes</Link>
+          <Link href="/cosmetics" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Cosmetics</Link>
+          <Link href="/wellness" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Wellness</Link>
+          <Link href="/quiz" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Scent Quiz</Link>
+          <Link href="/#scents" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Scent Families</Link>
           <div className="relative">
             <button type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen(!moreOpen)} className="inline-flex items-center gap-1 hover:text-[#8A0303] transition-colors">
               More <span className="text-xs">{moreOpen ? '▴' : '▾'}</span>
             </button>
             {moreOpen && (
-              <div className="absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#8A0303]/35 bg-[#f5f0e8] p-2 shadow-2xl shadow-black/20 dark:bg-[#11110f] dark:shadow-black/40">
+              <div className="site-menu-dropdown absolute right-0 top-9 z-50 w-48 rounded-2xl border border-[#C5A46D]/45 bg-[#FFF9F2] p-2 shadow-2xl shadow-black/20 dark:bg-[#2A1016] dark:shadow-black/40">
                 {[
                   ['Wishlist', '/wishlist'], ['Rewards', '/rewards'], ['Reviews', '/reviews'], ['Track Order', '/track'], ['Account', '/account'],
                 ].map(([label, href]) => (
@@ -164,7 +167,7 @@ export default function Header() {
             aria-label="Search fragrances"
             aria-expanded={searchOpen}
             onClick={() => setSearchOpen(true)}
-            className="flex w-9 h-9 items-center justify-center rounded-full border border-[#8A0303]/30 hover:bg-[#8A0303]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#8A0303]"
+            className="navbar-icon flex w-9 h-9 shrink-0 items-center justify-center rounded-full border border-[#8A0303]/30 hover:bg-[#8A0303]/10 transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -183,7 +186,7 @@ export default function Header() {
           <button
             aria-label={`Shopping cart with ${cartCount} items`}
             onClick={() => setCartOpen(true)}
-            className="relative flex w-9 h-9 items-center justify-center rounded-full border border-[#8A0303]/30 hover:bg-[#8A0303]/10 transition-colors text-[#f5f0e8]/75 hover:text-[#8A0303]"
+            className="navbar-icon relative flex w-9 h-9 shrink-0 items-center justify-center rounded-full border border-[#8A0303]/30 hover:bg-[#8A0303]/10 transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
@@ -198,7 +201,7 @@ export default function Header() {
           {/* CTA */}
           <Link
             href="/perfumes"
-            className="navbar-cta hidden sm:inline-flex bg-[#8A0303] text-white hover:bg-[#700404] items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
+            className="navbar-cta hidden shrink-0 whitespace-nowrap sm:inline-flex bg-[#8A0303] text-white hover:bg-[#700404] items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
           >
             Shop Now
           </Link>
@@ -207,7 +210,7 @@ export default function Header() {
           <button
             aria-label="Toggle menu"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-[#8A0303]/30 text-[#f5f0e8] hover:bg-[#8A0303]/10 transition-colors"
+            className="navbar-icon md:hidden w-9 h-9 shrink-0 flex items-center justify-center rounded-full border border-[#8A0303]/30 hover:bg-[#8A0303]/10 transition-colors"
           >
             {menuOpen ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -223,16 +226,16 @@ export default function Header() {
       </div>
       {/* Mobile Menu: isolated full-screen overlay and scrollable panel */}
       {menuOpen && (
-        <div className="md:hidden fixed inset-0 z-[110] bg-black/65 backdrop-blur-sm" onClick={() => setMenuOpen(false)}>
+        <div className="site-mobile-overlay md:hidden fixed inset-0 z-[110] bg-black/65 backdrop-blur-sm" onClick={() => setMenuOpen(false)}>
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
-            className="fixed right-4 left-4 top-[92px] max-h-[calc(100dvh-112px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#8A0303]/35 bg-[#11110f] p-5 shadow-2xl shadow-black/60"
+            className="site-mobile-panel fixed right-4 left-4 top-[92px] max-h-[calc(100dvh-112px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#C5A46D]/45 bg-[#FFF9F2] p-5 shadow-2xl shadow-black/60 dark:bg-[#2A1016]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between border-b border-[#8A0303]/20 pb-3">
-              <span className="text-sm font-semibold tracking-wide text-[#8A0303]">MENU</span>
+                <span className="text-sm font-semibold tracking-wide text-[#8A0303]">MENU</span>
               <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#8A0303]/30 text-[#f5f0e8]">×</button>
             </div>
             <nav className="flex flex-col gap-1">
@@ -268,15 +271,15 @@ export default function Header() {
       )}
 
       {searchOpen && (
-        <div className="fixed inset-0 z-[120] bg-black/70 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
-          <div className="mx-auto max-w-2xl rounded-3xl border border-[#8A0303]/30 bg-[#11110f] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+        <div className="site-search-overlay fixed inset-0 z-[120] bg-black/70 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
+          <div className="site-search-panel mx-auto max-w-2xl rounded-3xl border border-[#C5A46D]/45 bg-[#FFF9F2] p-5 shadow-2xl dark:bg-[#2A1016]" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-center gap-3">
               <input
                 autoFocus
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Search products, notes, or categories"
-                className="min-w-0 flex-1 rounded-full border border-[#8A0303]/25 bg-[#171411] px-5 py-3 text-[#f5f0e8] outline-none focus:border-[#8A0303]"
+                className="site-search-input min-w-0 flex-1 rounded-full border border-[#C5A46D]/50 bg-white px-5 py-3 text-[#241817] outline-none focus:border-[#8A0303] dark:bg-[#1D0B10] dark:text-[#F7F0E8]"
               />
               <button
                 type="button"
