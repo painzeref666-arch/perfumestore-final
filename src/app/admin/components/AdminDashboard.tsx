@@ -1135,11 +1135,11 @@ export default function AdminDashboard() {
             {loading ? <p className="mt-8 font-bold">Loading products...</p> : <ProductTable products={filteredProducts} editing={startEditProduct} deleteProduct={deleteProduct} />}
           </section>
 
-          <section className="min-w-0 rounded-[1.5rem] bg-stone-950 p-4 text-white sm:rounded-[2rem] sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-2xl font-black">Low stock alerts</h2><label className="text-xs font-black uppercase tracking-widest text-white/50">Alert at ≤ <input type="number" value={lowStockLimit} onChange={(e)=>setLowStockLimit(Number(e.target.value)||0)} className="ml-2 w-20 rounded-xl bg-white/10 px-3 py-2 text-white" /></label></div>
+          <section className="low-stock-alerts min-w-0 rounded-[1.5rem] border border-amber-900/10 bg-amber-50 p-4 text-stone-950 shadow-sm sm:rounded-[2rem] sm:p-6 dark:border-[#8F773A]/35 dark:bg-[#090909] dark:text-[#D4AF37]">
+            <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-2xl font-black">Low stock alerts</h2><label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-[#B8A878]">Alert at ≤ <input type="number" value={lowStockLimit} onChange={(e)=>setLowStockLimit(Number(e.target.value)||0)} className="ml-2 w-20 rounded-xl border border-amber-300 bg-white px-3 py-2 text-stone-950 dark:border-[#8F773A]/40 dark:bg-[#111111] dark:text-[#E4D39B]" /></label></div>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
-              {lowStock.map((p) => <div key={p.id} className="rounded-2xl bg-white/10 p-4"><p className="font-black">{p.name}</p><p className="text-sm text-white/60">Only {p.stock} left</p></div>)}
-              {lowStock.length === 0 && <p className="text-white/60">No low stock products.</p>}
+              {lowStock.map((p) => <div key={p.id} className={`low-stock-alert-card rounded-2xl border p-4 ${Number(p.stock) === 0 ? 'border-amber-500/60 bg-amber-100 dark:border-[#D4AF37]/60 dark:bg-[#211B0B]' : 'border-amber-200 bg-white/70 dark:border-[#8F773A]/30 dark:bg-[#11100C]'}`}><p className="font-black">{p.name}</p><p className="mt-1 inline-flex rounded-full bg-amber-100 px-2 py-1 text-sm font-bold text-amber-950 dark:bg-[#2B2413] dark:text-[#D4AF37]">{Number(p.stock) === 0 ? 'Out of stock' : `Only ${p.stock} left`}</p></div>)}
+              {lowStock.length === 0 && <p className="text-stone-600 dark:text-[#B8A878]">No low stock products.</p>}
             </div>
           </section>
           </div>
@@ -1354,14 +1354,14 @@ function Select({ label, value, onChange, options, disabled }: { label: string; 
 function ProductTable({ products, editing, deleteProduct }: { products: ManagedProduct[]; editing: (p: ManagedProduct) => void; deleteProduct: (id: string) => void | Promise<void>; }) {
   const columns = 'grid-cols-[280px_180px_180px_80px_100px_100px_110px_100px_110px_170px]';
   return (
-    <div className="admin-product-table-scroll mt-6 max-h-[72vh] max-w-full overflow-y-auto overflow-x-hidden rounded-2xl border border-stone-200/70 dark:border-white/10">
+    <div className="admin-product-table-scroll mt-6 max-h-[72vh] max-w-full overflow-y-auto overflow-x-hidden rounded-2xl border border-stone-200/70 dark:border-white/10" style={{ scrollbarColor: 'var(--admin-scroll-thumb) var(--admin-scroll-track)' }}>
       <div className={`admin-product-table-header sticky top-0 z-10 grid ${columns} min-w-[1390px] items-center border-b border-stone-200 bg-white px-4 py-3 text-xs uppercase tracking-widest text-stone-500 shadow-sm dark:border-white/10 dark:bg-[#201B16] dark:text-white/40`}>
         <span>Product</span><span>Hero</span><span>Promo/Event</span><span>Stock</span><span>10ml EDP</span><span>85ml EDP</span><span>50ml Extrait</span><span>50ml EDT</span><span>Status</span><span>Actions</span>
       </div>
       <div>
         {products.map((p) => (
           <div key={p.id} className="admin-product-row border-b border-stone-100 dark:border-white/5">
-            <div className="admin-product-row-scroll overflow-x-auto overflow-y-hidden px-4 py-2">
+            <div className="admin-product-row-scroll overflow-x-auto overflow-y-hidden px-4 py-2" style={{ scrollbarColor: 'var(--admin-scroll-thumb) var(--admin-scroll-track)' }}>
               <div className={`grid ${columns} min-w-[1390px] items-center gap-0 py-2 text-xs xl:text-sm`}>
                 <div className="py-2 pr-4"><div className="flex items-center gap-3"><img src={p.image} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" /><div className="min-w-0"><p className="font-black">{p.name}</p><p className="text-xs text-stone-600">{p.family} • {p.category || 'perfumes'}</p></div></div></div>
                 <div className="pr-4">
