@@ -716,3 +716,11 @@ html:not(.dark) body .home-brand-promise p {
 html:not(.dark) body .home-brand-promise span:first-child {
   color: #F6D98D !important;
 }
+html:not(.dark) body .home-category-card h2,
+html:not(.dark) body .home-category-card p:not(:first-child) {
+  color: #FFF9F2 !important;
+}
+html:not(.dark) body .home-category-card p:first-child,
+html:not(.dark) body .home-category-card span {
+  color: #F6D98D !important;
+}
