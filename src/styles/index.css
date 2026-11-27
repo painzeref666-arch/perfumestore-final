@@ -491,7 +491,11 @@ html.dark body .site-search-panel,
 html.dark body .site-announcement {
   background-color: #000000 !important;
 }
-html.dark body #event-scents { background: #000000 !important; }
+html.dark body main section#event-scents,
+html.dark body #event-scents {
+  background-color: #000000 !important;
+  background-image: none !important;
+}
 /* Replace literal brand-red and burgundy surfaces with quiet black surfaces. */
 html.dark body [class*="bg-[#8A0303]"],
 html.dark body [class*="bg-[#700404]"],
@@ -529,7 +533,7 @@ html.dark body [class*="text-rose-"] {
   color: #D4AF37 !important;
 }
 html.dark body .event-scents-panel {
-  background: linear-gradient(112deg, #0A0A0A 0%, #111111 58%, #080808 100%) !important;
+  background: #0A0A0A !important;
   border-color: rgba(212, 175, 55, .82) !important;
 }
 html.dark body .event-scents-panel::before {
@@ -546,6 +550,11 @@ html.dark body .site-footer::before {
   background: linear-gradient(90deg, #D4AF37, #E2C15A 50%, #D4AF37) !important;
 }
 html.dark body .home-ribbon { box-shadow: 0 8px 22px rgba(212, 175, 55, .14) !important; }
+html.dark body .site-navbar .navbar-cta {
+  background: #0A0A0A !important;
+  border: 1px solid rgba(212, 175, 55, .82) !important;
+  color: #D4AF37 !important;
+}
 html.dark body [class*="shadow-red-"],
 html.dark body [class*="shadow-rose-"] {
   --tw-shadow-color: rgba(212, 175, 55, .2) !important;
