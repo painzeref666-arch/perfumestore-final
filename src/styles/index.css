@@ -751,3 +751,17 @@ html body main :is(article, section)[class*="border"]:not([class*="rounded-"]):n
   border-radius: 1.25rem;
   overflow: hidden;
 }
+
+/* Keep image badges readable above product photography in both themes. */
+html:not(.dark) body .product-card .product-image-badge {
+  background-color: #8A0303 !important;
+  border-color: #E2C15A !important;
+  color: #FFF9F2 !important;
+  box-shadow: 0 2px 12px rgba(80, 0, 0, .34) !important;
+}
+html.dark body .product-card .product-image-badge {
+  background-color: #0A0A0A !important;
+  border-color: #D4AF37 !important;
+  color: #D4AF37 !important;
+  box-shadow: 0 0 12px rgba(212, 175, 55, .22) !important;
+}

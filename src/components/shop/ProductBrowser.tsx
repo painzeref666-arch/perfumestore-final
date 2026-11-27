@@ -73,8 +73,8 @@ function ProductCard({ product }: { product: Product }) {
     <article className="product-card group relative overflow-hidden rounded-[1.65rem] border border-[#C5A46D]/70 bg-[#FFFCF8] p-3.5 shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-amber-900/10 dark:border-[#C5A46D]/70 dark:bg-[#700404]">
       <Link href={`/products/${product.id}`} className="relative block aspect-[4/5] overflow-hidden rounded-[1.2rem] bg-[#EFE7DC] dark:bg-[#211015]">
         <AppImage src={product.image} alt={product.name} fill smartFill sizes="(max-width:768px) 100vw,33vw" className="object-contain transition-transform duration-700 group-hover:scale-105" />
-        <span className="absolute left-4 top-4 rounded-full border border-[#C5A46D]/80 bg-[#700404]/95 px-3 py-1 text-xs font-black text-[#E0C27A]">{product.promo || product.tag}</span>
-        <span className="absolute bottom-4 right-4 rounded-full border border-[#C5A46D]/70 bg-[#700404]/95 px-3 py-1 text-xs font-black text-[#E0C27A]">Rating {product.rating}</span>
+        <span className="product-image-badge absolute left-4 top-4 rounded-full border border-[#C5A46D]/80 bg-[#700404]/95 px-3 py-1 text-xs font-black text-[#E0C27A]">{product.promo || product.tag}</span>
+        <span className="product-image-badge absolute bottom-4 right-4 rounded-full border border-[#C5A46D]/70 bg-[#700404]/95 px-3 py-1 text-xs font-black text-[#E0C27A]">Rating {product.rating}</span>
       </Link>
       <WishlistButton productId={product.id} className="absolute right-8 top-8 z-10 h-11 w-11 border border-[#C5A46D]/70 bg-[#700404]/90 text-xl text-[#E0C27A] backdrop-blur" />
 
