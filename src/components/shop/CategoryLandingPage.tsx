@@ -46,11 +46,10 @@ export default function CategoryLandingPage({ category }: { category: CategoryKe
             </div>
             {isPerfume && <p className="mt-8 text-[9px] font-semibold uppercase tracking-[.25em] text-[#806D62] dark:text-[#C2B1A2]">Explore the mood&nbsp; · &nbsp;Discover the notes&nbsp; · &nbsp;Make it yours</p>}
           </div>
-          <div className="category-art relative mx-auto flex h-[330px] w-full max-w-[580px] items-end justify-center md:h-[460px]">
-            <div aria-hidden="true" className="absolute bottom-0 right-[4%] h-[88%] w-[78%] rounded-t-[48%] rounded-b-[2.5rem] bg-gradient-to-br from-[#A10A16] via-[#700404] to-[#3A1017]" />
-            <div aria-hidden="true" className="absolute bottom-4 left-[8%] h-20 w-20 rounded-full border border-[#C5A46D]/80 md:h-28 md:w-28" />
-            <img src={h.image} alt={`${h.eyebrow} collection`} className={`relative z-[1] h-[95%] w-[90%] drop-shadow-[0_24px_24px_rgba(35,10,12,.22)] ${isPerfume ? 'object-contain object-bottom' : 'rounded-t-[45%] object-cover object-center'}`} />
-            <div className="absolute bottom-5 left-0 z-[2] rounded-xl border border-[#C5A46D]/65 bg-[#FFF9F2]/95 px-4 py-3 shadow-lg dark:bg-[#2A1016]/95">
+          <div className="category-art relative mx-auto aspect-[3/2] w-full max-w-[580px] overflow-hidden rounded-[1.5rem] border border-[#C5A46D]/60 bg-[#16090b] shadow-[0_18px_50px_rgba(35,10,12,.18)] md:rounded-[2rem]">
+            <img src={h.image} alt={`${h.eyebrow} collection`} className="h-full w-full object-cover object-center" />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4 z-[2] max-w-[calc(100%-2rem)] rounded-xl border border-[#C5A46D]/65 bg-[#FFF9F2]/95 px-4 py-3 shadow-lg dark:bg-[#2A1016]/95">
               <p className="text-[9px] font-bold uppercase tracking-[.22em] text-[#8A0303] dark:text-[#E0C27A]">{isPerfume ? 'The signature collection' : 'Thoughtfully selected'}</p>
               <p className="mt-1 font-serif text-lg text-[#321C1D] dark:text-[#FFF8F0]">{category === 'perfumes' ? 'Make it yours.' : category === 'cosmetics' ? 'Beauty, your way.' : 'A softer daily ritual.'}</p>
             </div>
