@@ -445,8 +445,10 @@ body { background: var(--background) !important; color: var(--foreground) !impor
 :root.dark body main, :root.dark body footer, :root.dark body aside { background-color: #000 !important; color: #D4AF37 !important; }
 :root:not(.dark) body :is(h1,h2,h3,h4,h5,h6,p,a,label,small,strong,em,li,dt,dd,th,td,legend,summary,span,button) { color: #8A0303 !important; }
 :root.dark body :is(h1,h2,h3,h4,h5,h6,p,a,label,small,strong,em,li,dt,dd,th,td,legend,summary,span,button) { color: #D4AF37 !important; }
-html:not(.dark) body [class*='border'] { border-color: rgba(185, 28, 28, .72) !important; box-shadow: 0 0 0 1px rgba(185, 28, 28, .16), 0 0 12px rgba(220, 38, 38, .24); }
-html.dark body [class*='border'] { border-color: rgba(212, 175, 55, .78) !important; box-shadow: 0 0 0 1px rgba(212, 175, 55, .16), 0 0 12px rgba(212, 175, 55, .22); }
+html:not(.dark) body [class*='border'] { border-color: rgba(185, 28, 28, .72) !important; }
+html:not(.dark) body [class*='border'][class*='rounded-'] { box-shadow: 0 0 0 1px rgba(185, 28, 28, .16), 0 0 12px rgba(220, 38, 38, .24); }
+html.dark body [class*='border'] { border-color: rgba(212, 175, 55, .78) !important; }
+html.dark body [class*='border'][class*='rounded-'] { box-shadow: 0 0 0 1px rgba(212, 175, 55, .16), 0 0 12px rgba(212, 175, 55, .22); }
 html:not(.dark) body input, html:not(.dark) body textarea, html:not(.dark) body select { background: #F5F5F4 !important; color: #8A0303 !important; border-color: rgba(185, 28, 28, .72) !important; }
 html.dark body input, html.dark body textarea, html.dark body select { background: #111 !important; color: #D4AF37 !important; border-color: rgba(212, 175, 55, .78) !important; }
 html:not(.dark) body input::placeholder, html:not(.dark) body textarea::placeholder { color: #9F1239 !important; opacity: 1; }
@@ -723,4 +725,29 @@ html:not(.dark) body .home-category-card p:not(:first-child) {
 html:not(.dark) body .home-category-card p:first-child,
 html:not(.dark) body .home-category-card span {
   color: #F6D98D !important;
+}
+
+/* Keep horizontal page gutters steady across public routes and both themes. */
+html body main[class*="px-"]:not(.admin-dashboard) {
+  padding-left: clamp(1rem, 4vw, 2.5rem) !important;
+  padding-right: clamp(1rem, 4vw, 2.5rem) !important;
+}
+html:not(.dark) body .site-footer-panel {
+  border-color: rgba(185, 28, 28, .48) !important;
+  background-color: #F5F0E8 !important;
+  border-radius: 1.5rem;
+}
+html.dark body .site-footer-panel {
+  border-color: rgba(212, 175, 55, .56) !important;
+  background-color: #101010 !important;
+  border-radius: 2rem;
+}
+html body .site-footer-panel > div:first-child {
+  box-shadow: none !important;
+}
+
+/* Give bordered cards and sections rounded corners when older routes omit them. */
+html body main :is(article, section)[class*="border"]:not([class*="rounded-"]):not([class*="border-b"]):not([class*="border-t"]) {
+  border-radius: 1.25rem;
+  overflow: hidden;
 }

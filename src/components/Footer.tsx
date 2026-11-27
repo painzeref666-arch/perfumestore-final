@@ -18,9 +18,9 @@ const helpLinks = [
 
 export default function Footer() {
   return (
-    <footer className="site-footer border-t border-[#C5A46D]/30 bg-[#F1EAE0] text-[#27191A] dark:bg-[#19090D] dark:text-[#F5EDE4]">
-      <div className="mx-auto max-w-7xl px-5 pb-7 pt-14 md:px-8 md:pt-16">
-        <div className="grid gap-10 border-b border-[#8A0303]/15 pb-10 md:grid-cols-[1.3fr_.7fr_.7fr] md:gap-16">
+    <footer className="site-footer border-t border-[#C5A46D]/30 bg-[#E7E5E4] px-4 py-8 text-[#27191A] dark:bg-black dark:text-[#F5EDE4] sm:px-6 md:px-8 md:py-10">
+      <div className="site-footer-panel mx-auto max-w-7xl overflow-hidden rounded-[1.5rem] border border-[#C5A46D]/45 bg-[#F5F0E8] px-5 pb-5 pt-6 shadow-sm dark:bg-[#101010] sm:rounded-[2rem] sm:px-8 sm:pb-6 sm:pt-8 md:px-10 md:pb-8 md:pt-10">
+        <div className="grid gap-8 border-b border-[#8A0303]/15 pb-8 sm:gap-10 md:grid-cols-[1.3fr_.7fr_.7fr] md:gap-14 md:pb-10">
           <div className="max-w-sm">
             <Link href="/" className="inline-flex items-center gap-3">
               <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C5A46D]/75 bg-[#FFF9F2] dark:bg-[#2A1016]"><AppLogo size={31} iconName="SparklesIcon" /></span>
@@ -44,7 +44,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 pt-6 text-center sm:flex-row sm:text-left">
+        <div className="flex flex-col items-center justify-between gap-4 pt-5 text-center sm:flex-row sm:text-left">
           <p className="text-xs text-[#75635A] dark:text-[#B7A99A]">© {new Date().getFullYear()} Exousia &amp; Co. All rights reserved.</p>
           <nav className="flex items-center gap-5 text-xs text-[#75635A] dark:text-[#B7A99A]">
             <Link href="/" className="transition hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Privacy</Link>
