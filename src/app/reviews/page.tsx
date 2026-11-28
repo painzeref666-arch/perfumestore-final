@@ -41,8 +41,10 @@ export default function ReviewsPage() {
       if (alive) { setUser(data.user || null); setAuthChecked(true); }
     }
     checkAuth();
-    const { data: listener } = supabase?.auth.onAuthStateChange((_event, session) => { setUser(session?.user || null); setAuthChecked(true); });
-    return () => { alive = false; listener?.subscription.unsubscribe(); };
+    const authListener = supabase
+      ? supabase.auth.onAuthStateChange((_event, session) => { setUser(session?.user || null); setAuthChecked(true); })
+      : null;
+    return () => { alive = false; authListener?.data.subscription.unsubscribe(); };
   }, []);
 
   useEffect(() => {

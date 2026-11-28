@@ -261,20 +261,22 @@ export function makeProductId(name: string) {
 
 export type AvailableVariantOption = {
   key: string;
+  label: string;
   concentration: ConcentrationOption;
   size: SizeOption;
   price: number;
 };
 
 export const perfumeVariantOptions: Array<{
+  key: string;
   concentration: ConcentrationOption;
   size: SizeOption;
   label: string;
 }> = [
-  { concentration: 'EDP', size: '10ml', label: '10ml · EDP' },
-  { concentration: 'EDP', size: '85ml', label: '85ml · EDP' },
-  { concentration: 'Extrait', size: '50ml', label: '50ml · Extrait' },
-  { concentration: 'EDT', size: '50ml', label: '50ml · EDT' },
+  { key: '10ml__EDP', concentration: 'EDP', size: '10ml', label: '10ml · EDP' },
+  { key: '85ml__EDP', concentration: 'EDP', size: '85ml', label: '85ml · EDP' },
+  { key: '50ml__Extrait', concentration: 'Extrait', size: '50ml', label: '50ml · Extrait' },
+  { key: '50ml__EDT', concentration: 'EDT', size: '50ml', label: '50ml · EDT' },
 ];
 
 function variantPriceValue(product: ManagedProduct, concentration: ConcentrationOption, size: SizeOption) {
@@ -292,7 +294,6 @@ export function getAvailableVariantOptions(product: ManagedProduct): AvailableVa
   const options = perfumeVariantOptions
     .map((option) => ({
       ...option,
-      key: `${option.size}__${option.concentration}`,
       price: variantPriceValue(product, option.concentration, option.size),
     }))
     .filter((option) => option.price > 0);

@@ -138,12 +138,12 @@ export default function Header() {
         </Link>
 
         {/* Desktop Nav: primary shopping links, secondary customer links grouped under More */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-5 text-[12px] font-medium text-[#382525] dark:text-[#F1E8DD]">
-          <Link href="/perfumes" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Perfumes</Link>
-          <Link href="/cosmetics" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Cosmetics</Link>
-          <Link href="/wellness" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Wellness</Link>
-          <Link href="/quiz" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Scent Quiz</Link>
-          <Link href="/#scents" className="whitespace-nowrap hover:text-[#FFF2C2] transition-colors">Scent Families</Link>
+        <nav className="hidden md:flex items-center gap-3 lg:gap-5 text-[12px] font-medium text-[#382525] dark:text-[#F1E8DD]" aria-label="Main navigation">
+          <Link href="/perfumes" className="whitespace-nowrap transition-colors hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Perfumes</Link>
+          <Link href="/cosmetics" className="whitespace-nowrap transition-colors hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Cosmetics</Link>
+          <Link href="/wellness" className="whitespace-nowrap transition-colors hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Wellness</Link>
+          <Link href="/quiz" className="whitespace-nowrap transition-colors hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Scent Quiz</Link>
+          <Link href="/#scents" className="whitespace-nowrap transition-colors hover:text-[#8A0303] dark:hover:text-[#E0C27A]">Scent Families</Link>
           <div className="relative">
             <button type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen(!moreOpen)} className="inline-flex items-center gap-1 hover:text-[#8A0303] transition-colors">
               More <span className="text-xs">{moreOpen ? '▴' : '▾'}</span>
@@ -209,6 +209,8 @@ export default function Header() {
           {/* Hamburger */}
           <button
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="site-mobile-menu"
             onClick={() => setMenuOpen(!menuOpen)}
             className="navbar-icon md:hidden w-9 h-9 shrink-0 flex items-center justify-center rounded-full border border-[#8A0303]/30 hover:bg-[#8A0303]/10 transition-colors"
           >
@@ -231,6 +233,7 @@ export default function Header() {
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
+            id="site-mobile-menu"
             className="site-mobile-panel fixed right-4 left-4 top-[92px] max-h-[calc(100dvh-112px)] overflow-y-auto overscroll-contain rounded-2xl border border-[#C5A46D]/45 bg-[#FFF9F2] p-5 shadow-2xl shadow-black/60 dark:bg-[#2A1016]"
             onClick={(event) => event.stopPropagation()}
           >
@@ -243,6 +246,7 @@ export default function Header() {
                 ['Perfumes','/perfumes'],
                 ['Cosmetics','/cosmetics'],
                 ['Wellness','/wellness'],
+                ['Event Scents','/event-scents/book'],
                 ['Scent Quiz','/quiz'],
                 ['Scent Families','/#scents'],
                 ['Wishlist','/wishlist'],
@@ -272,7 +276,7 @@ export default function Header() {
 
       {searchOpen && (
         <div className="site-search-overlay fixed inset-0 z-[120] bg-black/70 px-4 py-24 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
-          <div className="site-search-panel mx-auto max-w-2xl rounded-3xl border border-[#C5A46D]/45 bg-[#FFF9F2] p-5 shadow-2xl dark:bg-[#2A1016]" onClick={(event) => event.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="Search the Exousia & Co. catalog" className="site-search-panel mx-auto max-w-2xl rounded-3xl border border-[#C5A46D]/45 bg-[#FFF9F2] p-5 shadow-2xl dark:bg-[#2A1016]" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-center gap-3">
               <input
                 autoFocus
@@ -285,14 +289,14 @@ export default function Header() {
                 type="button"
                 aria-label="Close search"
                 onClick={() => setSearchOpen(false)}
-                className="h-11 w-11 rounded-full border border-[#8A0303]/25 text-[#f5f0e8] text-xl font-black transition hover:bg-[#8A0303]/10"
+                className="h-11 w-11 rounded-full border border-[#8A0303]/25 text-[#700404] text-xl font-black transition hover:bg-[#8A0303]/10 dark:border-white/15 dark:text-[#F5F0E8]"
               >
-                x
+                ×
               </button>
             </div>
             <div className="mt-5 grid gap-2">
-              {!searchQuery.trim() && <p className="rounded-2xl bg-[#8A0303]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">Type a product name, note, or category.</p>}
-              {searchQuery.trim() && searchResults.length === 0 && <p className="rounded-2xl bg-[#8A0303]/5 p-4 text-sm font-bold text-[#f5f0e8]/60">No matching products found.</p>}
+              {!searchQuery.trim() && <p className="rounded-2xl bg-[#8A0303]/5 p-4 text-sm font-medium text-[#64534A] dark:text-[#D8C8BC]">Type a product name, note, or category.</p>}
+              {searchQuery.trim() && searchResults.length === 0 && <p className="rounded-2xl bg-[#8A0303]/5 p-4 text-sm font-medium text-[#64534A] dark:text-[#D8C8BC]">No matching products found.</p>}
               {searchResults.map((product) => (
                 <Link
                   key={product.id}
@@ -301,10 +305,10 @@ export default function Header() {
                     setSearchOpen(false);
                     setSearchQuery('');
                   }}
-                  className="rounded-2xl border border-[#8A0303]/20 p-4 transition hover:border-[#8A0303]"
+                  className="rounded-2xl border border-[#8A0303]/20 p-4 transition hover:border-[#8A0303] hover:bg-[#8A0303]/5 dark:hover:bg-white/5"
                 >
-                  <p className="font-black text-[#f5f0e8]">{product.name}</p>
-                  <p className="mt-1 text-sm text-[#f5f0e8]/60">{product.category || 'perfumes'} - {product.family}</p>
+                  <p className="font-semibold text-[#271719] dark:text-[#F5F0E8]">{product.name}</p>
+                  <p className="mt-1 text-sm capitalize text-[#64534A] dark:text-[#D8C8BC]">{product.category || 'perfumes'} · {product.family}</p>
                 </Link>
               ))}
             </div>
