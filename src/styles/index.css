@@ -905,3 +905,11 @@ html.dark body main.admin-dashboard .admin-dashboard-nav > a.admin-nav-logout {
   border: 2px solid #D4AF37 !important;
   box-shadow: 0 0 14px rgba(212, 175, 55, .2) !important;
 }
+html:not(.dark) body main.admin-dashboard .admin-dashboard-nav > a.admin-nav-logout > .admin-nav-logout-label {
+  color: #700404 !important;
+  -webkit-text-fill-color: #700404 !important;
+}
+html.dark body main.admin-dashboard .admin-dashboard-nav > a.admin-nav-logout > .admin-nav-logout-label {
+  color: #F6D98D !important;
+  -webkit-text-fill-color: #F6D98D !important;
+}

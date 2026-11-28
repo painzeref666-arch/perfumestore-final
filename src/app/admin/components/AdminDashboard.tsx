@@ -897,7 +897,7 @@ export default function AdminDashboard() {
             <Link href="/admin/activity-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Activity Logs</Link>
             <Link href="/admin/inventory-logs" className="rounded-full bg-white px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Inventory Logs</Link>
             <Link href="/products" className="rounded-full bg-stone-950 px-4 py-3 text-sm font-black hover:bg-amber-800 dark:bg-amber-700 sm:px-5" style={{ backgroundColor: "#201B16", color: "#FFFFFF" }}>View Shop</Link>
-            <Link href="/admin/logout" className="admin-nav-logout rounded-full border border-stone-300 px-4 py-3 text-sm font-black dark:border-white/10 sm:px-5">Logout</Link>
+            <Link href="/admin/logout" className="admin-nav-logout rounded-full border border-stone-300 px-4 py-3 text-sm font-black dark:border-white/10 sm:px-5"><span className="admin-nav-logout-label">Logout</span></Link>
           </div>
         </div>
 
