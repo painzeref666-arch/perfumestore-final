@@ -890,3 +890,18 @@ html.dark .admin-dashboard-nav > a:hover {
   background-color: #1A1A1A !important;
   color: #F6D98D !important;
 }
+/* Give Logout its own high-contrast surface in either theme. */
+html:not(.dark) body main.admin-dashboard .admin-dashboard-nav > a.admin-nav-logout {
+  background-color: #FFF9F2 !important;
+  color: #700404 !important;
+  -webkit-text-fill-color: #700404 !important;
+  border: 2px solid #8A0303 !important;
+  box-shadow: 0 2px 12px rgba(138, 3, 3, .2) !important;
+}
+html.dark body main.admin-dashboard .admin-dashboard-nav > a.admin-nav-logout {
+  background-color: #111111 !important;
+  color: #F6D98D !important;
+  -webkit-text-fill-color: #F6D98D !important;
+  border: 2px solid #D4AF37 !important;
+  box-shadow: 0 0 14px rgba(212, 175, 55, .2) !important;
+}
