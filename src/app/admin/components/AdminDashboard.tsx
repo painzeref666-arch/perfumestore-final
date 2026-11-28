@@ -889,6 +889,7 @@ export default function AdminDashboard() {
           <div className="admin-dashboard-nav flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Analytics</Link>
+            <Link href="/admin/ai-office" className="rounded-full border border-[#d4b27e]/40 bg-[#26181a] px-4 py-3 text-sm font-black text-[#e6c990] hover:bg-[#3a2024] focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">AI Office</Link>
             <Link href="/admin/reviews" className="rounded-full bg-[#8A0303] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Reviews</Link>
             <Link href="/admin/event-scents" className="rounded-full bg-[#8A0303] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Event Scents Bookings</Link>
             <Link href="/admin/marketing" className="rounded-full bg-white px-4 py-3 text-sm font-black hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5" style={{ backgroundColor: "#FFFFFF", color: "#171512" }}>Marketing</Link>
