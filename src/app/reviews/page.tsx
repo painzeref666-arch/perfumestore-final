@@ -7,6 +7,7 @@ import { useProducts } from '@/context/ProductContext';
 import { supabase } from '@/lib/supabase';
 
 type ReviewMedia = { url: string; type: 'image' | 'video'; name?: string };
+const EVENT_SCENTS_REVIEW_VALUE = '__event_scents__';
 
 export default function ReviewsPage() {
   const { activeProducts } = useProducts();
@@ -48,7 +49,9 @@ export default function ReviewsPage() {
     if (showForm) formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [showForm]);
 
-  const productName = (id: string) => activeProducts.find((product) => product.id === id)?.name || 'Exousia product';
+  const productName = (id: string | null) => id === EVENT_SCENTS_REVIEW_VALUE
+    ? 'Event Scents'
+    : activeProducts.find((product) => product.id === id)?.name || 'Exousia product';
 
   function handleFiles(files: FileList | null) {
     if (!files) return;
@@ -93,8 +96,11 @@ export default function ReviewsPage() {
     setUploading(true);
     try {
       const media = await uploadMedia(selectedFiles);
+      const selectedSubject = String(form.get('product_id') || '');
+      const isEventScents = selectedSubject === EVENT_SCENTS_REVIEW_VALUE;
       const payload: any = {
-        product_id: String(form.get('product_id') || ''),
+        product_id: isEventScents ? null : selectedSubject,
+        review_subject: isEventScents ? 'Event Scents' : productName(selectedSubject),
         customer_name: String(form.get('customer_name') || '').trim(),
         rating: Number(form.get('rating') || 5),
         title: String(form.get('title') || '').trim(),
@@ -137,8 +143,10 @@ export default function ReviewsPage() {
         {showForm && user && (
           <form ref={formRef} onSubmit={submit} noValidate className="mt-6 grid gap-4 rounded-[2rem] border border-[#8A0303]/30 bg-white p-6 shadow-sm dark:bg-white/5 sm:p-8">
             <h2 className="text-2xl font-black">Share your experience</h2>
-            <select name="product_id" required className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white">
+            <select name="product_id" required defaultValue="" className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white">
+              <option value="" disabled>Select a product or service</option>
               {activeProducts.map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
+              <option value={EVENT_SCENTS_REVIEW_VALUE}>Event Scents</option>
             </select>
             <input name="customer_name" required placeholder="Your name" className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white" />
             <select name="rating" className="rounded-2xl border border-stone-200 bg-white px-5 py-4 text-stone-900 dark:border-white/10 dark:bg-[#191816] dark:text-white"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select>
@@ -160,7 +168,7 @@ export default function ReviewsPage() {
             <article key={review.id} className="overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
               {mediaFor(review).length > 0 && <div className="grid gap-2 p-3 sm:grid-cols-2">{mediaFor(review).map((media, i) => media.type === 'video' || /\.(mp4|webm|mov)(\?|$)/i.test(media.url) ? <video key={i} controls preload="metadata" className="max-h-96 w-full rounded-2xl bg-black" src={media.url} /> : <div key={i} className="relative aspect-video overflow-hidden rounded-2xl bg-stone-100"><AppImage src={media.url} alt={`${review.title || 'Review'} media`} fill sizes="(max-width:768px) 100vw,50vw" className="object-cover" /></div>)}</div>}
               <div className="p-6">
-                <p className="text-xs font-black uppercase tracking-widest text-amber-700 dark:text-[#8A0303]">{productName(review.product_id)}</p>
+                <p className="text-xs font-black uppercase tracking-widest text-amber-700 dark:text-[#8A0303]">{review.review_subject || (review.product_id ? productName(review.product_id) : 'Event Scents')}</p>
                 <p className="mt-2 text-lg font-black">{review.title} <span className="text-amber-700 dark:text-[#8A0303]">{'★'.repeat(Math.max(1, Math.min(5, Number(review.rating || 5))) )}</span></p>
                 <p className="mt-1 text-sm text-stone-500 dark:text-white/50">{review.customer_name}</p>
                 <p className="mt-3 whitespace-pre-wrap text-stone-700 dark:text-white/70">{review.body}</p>
