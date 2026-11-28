@@ -913,3 +913,13 @@ html.dark body main.admin-dashboard .admin-dashboard-nav > a.admin-nav-logout > 
   color: #F6D98D !important;
   -webkit-text-fill-color: #F6D98D !important;
 }
+
+/* Red illuminated outlines for the admin KPI/stat oval cards. */
+.admin-dashboard .admin-stat-card {
+  border: 1px solid rgba(138, 3, 3, .72) !important;
+  box-shadow: 0 0 0 1px rgba(138, 3, 3, .12), 0 0 16px rgba(138, 3, 3, .2) !important;
+}
+html.dark .admin-dashboard .admin-stat-card {
+  border-color: rgba(225, 29, 46, .9) !important;
+  box-shadow: 0 0 0 1px rgba(225, 29, 46, .2), 0 0 18px rgba(225, 29, 46, .3) !important;
+}

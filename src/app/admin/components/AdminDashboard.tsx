@@ -907,7 +907,7 @@ export default function AdminDashboard() {
           <Stat label="Active Products" value={activeCount} />
           <Stat label="Total Products" value={products.length} />
           <Stat label="Total Stock" value={totalInventory} />
-          <div className="min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
+          <div className="admin-stat-card min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <p className="text-sm font-bold text-stone-500 dark:text-white/50">Inventory Value</p>
             <Price amount={totalValue} className="mt-2 block text-3xl font-black" />
           </div>
@@ -918,7 +918,7 @@ export default function AdminDashboard() {
           <Stat label="Pending Orders" value={pendingOrders} />
           <Stat label="Pending Payments" value={pendingPayments} />
           <Stat label="Paid Orders" value={paidOrders} />
-          <div className="min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
+          <div className="admin-stat-card min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6">
             <p className="text-sm font-bold text-stone-500 dark:text-white/50">Order Revenue</p>
             <Price amount={orderRevenue} className="mt-2 block text-3xl font-black" />
           </div>
@@ -1393,7 +1393,7 @@ function Status({ usingSupabase }: { usingSupabase: boolean }) {
 }
 
 function Stat({ label, value }: { label: string; value: number }) {
-  return <div className="min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6"><p className="text-sm font-bold text-stone-500 dark:text-white/50">{label}</p><p className="mt-2 break-words text-3xl font-black sm:text-4xl">{value}</p></div>;
+  return <div className="admin-stat-card min-w-0 rounded-[1.5rem] bg-white p-5 shadow-sm dark:bg-white/5 sm:rounded-[2rem] sm:p-6"><p className="text-sm font-bold text-stone-500 dark:text-white/50">{label}</p><p className="mt-2 break-words text-3xl font-black sm:text-4xl">{value}</p></div>;
 }
 
 function Field({ label, value, onChange, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; type?: string; }) {
