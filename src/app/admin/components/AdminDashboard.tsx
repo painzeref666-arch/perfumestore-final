@@ -886,7 +886,7 @@ export default function AdminDashboard() {
             <p className="mt-2 text-stone-600 dark:text-white/60">Products, images, prices, promos, inventory, and orders.</p>
             <div className="mt-3"><Status usingSupabase={usingSupabase} /></div>
           </div>
-          <div className="flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
+          <div className="admin-dashboard-nav flex w-full flex-wrap gap-2 md:w-auto md:justify-end md:gap-3">
             <CurrencySelector />
             <Link href="/admin/analytics" className="rounded-full bg-amber-700 px-4 py-3 text-sm font-black text-white hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Analytics</Link>
             <Link href="/admin/reviews" className="rounded-full bg-[#8A0303] px-4 py-3 text-sm font-black text-[#171512] hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-400 sm:px-5">Reviews</Link>

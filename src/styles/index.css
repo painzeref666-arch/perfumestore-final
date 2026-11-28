@@ -865,3 +865,28 @@ html.dark body .product-card .product-image-badge {
   .site-navbar > div:last-child { gap: .25rem !important; }
   .site-navbar .navbar-icon { width: 1.9rem; height: 1.9rem; }
 }
+/* Keep every admin shortcut readable, including links with legacy inline styles. */
+.admin-dashboard-nav > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  background-color: #8A0303 !important;
+  color: #FFF9F2 !important;
+  border: 1px solid #C5A46D !important;
+  box-shadow: 0 2px 12px rgba(138, 3, 3, .16);
+}
+.admin-dashboard-nav > a:hover {
+  background-color: #700404 !important;
+  color: #FFFFFF !important;
+}
+html.dark .admin-dashboard-nav > a {
+  background-color: #111111 !important;
+  color: #D4AF37 !important;
+  border-color: rgba(212, 175, 55, .65) !important;
+  box-shadow: 0 0 12px rgba(212, 175, 55, .12);
+}
+html.dark .admin-dashboard-nav > a:hover {
+  background-color: #1A1A1A !important;
+  color: #F6D98D !important;
+}
